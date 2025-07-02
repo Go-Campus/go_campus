@@ -2,9 +2,11 @@ import React from "react";
 import Navbar from "../../components/navbar";
 import Image from "next/image";
 import {MainTicketLeft, MainTicketRight, PartyImage, Barcode} from "../../public"
+import Footer from "@/components/footer";
 
 const page = () => {
   return (
+    <div>
     <div className="w-full flex justify-center">
       <div className="w-full flex flex-col max-w-[1400px]">
         <Navbar />
@@ -49,6 +51,8 @@ const page = () => {
         </div>
       </div>
     </div>
+      <Footer />  
+      </div>
   );
 };
 
