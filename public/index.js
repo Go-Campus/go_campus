@@ -6,6 +6,10 @@ import GoWhiteIcon from "./icons/gocampusWhite.svg"
 import MainTicket from "./images/mainticket.svg"
 import GoCampusLogo from "./icons/gonavIcon.svg"
 import ProfileIcon from "./icons/profileIcon.svg"
+import PartyImage from "./images/partyiamge.png"
+import MainTicketLeft from "./images/mainticketLeft.svg"
+import MainTicketRight from "./images/mainticketright.svg"
+import Barcode from "./images/barcode.svg"
 export { 
     LoginImage ,
     GoogleIcon,
@@ -14,5 +18,9 @@ export {
     GoWhiteIcon,
     MainTicket,
     GoCampusLogo,
-    ProfileIcon
+    ProfileIcon,
+    PartyImage,
+    MainTicketLeft,
+    MainTicketRight,
+    Barcode
 };
