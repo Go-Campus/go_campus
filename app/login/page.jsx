@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Mail, Apple, Facebook } from "lucide-react";
 import Input from "../../components/input/input.jsx";
-import Button from "../../components/button/Button.jsx";
+import Button from "../../components/button/index.jsx";
 import { AppleIcon, FaceBookIcon, GoogleIcon, GoWhiteIcon } from "../../public";
 import Image from "next/image.js";
 export default function LoginPage() {
