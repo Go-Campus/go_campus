@@ -14,9 +14,10 @@ import {
   entertaiment,
   Workshopes,
 } from "../../public";
+
 import Ticket from "../../components/mainTicket";
 import TypeCard from "../../components/typeCard";
-
+import EventCard from "../../components/card"
 const cards = [
   { id: 1, img: AcadamicIcon, name: "Academic" },
   { id: 2, img: Technology, name: "Technology" },
@@ -27,29 +28,144 @@ const cards = [
   { id: 7, img: Workshopes, name: "Workshops" },
 ];
 
+const events = [
+  {
+    id: 1,
+    headerText: {
+      main: "DBP 25",
+      sub: "回归 学房"
+    },
+    title: "Delhi Beatbox Championship",
+    dateRange: "18 June - 15 July",
+    time: "03:00 PM",
+    location: "IndiOwl - Platform 13, Delhi",
+    price: 5699,
+    artists: [
+      "/artist-1.jpg",
+      "/artist-2.jpg", 
+      "/artist-main.jpg",
+      "/artist-3.jpg",
+      "/artist-4.jpg"
+    ]
+  },
+  {
+    id: 2,
+    headerText: {
+      main: "MBF 25",
+      sub: "音乐 节日"
+    },
+    title: "Mumbai Bass Festival",
+    dateRange: "22 June - 20 July",
+    time: "05:00 PM",
+    location: "SoundSpace - Marine Drive, Mumbai",
+    price: 4999,
+    artists: [
+      "/artist-5.jpg",
+      "/artist-6.jpg",
+      "/artist-7.jpg",
+      "/artist-8.jpg",
+      "/artist-9.jpg"
+    ]
+  },
+  {
+    id: 3,
+    headerText: {
+      main: "BLR 25",
+      sub: "电子 音乐"
+    },
+    title: "Bangalore Electronic Music Fest",
+    dateRange: "01 July - 25 July",
+    time: "06:00 PM",
+    location: "TechHub - Whitefield, Bangalore",
+    price: 6299,
+    artists: [
+      "/artist-10.jpg",
+      "/artist-11.jpg",
+      "/artist-12.jpg",
+      "/artist-13.jpg",
+      "/artist-14.jpg"
+    ]
+  },
+  {
+    id: 4,
+    headerText: {
+      main: "CHN 25",
+      sub: "说唱 大赛"
+    },
+    title: "Chennai Hip-Hop Battle",
+    dateRange: "10 July - 30 July",
+    time: "04:00 PM",
+    location: "Urban Arena - T.Nagar, Chennai",
+    price: 3799,
+    artists: [
+      "/artist-15.jpg",
+      "/artist-16.jpg",
+      "/artist-17.jpg",
+      "/artist-18.jpg",
+      "/artist-19.jpg"
+    ]
+  },
+  {
+    id: 5,
+    headerText: {
+      main: "KOL 25",
+      sub: "文化 音乐"
+    },
+    title: "Kolkata Cultural Music Meet",
+    dateRange: "15 July - 05 August",
+    time: "07:00 PM",
+    location: "Heritage Hall - Park Street, Kolkata",
+    price: 4499,
+    artists: [
+      "/artist-20.jpg",
+      "/artist-21.jpg",
+      "/artist-22.jpg",
+      "/artist-23.jpg",
+      "/artist-24.jpg"
+    ]
+  }
+];
+
 const page = () => {
   return (
-    <div className="w-full flex justify-center">
-      <div className="w-full flex flex-col max-w-[1400px]">
+    <div className="w-full  flex-col items-center flex justify-center">
+      <div className="w-full flex  flex-col max-w-[1400px]">
         <Navbar />
+ 
+ {/* hero section  */}
 
-        {/* first section */}
         <div className="w-full flex  justify-center p-4">
           <Ticket />
         </div>
-        <div className="w-full py-5 border-b border-[#ADADAD40] px-4">
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7 gap-4 justify-items-center">
+        <div className="w-full ">
+      
+        </div>
+      </div>
+
+      {/* event cards   */}
+      <div className="w-full px-4 border-b border-[#ADADAD40] py-10">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7 gap-4 max-w-[1400px] mx-auto">
             {cards.map((card) => (
               <TypeCard
                 key={card.id}
                 name={card.name}
                 Image={card.img}
-                className="w-full max-w-[120px]"
+                className="w-full   max-w-[120px] "
               />
             ))}
-          </div>
         </div>
       </div>
+
+      {/* Latest Events in Lucknow */}
+    
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {events.map((event) => (
+            <EventCard key={event.id} event={event} />
+          ))}
+        </div>
+
+
+
     </div>
   );
 };
