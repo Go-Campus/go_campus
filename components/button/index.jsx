@@ -17,7 +17,7 @@ const Button = ({
     <button
       type={type}
       onClick={handleClick}
-      className={`group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-red-500 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors duration-200 ${className}`}
+      className={`p-4 bg-red-50 ${className}`}
       {...props}
     >
       {children}
