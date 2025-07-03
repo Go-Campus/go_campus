@@ -17,6 +17,8 @@ import entertaiment from "./icons/Entertainment.svg";
 import Sport from "./icons/Sports.svg";
 import Culture from "./icons/Culture.svg";
 import Workshopes from "./icons/Workshopes.svg";
+import CardImage from "./images/cardimage.png";
+
 export {
   LoginImage,
   GoogleIcon,
@@ -37,4 +39,5 @@ export {
   Sport,
   Workshopes,
   entertaiment,
+  CardImage
 };

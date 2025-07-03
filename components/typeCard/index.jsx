@@ -11,17 +11,17 @@ const TypeCard = ({
 
   return (
     <div
-      className={`justify-center items-center flex border border-[#ADADAD40] rounded-[26px] p-3 sm:p-4 md:p-5 ${className}`}
+      className={`flex border border-[#ADADAD40] rounded-[26px]  ${className}`}
       {...props}
     >
       {ImageSrc && (
-        <div className='flex flex-col justify-center items-center w-full'>
+        <div className='flex p-5 flex-col justify-center items-center w-full'>
         <Image 
-          className='object-contain w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-24 lg:h-24' 
+          className='object-contain ' 
           src={ImageSrc}
           alt={`${props.name} icon`}
-          width={96}
-          height={96}
+          width={56}
+          // height={96}
         />
         <p className='flex justify-center items-center text-xs sm:text-sm md:text-base text-center mt-2'>
             {props.name}
