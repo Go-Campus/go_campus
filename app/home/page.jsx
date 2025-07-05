@@ -1,4 +1,5 @@
-import React from "react";
+'use client'
+import React, { useState } from "react";
 import Navbar from "../../components/navbar";
 import Image from "next/image";
 import {
@@ -14,6 +15,7 @@ import {
   entertaiment,
   Workshopes,
 } from "../../public";
+import Link from 'next/link';
 
 import Ticket from "../../components/mainTicket";
 import TypeCard from "../../components/typeCard";
@@ -40,6 +42,7 @@ const events = [
     time: "03:00 PM",
     location: "IndiOwl - Platform 13, Delhi",
     price: 5699,
+    discount: "save upto 39%",
     artists: [
       "/artist-1.jpg",
       "/artist-2.jpg", 
@@ -126,24 +129,37 @@ const events = [
   }
 ];
 
-const page = () => {
+const Page = () => {
+  const [activeTab, setActiveTab] = useState("All");
+  const tabs = [
+    "All",
+    "ForYou",
+    "Online",
+    "Today",
+    "This Week",
+    "Academic",
+    "Free",
+    "Food drink",
+    "Charity"
+  ];
   return (
     <div className="w-full  flex-col items-center flex justify-center">
       <div className="w-full flex  flex-col max-w-[1400px]">
+        <div>
         <Navbar />
+        </div>
  
  {/* hero section  */}
 
-        <div className="w-full flex  justify-center p-4">
+        <div className="w-full flex">
           <Ticket />
         </div>
         <div className="w-full ">
       
         </div>
-      </div>
 
       {/* event cards   */}
-      <div className="w-full px-4 border-b border-[#ADADAD40] py-10">
+      {/* <div className="w-full px-4 border-b border-[#ADADAD40] py-10">
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7 gap-4 max-w-[1400px] mx-auto">
             {cards.map((card) => (
               <TypeCard
@@ -154,9 +170,30 @@ const page = () => {
               />
             ))}
         </div>
-      </div>
+      </div> */}
 
       {/* Latest Events in Lucknow */}
+
+      <div className="w-full py-6 border-b border-t border-[#E2E4E9] ">
+        <h2 className="font-[500] text-[28px] text-[#000000]">Latest Events in Lucknow</h2>
+      </div>
+
+      <div className="py-8">
+        <ul className="flex gap-[18px] font-[500] text-[14px] text-[#868C98] ">
+          {tabs.map((tab) => (
+            <Link href="" key={tab}>
+              <li
+                className={
+                  (activeTab === tab ? "text-red-500 " : "") + "cursor-pointer"
+                }
+                onClick={() => setActiveTab(tab)}
+              >
+                {tab}
+              </li>
+            </Link>
+          ))}
+        </ul>
+      </div>
     
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {events.map((event) => (
@@ -165,9 +202,10 @@ const page = () => {
         </div>
 
 
+        </div>
 
     </div>
   );
 };
 
-export default page;
+export default Page;

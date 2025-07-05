@@ -1,35 +1,11 @@
-import Image from 'next/image'
+import React from 'react'
 
-const TypeCard = ({
-  Image: ImageSrc,
-   // Renaming to avoid conflict with Next.js Image component
-  className = '',
-  ...props
-}) => {
-  // Log component rendering for debugging
-  console.log('TypeCard component rendered:', { name: props.name, className });
-
+const index = () => {
   return (
-    <div
-      className={`flex border border-[#ADADAD40] rounded-[26px]  ${className}`}
-      {...props}
-    >
-      {ImageSrc && (
-        <div className='flex p-5 flex-col justify-center items-center w-full'>
-        <Image 
-          className='object-contain ' 
-          src={ImageSrc}
-          alt={`${props.name} icon`}
-          width={56}
-          // height={96}
-        />
-        <p className='flex justify-center items-center text-xs sm:text-sm md:text-base text-center mt-2'>
-            {props.name}
-        </p>
-        </div>
-      )}
+    <div>
+      
     </div>
   )
 }
 
-export default TypeCard
+export default index
