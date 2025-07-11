@@ -26,32 +26,32 @@ export default function LoginPage() {
       {/* Left Side - 60% - Show bg only on md+ */}
       <div
         className="hidden md:flex w-3/5  p-10  bg-cover bg-center"
-        style={{ backgroundImage: "url('/images/loginImage.svg')" }}
+        style={{ backgroundImage: "url('/images/loginImage.svg')", backgroundSize: "cover", backgroundPosition: "center" }}
       >
         {/* first row  */}
-        <div  className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2">
           <div>
 
-          
-          <h1 className="text-[30px] gap-2 text-white flex font-bold">
-            <span>
-              <Image  className="w-[30px]" src={GoWhiteIcon} />
-            </span>
-            Go Campus
-          </h1>
+
+            <h1 className="text-[30px] gap-2 text-white flex font-bold">
+              <span>
+                <Image className="w-[30px]" src={GoWhiteIcon} />
+              </span>
+              Go Campus
+            </h1>
           </div>
           <div className=" ">
-          <h1 className=" flex leading-16  text-[48px] text-white">
-            Find,Book 
-            <br/>
-          
-            Experience
-          
-          </h1>
+            <h1 className=" flex leading-16  text-[48px] text-white">
+              Find,Book
+              <br />
+
+              Experience
+
+            </h1>
           </div>
           <p className="text-[56px] leading-12 text-white font-[300]">
-          Your Ultimate Event  <br/> 
-          Journey Starts Here
+            Your Ultimate Event  <br />
+            Journey Starts Here
           </p>
         </div>
         {/* Optionally, overlay or content can go here */}
@@ -113,10 +113,10 @@ export default function LoginPage() {
                 </a>
               </div>
             </div>
+            <button className="w-full py-3 px-4 text-base bg-[#FF5F4A] text-white rounded-lg">
+              Sign In
+            </button>
 
-            <div>
-              <Button type="submit">Sign in</Button>
-            </div>
 
             <div className="mt-6">
               <div className="relative">
