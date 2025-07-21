@@ -18,8 +18,10 @@ import Sport from "./icons/Sports.svg";
 import Culture from "./icons/Culture.svg";
 import Workshopes from "./icons/Workshopes.svg";
 import CardImage from "./images/cardimage.png";
+import checkImage from "./images/checkImage.svg";
 
 export {
+  checkImage,
   LoginImage,
   GoogleIcon,
   FaceBookIcon,

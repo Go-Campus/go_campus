@@ -1,211 +1,413 @@
-'use client'
-import React, { useState } from "react";
-import Navbar from "../../components/navbar";
-import Image from "next/image";
-import {
-  MainTicketLeft,
-  MainTicketRight,
-  PartyImage,
-  Barcode,
-  Sport,
-  AcadamicIcon,
-  Career,
-  Culture,
-  Technology,
-  entertaiment,
-  Workshopes,
-} from "../../public";
-import Link from 'next/link';
-
-import Ticket from "../../components/mainTicket";
-import TypeCard from "../../components/typeCard";
-import EventCard from "../../components/card"
-const cards = [
-  { id: 1, img: AcadamicIcon, name: "Academic" },
-  { id: 2, img: Technology, name: "Technology" },
-  { id: 3, img: entertaiment, name: "Entertainment" },
-  { id: 4, img: Career, name: "Career" },
-  { id: 5, img: Culture, name: "Culture" },
-  { id: 6, img: Sport, name: "Sport" },
-  { id: 7, img: Workshopes, name: "Workshops" },
-];
-
-const events = [
-  {
-    id: 1,
-    headerText: {
-      main: "DBP 25",
-      sub: "回归 学房"
+"use client";
+import Card from "../../components/destinationCard/index";
+import React from "react";
+import { CardImage } from "@/public";
+const HomePage = () => {
+  const heroBanners = [
+    {
+      image: "/images/partyiamge.png",
+      title: ["From Pop", "Ballads to Emo", "Encores"],
+      description:
+        "Experience the magic as pop ballads transform into emo encores, showcasing.",
+      buttonText: "Get Into Music",
     },
-    title: "Delhi Beatbox Championship",
-    dateRange: "18 June - 15 July",
-    time: "03:00 PM",
-    location: "IndiOwl - Platform 13, Delhi",
-    price: 5699,
-    discount: "save upto 39%",
-    artists: [
-      "/artist-1.jpg",
-      "/artist-2.jpg", 
-      "/artist-main.jpg",
-      "/artist-3.jpg",
-      "/artist-4.jpg"
-    ]
-  },
-  {
-    id: 2,
-    headerText: {
-      main: "MBF 25",
-      sub: "音乐 节日"
-    },
-    title: "Mumbai Bass Festival",
-    dateRange: "22 June - 20 July",
-    time: "05:00 PM",
-    location: "SoundSpace - Marine Drive, Mumbai",
-    price: 4999,
-    artists: [
-      "/artist-5.jpg",
-      "/artist-6.jpg",
-      "/artist-7.jpg",
-      "/artist-8.jpg",
-      "/artist-9.jpg"
-    ]
-  },
-  {
-    id: 3,
-    headerText: {
-      main: "BLR 25",
-      sub: "电子 音乐"
-    },
-    title: "Bangalore Electronic Music Fest",
-    dateRange: "01 July - 25 July",
-    time: "06:00 PM",
-    location: "TechHub - Whitefield, Bangalore",
-    price: 6299,
-    artists: [
-      "/artist-10.jpg",
-      "/artist-11.jpg",
-      "/artist-12.jpg",
-      "/artist-13.jpg",
-      "/artist-14.jpg"
-    ]
-  },
-  {
-    id: 4,
-    headerText: {
-      main: "CHN 25",
-      sub: "说唱 大赛"
-    },
-    title: "Chennai Hip-Hop Battle",
-    dateRange: "10 July - 30 July",
-    time: "04:00 PM",
-    location: "Urban Arena - T.Nagar, Chennai",
-    price: 3799,
-    artists: [
-      "/artist-15.jpg",
-      "/artist-16.jpg",
-      "/artist-17.jpg",
-      "/artist-18.jpg",
-      "/artist-19.jpg"
-    ]
-  },
-  {
-    id: 5,
-    headerText: {
-      main: "KOL 25",
-      sub: "文化 音乐"
-    },
-    title: "Kolkata Cultural Music Meet",
-    dateRange: "15 July - 05 August",
-    time: "07:00 PM",
-    location: "Heritage Hall - Park Street, Kolkata",
-    price: 4499,
-    artists: [
-      "/artist-20.jpg",
-      "/artist-21.jpg",
-      "/artist-22.jpg",
-      "/artist-23.jpg",
-      "/artist-24.jpg"
-    ]
-  }
-];
-
-const Page = () => {
-  const [activeTab, setActiveTab] = useState("All");
-  const tabs = [
-    "All",
-    "ForYou",
-    "Online",
-    "Today",
-    "This Week",
-    "Academic",
-    "Free",
-    "Food drink",
-    "Charity"
   ];
+
+  const categories = [
+    { icon: CardImage, label: "Academic" },
+    { icon: CardImage, label: "Technology" },
+    { icon: CardImage, label: "Entertainment" },
+    { icon: CardImage, label: "Career" },
+    { icon: CardImage, label: "Sports" },
+    { icon: CardImage, label: "Culture" },
+    { icon: CardImage, label: "Workshops" },
+  ];
+
+  const featuredTitles = [
+    "Clay Sculpting",
+    "The Universe in a Pot",
+    "Zoreko",
+    "Music Quiz",
+    "Radhika Das India Tour 2025 | Delhi",
+    "Delhi Beatbox Championship",
+    "Weekend Comedy Night",
+    "Worlds of Wonder (WOW) – Water Park",
+  ];
+
+  const featuredVenues = [
+    "Venue to be announced, Delhi",
+    "Nojoto Creator Hub, Delhi",
+    "Venue to be announced, Delhi",
+    "Venue to be announced, Delhi",
+    "Venue to be announced, Delhi",
+    "IndiOwl – Platform 13, Delhi",
+    "Nojoto Creator Hub, Delhi",
+    "Worlds of Wonder, Noida",
+  ];
+
+  const featuredPrices = [
+    "2499",
+    "499",
+    "2499",
+    "2499",
+    "2499",
+    "5699",
+    "499",
+    "5317",
+  ];
+
+  const howItWorksItems = [
+    {
+      icon: "/icons/magnifier.svg",
+      heading: "Discover Events",
+      text: "Browse through hundreds of campus events or search for specific interests",
+      bgColor: "bg-green-50",
+    },
+    {
+      icon: "/icons/lock.svg",
+      heading: "Register & Save",
+      text: "Sign up for events with just a click and save them to your personal calendar",
+      bgColor: "bg-red-50",
+    },
+    {
+      icon: "/icons/profile.svg",
+      heading: "Attend & Connect",
+      text: "Join the events, meet new people, and make the most of your campus experiences",
+      bgColor: "bg-purple-50",
+    },
+  ];
+
+  const popularCities = [
+    "Things to do in Abilene",
+    "Things to do in Kochi",
+    "Things to do in Kannur",
+    "Things to do in Coimbatore",
+    "Things to do in Calicut",
+    "Things to do in Indianapolis",
+    "Things to do in Antarctica",
+  ];
+
   return (
-    <div className="w-full  flex-col items-center flex justify-center">
-      <div className="w-full flex  flex-col max-w-[1400px]">
-        <div>
-        <Navbar />
-        </div>
- 
- {/* hero section  */}
-
-        <div className="w-full flex">
-          <Ticket />
-        </div>
-        <div className="w-full ">
-      
-        </div>
-
-      {/* event cards   */}
-      {/* <div className="w-full px-4 border-b border-[#ADADAD40] py-10">
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7 gap-4 max-w-[1400px] mx-auto">
-            {cards.map((card) => (
-              <TypeCard
-                key={card.id}
-                name={card.name}
-                Image={card.img}
-                className="w-full   max-w-[120px] "
+    <div className="min-h-screen bg-white w-full flex flex-col items-center justify-center">
+      <div className="w-full max-w-[1320px] flex flex-col items-center justify-center">
+      {/* HERO SECTION */}
+      {heroBanners.map((banner, index) => (
+        <div key={index} className="w-full px-4 mx-auto my-6 ">
+          {/* Desktop Layout */}
+          <div className="hidden lg:flex relative">
+            {/* Left: Image + Content */}
+            <div className="relative flex-1 h-[400px] rounded-tr-[38px] rounded-br-[38px] overflow-hidden">
+              <div className="absolute inset-0 z-10 bg-gradient-to-r from-black/70 via-black/30 to-transparent" />
+              <img
+                src={banner.image}
+                alt="Hero"
+                className="w-full h-full object-cover"
               />
-            ))}
+              <div className="absolute inset-0 z-20 flex items-center px-8 py-16">
+                <div className="max-w-lg">
+                  <h1 className="text-5xl font-bold text-white mb-4 leading-tight">
+                    {banner.title.map((line, i) => (
+                      <div key={i}>{line}</div>
+                    ))}
+                  </h1>
+                  <p className="text-gray-300 text-lg mb-6">
+                    {banner.description}
+                  </p>
+                  <button className="bg-white text-black px-6 py-3 rounded-full font-medium hover:bg-gray-100 transition-colors">
+                    {banner.buttonText}
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Right: Barcode */}
+            <div className="relative w-[130px] h-[400px] bg-[#E9E6E6] rounded-tl-[36px] z-10  rounded-bl-[36px]">
+              <div className="absolute top-0 left-[-6px] h-full flex flex-col justify-between py-3 z-20">
+                {Array.from({ length: 28 }).map((_, i) => (
+                  <div
+                    key={i}
+                    className="w-2 h-2 bg-white rounded-full my-[2px]"
+                  />
+                ))}
+              </div>
+              <div className="absolute inset-0 flex justify-center items-center z-30">
+                <img
+                  src="/images/barcode.svg"
+                  alt="Barcode"
+                  className="w-[50px] h-[200px] object-contain"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Mobile Layout */}
+          <div className="block lg:hidden bg-white rounded-[36px] overflow-hidden shadow-md">
+            <div className="relative h-[400px]">
+              <img
+                src={banner.image}
+                alt="Hero"
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent z-10" />
+              <div className="absolute inset-0 flex flex-col justify-end px-5 pb-6 z-20">
+                <h1 className="text-3xl font-bold text-white leading-snug mb-2">
+                  {banner.title.map((line, i) => (
+                    <div key={i}>{line}</div>
+                  ))}
+                </h1>
+                <p className="text-white text-sm mb-4">{banner.description}</p>
+                <button className="bg-white text-black text-sm font-semibold px-4 py-2 rounded-full w-fit">
+                  {banner.buttonText}
+                </button>
+              </div>
+            </div>
+
+            <div className="relative h-[20px] bg-white">
+              <div className="absolute inset-0 border-t border-dotted border-gray-300" />
+              <div className="absolute -left-4 top-1/2 -translate-y-1/2 w-8 h-8 bg-white rounded-full border border-gray-200" />
+              <div className="absolute -right-4 top-1/2 -translate-y-1/2 w-8 h-8 bg-white rounded-full border border-gray-200" />
+            </div>
+
+            {/* Mobile Barcode */}
+            <div className="bg-white py-4 flex justify-center items-center lg:hidden">
+              <img
+                src="/images/barcode1.svg"
+                alt="Barcode"
+                className="w-[140px] h-[60px] object-contain"
+              />
+            </div>
+          </div>
         </div>
-      </div> */}
+      ))}
 
-      {/* Latest Events in Lucknow */}
-
-      <div className="w-full py-6 border-b border-t border-[#E2E4E9] ">
-        <h2 className="font-[500] text-[28px] text-[#000000]">Latest Events in Lucknow</h2>
-      </div>
-
-      <div className="py-8">
-        <ul className="flex gap-[18px] font-[500] text-[14px] text-[#868C98] ">
-          {tabs.map((tab) => (
-            <Link href="" key={tab}>
-              <li
-                className={
-                  (activeTab === tab ? "text-red-500 " : "") + "cursor-pointer"
-                }
-                onClick={() => setActiveTab(tab)}
+      {/* CATEGORY SECTION */}
+      <section className="px-4 py-12">
+        <div className="max-w-[1320px] mx-auto">
+          <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-4 lg:grid-cols-7 gap-4">
+            {categories.map((category, index) => (
+              <div
+                key={index}
+                className="flex flex-col items-center text-center cursor-pointer"
               >
-                {tab}
-              </li>
-            </Link>
-          ))}
-        </ul>
-      </div>
+                <div className="w-10 h-10 mb-2">
+                  <img
+                    src={category.icon}
+                    alt={category.label}
+                    className="w-full h-full object-contain"
+                  />
+                </div>
+                <span className="text-gray-800 text-sm font-medium">
+                  {category.label}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
     
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {events.map((event) => (
-            <EventCard key={event.id} event={event} />
-          ))}
+   {/* LATEST EVENTS SECTION */}
+<section className="px-4 pb-16">
+  <div className="max-w-[1320px] mx-auto">
+    <h2 className="text-xl sm:text-2xl font-semibold text-gray-800 mb-4">
+      Latest Events in Lucknow
+    </h2>
+
+    {/* Filter buttons with horizontal scroll on mobile */}
+    <div className="flex gap-3 overflow-x-auto scrollbar-hide mb-6 sm:flex-wrap sm:overflow-visible">
+      {[
+        "All",
+        "For You",
+        "Online",
+        "Today",
+        "This Week",
+        "Academic",
+        "Free",
+        "Food & Drink",
+        "Charity",
+      ].map((label, i) => (
+        <button
+          key={i}
+          className={`flex-shrink-0 px-4 py-2 text-sm rounded-full border ${
+            i === 0
+              ? "bg-black text-white"
+              : "text-gray-600 hover:bg-gray-100 border-gray-300"
+          } transition`}
+        >
+          {label}
+        </button>
+      ))}
+    </div>
+
+    {/* Event cards */}
+    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 w-[100%] h-[100%]">
+      {featuredTitles.map((t, i) => (
+        <Card
+          key={i}
+          image ={CardImage}
+          date="18 June – 15 July | 03:00 PM"
+          title={t}
+          venue={featuredVenues[i]}
+          price={featuredPrices[i]}
+          badge={i === 0 ? "Save up to 39%" : ""}
+          variant="latest"
+        />
+      ))}
+    </div>
+  </div>
+</section>
+
+
+      {/* FEATURED EVENTS SECTION */}
+      <section className="flex flex-col items-center justify-center">
+        <div className="">
+         <h2 className="text-xl sm:text-2xl font-semibold text-gray-800 mb-4">
+         Featured Events
+    </h2>
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 w-[100%] h-[100%]">
+      {featuredTitles.map((t, i) => (
+        <Card
+          key={i}
+          image ={CardImage}
+          date="18 June – 15 July | 03:00 PM"
+          title={t}
+          venue={featuredVenues[i]}
+          price={featuredPrices[i]}
+          badge={i === 0 ? "Save up to 39%" : ""}
+          variant="featured"
+        />
+      ))}
+    </div>
+    </div>
+      </section>
+
+      {/* TOP DESTINATIONS SECTION */}
+      <section className="px-4 py-12 bg-[#F6F8FA]">
+        <div className="max-w-[1320px] mx-auto">
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-xl sm:text-2xl font-semibold text-gray-800">
+              Top destinations
+            </h2>
+            <div className="flex gap-3">
+              <button className="w-10 h-10 rounded-full bg-gray-100 flex justify-center items-center hover:bg-gray-200 transition">
+                <span className="text-xl font-bold">{'<'}</span>
+              </button>
+              <button className="w-10 h-10 rounded-full bg-gray-100 flex justify-center items-center hover:bg-gray-200 transition">
+                <span className="text-xl font-bold">{'>'}</span>
+              </button>
+            </div>
+          </div>
+
+          <div className="flex overflow-x-auto gap-6 scrollbar-hide scroll-smooth  ">
+            {[
+              { img: "/images/Events/mumbai.svg", name: "Mumbai" },
+              { img: "/images/Events/kochi.svg", name: "Kochi" },
+              { img: "/images/Events/hyderabad.svg", name: "Hyderabad" },
+              { img: "/images/Events/chennai.svg", name: "Chennai" },
+              { img: "/images/Events/delhi.svg", name: "Delhi" },
+                 { img: "/images/Events/mumbai.svg", name: "Mumbai" },
+              { img: "/images/Events/kochi.svg", name: "Kochi" },
+              { img: "/images/Events/hyderabad.svg", name: "Hyderabad" },
+            ].map((d, i) => (
+              <div
+                key={i}
+                className="min-w-[180px] sm:min-w-[260px] rounded-4xl overflow-hidden relative shadow-md flex-shrink-0"
+              >
+                <img
+                  src={d.img}
+                  alt={d.name}
+                  className="w-full h-[300px] object-fit  rounded-4xl "
+                />
+                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-3">
+                  <p className="text-white text-lg font-semibold">{d.name}</p>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
+      </section>
 
-
+      {/* POPULAR CITIES SECTION */}
+      <section className="px-4 py-12 bg-white">
+      <div className="max-w-[1320px] mx-auto">
+          <h2 className="text-xl sm:text-2xl font-semibold text-gray-800 mb-4">
+            Popular Cities
+          </h2>
+          <div className="flex flex-wrap gap-3">
+            {popularCities.map((city, i) => (
+              <button
+                key={i}
+                className="flex gap-1 md:gap-1  space-x-1 md:px-4 py-2 text-[10px] md:text-sm font-[500] md:font-medium text-gray-700 hover:bg-gray-100 transition"
+              >
+                {city}
+                <img src="icons/arrow-right-up-line.svg" alt=" arow" />
+              </button>
+            ))}
+          </div>
         </div>
+      </section>
 
+      
+      <section className="px-4 py-12 bg-white">
+      <div className="max-w-[1320px] mx-auto">
+          <h2 className="text-xl sm:text-2xl font-semibold text-gray-800 mb-4">
+          Things to do Around Calicut
+          </h2>
+          <div className="flex flex-wrap gap-3">
+            {popularCities.map((city, i) => (
+              <button
+                key={i}
+                className="flex gap-1 md:gap-1  space-x-1 md:px-4 py-2 text-[10px] md:text-sm font-[500] md:font-medium text-gray-700 hover:bg-gray-100 transition"
+              >
+                {city}
+             <img src="icons/arrow-right-up-line.svg" alt=" arow" />
+              </button>
+            ))}
+          </div>
+        </div>
+      </section>
+      
+    {/* HOW IT WORKS SECTION */}
+<section className="bg-[#F6F8FA] py-16 hidden md:block">
+  <div className="max-w-[1320px] mx-auto px-4">
+    {/* Title */}
+    <h2 className="text-lg sm:text-xl md:text-2xl font-medium text-center text-black mb-12">
+      How GoCampus Works
+    </h2>
+
+    {/* Items row */}
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+      {howItWorksItems.map((item, idx) => (
+        <div key={idx} className="flex items-start gap-4">
+          {/* Icon */}
+          <div
+            className={`w-14 h-14 flex items-center justify-center rounded-full ${item.bgColor} flex-shrink-0`}
+          >
+            <img
+              src={item.icon}
+              alt={item.heading}
+              className="w-7 h-7"
+            />
+          </div>
+          {/* Text */}
+          <div>
+            <h3 className="text-base font-semibold text-gray-900 mb-1">
+              {item.heading}
+            </h3>
+            <p className="text-sm text-gray-500 leading-relaxed">
+              {item.text}
+            </p>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+
+    </div>
     </div>
   );
 };
 
-export default Page;
+export default HomePage;
