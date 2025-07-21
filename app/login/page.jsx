@@ -4,8 +4,10 @@ import { useState } from "react";
 import { Mail, Apple, Facebook } from "lucide-react";
 import Input from "../../components/input/input.jsx";
 import Button from "../../components/button/index.jsx";
-import { AppleIcon, FaceBookIcon, GoogleIcon, GoWhiteIcon } from "../../public";
+import { AppleIcon, FaceBookIcon, GoogleIcon, GoWhiteIcon } from "../../public/index.js";
 import Image from "next/image.js";
+
+
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
