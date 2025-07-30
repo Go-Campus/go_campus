@@ -165,13 +165,16 @@ const HomePage = () => {
 
   return (
     <div className=" bg-white w-full flex flex-col gap-[98px] items-center justify-center">
-      <div className="w-full  flex gap-5 flex-col items-center justify-center">
-        {/* <Navbar/> */}
+      <div className="w-full  px-5 flex gap-5 flex-col items-center justify-center">
+        <div>
+
+        <Navbar/>
+        </div>
 
         {/* HERO SECTION */}
         <section className={`w-full  max-w-[${MAxwidth}]`}>
           {heroBanners.map((banner, index) => (
-            <div key={index} className="w-full px-4 mx-auto my-6 ">
+            <div key={index} className="w-full my-6 ">
               {/* Desktop Layout */}
               <div className="hidden lg:flex relative">
                 {/* Left: Image + Content */}
@@ -309,52 +312,53 @@ const HomePage = () => {
               </div>
               {/* Filter buttons with horizontal scroll on mobile */}
               <div className=" w-full py-[32px]  flex justify-center items-center border-gray-200">
-              <div
-                className={` w-full  justify-center items-center max-w-[${MAxwidth}]`}
-              >
-                <div className="flex gap-3  overflow-x-auto scrollbar-hide mb-6 sm:flex-wrap ">
-                  {filterLabels.map((label, i) => (
-                    <button
-                      key={i}
-                      className={`flex-shrink-0 px-[13px] py-[3px] text-[14px] rounded-[6px] border ${
-                        i === 0
-                          ? "bg-[#CDD0D5] text-black  border-none"
-                          : "text-[#868C98] hover:bg-gray-100 border-gray-300"
-                      } transition`}
-                    >
-                      {label}
-                    </button>
-                  ))}
+                <div
+                  className={` w-full  justify-center items-center max-w-[${MAxwidth}]`}
+                >
+                  <div className="flex gap-3  overflow-x-auto scrollbar-hide mb-6 sm:flex-wrap ">
+                    {filterLabels.map((label, i) => (
+                      <button
+                        key={i}
+                        className={`flex-shrink-0 px-[13px] py-[3px] text-[14px] rounded-[6px] border ${
+                          i === 0
+                            ? "bg-[#CDD0D5] text-black  border-none"
+                            : "text-[#868C98] hover:bg-gray-100 border-gray-300"
+                        } transition`}
+                      >
+                        {label}
+                      </button>
+                    ))}
                   </div>
                 </div>
               </div>
 
-
               {/* Event cards */}
-<div className="w-full items-center flex justify-center">
-              <div className={` w-full  justify-center items-center max-w-[${MAxwidth}]`}>
-              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 w-full h-full">
-                {featuredTitles.map((t, i) => (
-                  <Card
-                    key={i}
-                    image={CardImage}
-                    date="18 June – 15 July | 03:00 PM"
-                    title={t}
-                    venue={featuredVenues[i]}
-                    price={featuredPrices[i]}
-                    badge={i === 0 ? "Save up to 39%" : ""}
-                    variant="latest"
-                  />
-                ))}
-              </div>
-              </div>
+              <div className="w-full items-center flex justify-center">
+                <div
+                  className={` w-full  justify-center items-center max-w-[${MAxwidth}]`}
+                >
+                  <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 w-full h-full">
+                    {featuredTitles.map((t, i) => (
+                      <Card
+                        key={i}
+                        image={CardImage}
+                        date="18 June – 15 July | 03:00 PM"
+                        title={t}
+                        venue={featuredVenues[i]}
+                        price={featuredPrices[i]}
+                        badge={i === 0 ? "Save up to 39%" : ""}
+                        variant="latest"
+                      />
+                    ))}
+                  </div>
+                </div>
               </div>
             </div>
           </section>
 
           {/* FEATURED EVENTS SECTION */}
-          <section className="flex flex-col  w-full ">
-            <div className="">
+          <section className="flex flex-col items-center   w-full ">
+            <div className={` w-full  justify-center items-center max-w-[${MAxwidth}]`}>
               <h2 className="text-xl sm:text-2xl font-semibold text-gray-800 mb-4">
                 Featured Events
               </h2>
@@ -376,8 +380,8 @@ const HomePage = () => {
           </section>
 
           {/* TOP DESTINATIONS SECTION */}
-          <section className="w-full">
-            <div className="mx-auto">
+          <section className="w-full  items-center flex justify-center">
+            <div className={` w-full  justify-center items-center max-w-[${MAxwidth}]`}>
               <div className="flex justify-between items-center mb-6">
                 <h2 className="text-xl sm:text-2xl font-semibold text-gray-800">
                   Top destinations
@@ -438,8 +442,8 @@ const HomePage = () => {
           </section>
 
           {/* POPULAR CITIES SECTION */}
-          <div className="w-full  gap-[50px] flex flex-col">
-            <section className=" w-full ">
+          <div className="w-full  gap-[50px] flex flex-col items-center justify-center">
+            <section className={` w-full  justify-center items-center max-w-[${MAxwidth}]`}>
               <div className="w-full  flex gap-[24px] flex-col">
                 <h2 className="text-[28px] font-[500] text-gray-800 ">
                   Popular Cities
@@ -458,9 +462,9 @@ const HomePage = () => {
               </div>
             </section>
 
-            <section className=" w-full ">
-              <div className="w-full flex gap-[24px] flex-col">
-                <h2 className="text-[28px] font-[500]  text-gray-800 ">
+            <section className=" w-full  items-center flex justify-center">
+              <div className={`w-full flex  justify-center items-center max-w-[${MAxwidth}] gap-[24px] flex-col`}>
+                <h2 className="text-[28px] text-start w-full font-[500]  text-gray-800 ">
                   Things to do Around Calicut
                 </h2>
                 <div className="grid grid-cols-2 md:flex md:flex-wrap gap-[16px]">
@@ -480,8 +484,11 @@ const HomePage = () => {
         </div>
       </div>
       {/* HOW IT WORKS SECTION */}
-      <section className=" w-full  px-[98px]  bg-[#F6F8FA]  ">
-        <div className="  px-4">
+    
+      {/* FOOTER SECTION */}
+      <div className=" w-full">
+      <section className=" w-full px-0 md:px-[98px]   pt-[35px] pb-[98px] bg-[#F6F8FA]  ">
+        <div className="  ">
           {/* Title */}
           <h2 className="text-lg sm:text-xl md:text-2xl font-medium text-center text-black mb-12">
             How GoCampus Works
@@ -515,8 +522,6 @@ const HomePage = () => {
           </div>
         </div>
       </section>
-      {/* FOOTER SECTION */}
-      <div className=" w-full">
         <Footer />
       </div>
     </div>
