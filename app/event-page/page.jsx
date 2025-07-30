@@ -1,54 +1,26 @@
 "use client";
 
+import  { EventCard, InfoCard } from "@/components/InfoCard/InfoCard";
 import React from "react";
-import { InfoCard } from "@/components/infoCard/index";
 import { aboutEventContent, faqs, socialIcons } from "../../constants/aboutEvent";
-import Navbar from "@/components/navbar";
+import { Accordion } from "@/components/accordion/accordion";
 import Button from "@/components/button";
-
-import Card from "@/components/card";
-import Accordion from "@/components/Accordion";
-
+import Image from "next/image";
 
 export default function EventPage() {
-    const featuredTitles = [
-        "Clay Sculpting",
-        "The Universe in a Pot",
-        "Zoreko",
-        "Music Quiz",
-    ];
-
-    const featuredVenues = [
-        "Venue to be announced, Delhi",
-        "Nojoto Creator Hub, Delhi",
-        "Venue to be announced, Delhi",
-        "Venue to be announced, Delhi",
-
-    ];
-
-    const featuredPrices = [
-        "2499",
-        "499",
-        "2499",
-        "2499",
-        "2499",
-        "5699",
-        "499",
-        "5317",
-    ];
-    const MAxwidth = "1300px";
     return (
-        <div className=" flex justify-center items-center bg-white overflow-x-hidden">
-            <div className={`w-full  justify-center items-center max-w-[${MAxwidth}]`}>
-                <Navbar/>
+        <div className="min-h-screen bg-red-500 ">
+            <div className=" w-full ">
                 {/* Top Grid: Poster and Info Cards */}
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     {/* Poster */}
                     <div className="lg:col-span-2 h-[320px] sm:h-[360px] md:h-[400px] lg:h-[470px] rounded-2xl overflow-hidden border border-gray-100 shadow-lg">
-                        <img
+                        <Image
                             src="/images/eventImage.svg"
                             alt="Event Poster"
                             className="w-full h-full object-cover"
+                            width={800}
+                            height={470}
                         />
                     </div>
 
@@ -65,7 +37,7 @@ export default function EventPage() {
                         <InfoCard
                             bgColor="bg-red-50"
                             borderColor="border-orange-100"
-                            iconSrc="/icons/locationWhite.svg"
+                            iconSrc="/icons/location.svg"
                             title="Cial Convention Center"
                             subtitle="Athani, Nedumbassery, Cochin"
                             decorativeImageSrc="/images/decorativeLocation.svg"
@@ -91,6 +63,8 @@ export default function EventPage() {
                                             src="/icons/TablonIcon.svg"
                                             alt="Tablon Global"
                                             className="w-8 h-8 object-contain"
+                                            width={32}
+                                            height={32}
                                         />
                                     </div>
                                     <div className="text-[18px] text-gray-900 font-medium">
@@ -141,11 +115,13 @@ export default function EventPage() {
                                             className="w-7 h-7 rounded-lg flex items-center justify-center p-1"
                                             style={{ background: "linear-gradient(to bottom right, #FFC7C7, #FF5F4A)" }}
                                         >
-                                            <img
-                                                src="/icons/locationWhite.svg"
-                                                alt="Icon"
-                                                className="w-full h-full object-contain"
-                                            />
+                                                                                    <Image
+                                            src="/icons/location.svg"
+                                            alt="Icon"
+                                            className="w-full h-full object-contain"
+                                            width={28}
+                                            height={28}
+                                        />
                                         </div>
                                         <div>
                                             <h3 className="font-semibold text-gray-900 text-sm">CIAL Convention Center</h3>
@@ -177,66 +153,54 @@ export default function EventPage() {
                                 ))}
                             </div>
                         </div>
-                        <div className="bg-red-50 rounded-lg shadow-sm border border-red-100 p-4 sm:p-6">
-  {/* Top Row: Logo + Title + Follow */}
-  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-4 gap-4">
-    {/* Left: Logo + Title */}
-    <div className="flex items-center space-x-3">
-      <div className="w-12 h-12 bg-white rounded-full shadow-sm border border-gray-200 flex items-center justify-center flex-shrink-0">
-        <img
-          src="/icons/TablonIcon.svg"
-          alt="Tablon Global"
-          className="w-8 h-8 object-contain"
-        />
-      </div>
-      <h3 className="font-semibold text-gray-900 text-base sm:text-lg">
-        By Tablon Global
-      </h3>
-    </div>
+                        <div className="bg-red-50 rounded-lg shadow-sm border border-red-100 p-6">
+                            <div className="flex items-start justify-between mb-4">
+                                <div className="flex items-center space-x-3">
+                                    <div className="w-12 h-12 bg-white rounded-full shadow-sm border border-gray-200 flex items-center justify-center flex-shrink-0">
+                                        <img
+                                            src="/icons/TablonIcon.svg"
+                                            alt="Tablon Global"
+                                            className="w-8 h-8 object-contain"
+                                            width={32}
+                                            height={32}
+                                        />
+                                    </div>
+                                    <div>
+                                        <h3 className="font-semibold text-gray-900 text-lg">By Tablon Global</h3>
+                                    </div>
+                                </div>
+                                <Button size="medium">
+                                    Follow
+                                </Button>
+                            </div>
 
-    {/* Right: Follow Button */}
-    <div className="self-start sm:self-center">
-      <Button size="medium" className="w-full sm:w-auto">
-        Follow
-      </Button>
-    </div>
-  </div>
+                            <div className="mb-4">
+                                <p className="text-gray-700 text-[18px] leading-[28px]">
+                                    Tablon is B2B Networking company to connect Investors & Founders.
+                                    Both Investors & Founders believe meeting in-person is far more
+                                    effective to discuss investment rather than sending emails, cold calls &
+                                    knocking on doors.
+                                </p>
+                            </div>
 
-  {/* Description */}
-  <div className="mb-4">
-    <p className="text-gray-700 text-sm sm:text-[16px] leading-relaxed">
-      Tablon is a B2B Networking company to connect Investors & Founders.
-      Both Investors & Founders believe meeting in-person is far more
-      effective to discuss investment rather than sending emails, cold
-      calls & knocking on doors.
-    </p>
-  </div>
+                            <div className="flex items-center justify-between">
+                                <div className="text-gray-600 text-[14px">
+                                    www.tablonglobal.com
+                                </div>
+                                <div className="flex items-center space-x-2">
+                                    {socialIcons.map((icon, index) => (
+                                        <button
+                                            key={index}
+                                            className="w-8 h-8  border border-gray-700 rounded-full flex items-center justify-center hover:bg-gray-50 transition-colors"
+                                            aria-label={icon.name}
+                                        >
+                                            {icon.icon}
+                                        </button>
+                                    ))}
+                                </div>
 
-  {/* Footer Row: Website + Social icons */}
-  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-    <a
-      href="https://www.tablonglobal.com"
-      target="_blank"
-      rel="noopener noreferrer"
-      className="text-gray-600 text-sm sm:text-[14px] hover:underline break-all"
-    >
-      www.tablonglobal.com
-    </a>
-
-    <div className="flex items-center space-x-2">
-      {socialIcons.map((icon, index) => (
-        <button
-          key={index}
-          className="w-8 h-8 border border-gray-300 rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors"
-          aria-label={icon.name}
-        >
-          {icon.icon}
-        </button>
-      ))}
-    </div>
-  </div>
-</div>
-
+                            </div>
+                        </div>
                     </div>
 
                     {/* Register Card */}
@@ -245,10 +209,9 @@ export default function EventPage() {
                             <img
                                 src="/images/eventImage.svg"
                                 alt="Event"
-                                className="w-full h-[230px] object-cover rounded-2xl"
+                                className="w-full h-[100px] object-cover"
                             />
                         </div>
-                        
 
                         <h4 className="text-center font-semibold text-gray-900 text-base sm:text-lg mb-1">
                             Delhi Beatbox Championship
@@ -269,83 +232,80 @@ export default function EventPage() {
                         </div>
                     </div>
                 </div>
-                <section className="px-4 pb-16">
+                <div className="flex flex-col gap-4">
+                    <h1 className="text-[24px] font-semibold text-black">More events from this organizer</h1>
+                    <div className="flex gap-4">
+                <EventCard
+  image="/images/eventImage.svg"
+  label="18 June  -15 July |  03:00 PM"
+  title="Worlds of Wonder (WOW) - Water Park"
+  venue="Worlds of Wonder, Noida"
+  price={5317}
+  discount={"Save up to 39%"}
+/>
+                <EventCard
+  image="/images/eventImage.svg"
+  label="18 June  -15 July |  03:00 PM"
+  title="Worlds of Wonder (WOW) - Water Park"
+  venue="Worlds of Wonder, Noida"
+  price={5317}
 
-                    <h2 className="text-xl sm:text-2xl font-semibold text-gray-800 mb-4">
-                        More events from this organizer
-                    </h2>
-                    <div className="w-[70%] grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                        {featuredTitles.map((t, i) => (
-                            <Card
-                                key={i}
-                                image={`/images/Events/event${(i) + 1}.svg`}
-                                date="18 June – 15 July | 03:00 PM"
-                                title={t}
-                                venue={featuredVenues[i]}
-                                price={featuredPrices[i]}
-                                badge={i === 0 ? "Save up to 39%" : ""}
-                                variant="varient"
-                            />
-                        ))}
+/>
+                <EventCard
+  image="/images/eventImage.svg"
+  label="18 June  -15 July |  03:00 PM"
+  title="Worlds of Wonder (WOW) - Water Park"
+  venue="Worlds of Wonder, Noida"
+  price={5317}
+  
+/>
+                <EventCard
+  image="/images/eventImage.svg"
+  label="18 June  -15 July |  03:00 PM"
+  title="Worlds of Wonder (WOW) - Water Park"
+  venue="Worlds of Wonder, Noida"
+  price={5317}
+  discount={"Save up to 39%"}
+/>
                     </div>
-                </section>
-                <section className="px-4 pb-16">
-                    <div className="max-w-[1320px] mx-auto">
-                        {/* Section Header */}
-                        <div className="flex justify-between items-center mb-4">
-                            <h2 className="text-xl sm:text-2xl font-semibold text-gray-800">
-                                Other Events You May Like
-                            </h2>
-                            <div className="flex gap-3">
-                                <button
-                                    onClick={() => {
-                                        document.getElementById("other-events-scroll").scrollBy({
-                                            left: -300,
-                                            behavior: "smooth",
-                                        });
-                                    }}
-                                    className="w-10 h-10 rounded-full bg-gray-100 flex justify-center items-center hover:bg-gray-200 transition"
-                                >
-                                    <span className="text-xl font-bold">{'<'}</span>
-                                </button>
-                                <button
-                                    onClick={() => {
-                                        document.getElementById("other-events-scroll").scrollBy({
-                                            left: 300,
-                                            behavior: "smooth",
-                                        });
-                                    }}
-                                    className="w-10 h-10 rounded-full bg-gray-100 flex justify-center items-center hover:bg-gray-200 transition"
-                                >
-                                    <span className="text-xl font-bold">{'>'}</span>
-                                </button>
-                            </div>
-                        </div>
+                </div>
+                <div className="flex flex-col gap-4">
+                    <h1 className="text-[24px] font-semibold text-black">Other Event you May like</h1>
+                    <div className="flex gap-4">
+                <EventCard
+  image="/images/eventImage.svg"
+  label="18 June  -15 July |  03:00 PM"
+  title="Worlds of Wonder (WOW) - Water Park"
+  venue="Worlds of Wonder, Noida"
+  price={5317}
+  discount={"Save up to 39%"}
+/>
+                <EventCard
+  image="/images/eventImage.svg"
+  label="18 June  -15 July |  03:00 PM"
+  title="Worlds of Wonder (WOW) - Water Park"
+  venue="Worlds of Wonder, Noida"
+  price={5317}
 
-                        {/* Event Cards Horizontal Scroll */}
-                        <div
-                            id="other-events-scroll"
-                            className="flex gap-6 overflow-x-auto scrollbar-hide scroll-smooth"
-                        >
-                            {featuredTitles.map((t, i) => (
-                                <div key={i} className="flex-shrink-0 w-[20%]">
-                                    <Card
-                                        image={`/images/Events/event${i + 1}.svg`}
-                                        date="18 June – 15 July | 03:00 PM"
-                                        title={t}
-                                        venue={featuredVenues[i]}
-                                        price={featuredPrices[i]}
-                                        badge={i === 0 ? "Save up to 39%" : ""}
-                                        variant="latest"
-                                    />
-                                </div>
-                            ))}
-                        </div>
+/>
+                <EventCard
+  image="/images/eventImage.svg"
+  label="18 June  -15 July |  03:00 PM"
+  title="Worlds of Wonder (WOW) - Water Park"
+  venue="Worlds of Wonder, Noida"
+  price={5317}
+  
+/>
+                <EventCard
+  image="/images/eventImage.svg"
+  label="18 June  -15 July |  03:00 PM"
+  title="Worlds of Wonder (WOW) - Water Park"
+  venue="Worlds of Wonder, Noida"
+  price={5317}
+  discount={"Save up to 39%"}
+/>
                     </div>
-                </section>
-
-
-
+                </div>
             </div>
         </div>
     );
