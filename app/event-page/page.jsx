@@ -2,22 +2,25 @@
 
 import  { EventCard, InfoCard } from "@/components/InfoCard/InfoCard";
 import React from "react";
-import { aboutEventContent, faqs, socialIcons } from "../constants/aboutEvent";
+import { aboutEventContent, faqs, socialIcons } from "../../constants/aboutEvent";
 import { Accordion } from "@/components/accordion/accordion";
-import Button from "@/components/button/Button";
+import Button from "@/components/button";
+import Image from "next/image";
 
 export default function EventPage() {
     return (
-        <div className="min-h-screen bg-white overflow-x-hidden">
-            <div className="max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div className="min-h-screen bg-red-500 ">
+            <div className=" w-full ">
                 {/* Top Grid: Poster and Info Cards */}
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     {/* Poster */}
                     <div className="lg:col-span-2 h-[320px] sm:h-[360px] md:h-[400px] lg:h-[470px] rounded-2xl overflow-hidden border border-gray-100 shadow-lg">
-                        <img
+                        <Image
                             src="/images/eventImage.svg"
                             alt="Event Poster"
                             className="w-full h-full object-cover"
+                            width={800}
+                            height={470}
                         />
                     </div>
 
@@ -60,6 +63,8 @@ export default function EventPage() {
                                             src="/icons/TablonIcon.svg"
                                             alt="Tablon Global"
                                             className="w-8 h-8 object-contain"
+                                            width={32}
+                                            height={32}
                                         />
                                     </div>
                                     <div className="text-[18px] text-gray-900 font-medium">
@@ -110,11 +115,13 @@ export default function EventPage() {
                                             className="w-7 h-7 rounded-lg flex items-center justify-center p-1"
                                             style={{ background: "linear-gradient(to bottom right, #FFC7C7, #FF5F4A)" }}
                                         >
-                                            <img
-                                                src="/icons/location.svg"
-                                                alt="Icon"
-                                                className="w-full h-full object-contain"
-                                            />
+                                                                                    <Image
+                                            src="/icons/location.svg"
+                                            alt="Icon"
+                                            className="w-full h-full object-contain"
+                                            width={28}
+                                            height={28}
+                                        />
                                         </div>
                                         <div>
                                             <h3 className="font-semibold text-gray-900 text-sm">CIAL Convention Center</h3>
@@ -154,6 +161,8 @@ export default function EventPage() {
                                             src="/icons/TablonIcon.svg"
                                             alt="Tablon Global"
                                             className="w-8 h-8 object-contain"
+                                            width={32}
+                                            height={32}
                                         />
                                     </div>
                                     <div>

@@ -3,7 +3,7 @@
 import React from "react";
 import { InfoCard } from "@/components/infoCard/index";
 import { aboutEventContent, faqs, socialIcons } from "../../constants/aboutEvent";
-
+import Navbar from "@/components/navbar";
 import Button from "@/components/button";
 
 import Card from "@/components/card";
@@ -36,9 +36,11 @@ export default function EventPage() {
         "499",
         "5317",
     ];
+    const MAxwidth = "1300px";
     return (
-        <div className="min-h-screen bg-white overflow-x-hidden">
-            <div className="w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div className=" flex justify-center items-center bg-white overflow-x-hidden">
+            <div className={`w-full  justify-center items-center max-w-[${MAxwidth}]`}>
+                <Navbar/>
                 {/* Top Grid: Poster and Info Cards */}
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     {/* Poster */}

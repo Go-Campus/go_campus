@@ -39,7 +39,7 @@ export default function Footer() {
           </div>
 
           {/* Links Grid */}
-          <div className="grid grid-cols-1  sm:grid-cols-2 lg:grid-cols-3 gap-10  w-[full] md:w-[60%]">
+          <div className="md:grid grid-cols-1  sm:grid-cols-2 lg:grid-cols-3 gap-10  w-[full] hidden md:w-[60%]">
             {/* Company Links */}
             <div className="flex flex-col gap-[24px]">
               <h3 className="text-[#FFFFFF] text-[12px] font-[500] uppercase tracking-wider">
@@ -155,7 +155,7 @@ export default function Footer() {
         </div>
 
         {/* social media */}
-        <div className="flex flex-wrap gap-[10px] justify-center sm:justify-start">
+        <div className="flex flex-wrap gap-[10px] justify-start sm:justify-start">
           <div className="w-10 h-10 border border-gray-100 rounded-full flex items-center justify-center hover:border-gray-500 transition-colors cursor-pointer">
             <Facebook size={18} />
           </div>
