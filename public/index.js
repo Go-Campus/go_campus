@@ -22,6 +22,9 @@ import checkImage from "./images/checkImage.svg";
 import PlaceImage from "./placeImage/UKPhotosbyVisaVerge-097.jpg"
 import DubaiImage from "./placeImage/dubai.jpg"
 import UkImage from "./placeImage/uk.png"
+import LockColorIcon from "./icons/Lock.png"
+import ProfleColorIcon from "./icons/Profile.png"
+import SearchColorIcon from "./icons/Magnifier.png"
 export {
   checkImage,
   LoginImage,
@@ -46,5 +49,8 @@ export {
   CardImage,
   PlaceImage,
   DubaiImage,
-  UkImage
+  UkImage,
+  LockColorIcon,
+  ProfleColorIcon,
+  SearchColorIcon
 };

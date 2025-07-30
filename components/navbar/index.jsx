@@ -11,23 +11,28 @@ export default function GoCampusHeader() {
   const navBar = [
     {
       id: 1,
-      name: " Create an Event",
+      name: " Contact Sales",
       link: "home",
     },
     {
       id: 2,
-      name: " Likes",
+      name: " Create Events ",
       link: "home",
     }, 
     {
       id: 3,
-      name: "Tickets",
+      name: "Find my ticket ",
+      link: "home",
+    },
+    {
+      id: 4,
+      name: "Help   ",
       link: "home",
     },
   ];
 
   return (
-    <header className="bg-white py-3">
+    <header className="bg-white w-full py-3">
       {/* Desktop Layout */}
       <div className="hidden lg:flex items-center justify-between">
         {/* First 50%: Logo + Search Bar */}
@@ -65,7 +70,7 @@ export default function GoCampusHeader() {
               <Link 
                 key={navbar.id} 
                 href={navbar.link}
-                className="text-gray-700 hover:text-gray-900 font-medium"
+                className="text-gray-700 hover:text-gray-900 text-[16px] font-medium"
               >
                 {navbar.name}
               </Link>
@@ -161,7 +166,7 @@ export default function GoCampusHeader() {
                 <Link 
                   key={navbar.id} 
                   href={navbar.link}
-                  className={`text-gray-700 hover:text-gray-900 hover:bg-gray-200 font-medium py-2 px-3 rounded transition-all duration-200 transform ${
+                  className={`text-gray-700 hover:text-gray-900 text-[16px] hover:bg-gray-200 font-medium py-2 px-3 rounded transition-all duration-200 transform ${
                     isMenuOpen 
                       ? 'translate-y-0 opacity-100' 
                       : 'translate-y-[-10px] opacity-0'
