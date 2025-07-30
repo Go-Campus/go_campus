@@ -144,13 +144,13 @@ const HomePage = () => {
 
   const topDestinations = [
     { img: CardImage, name: "Mumbai" },
-    { img: UkImage, name: "London" },
+    { img: DubaiImage, name: "London" },
     { img: DubaiImage, name: "Dubai" },
     { img: CardImage, name: "Mumbai" },
-    { img: UkImage, name: "London" },
+    { img: DubaiImage, name: "London" },
     { img: DubaiImage, name: "Dubai" },
     { img: CardImage, name: "Mumbai" },
-    { img: UkImage, name: "London" },
+    { img: DubaiImage, name: "London" },
     { img: DubaiImage, name: "Dubai" },
 
   ];
@@ -384,11 +384,12 @@ const HomePage = () => {
                   {topDestinations.map((destination, i) => (
                     <div
                       key={i}
-                      className="group relative min-w-[274px] h-[390px] rounded-[40%] shadow-md cursor-pointer transition-transform duration-300 hover:translate-x-2 flex-shrink-0"
+                      className="group relative min-w-[274px] h-[390px] rounded-[30%]  cursor-pointer transition-transform duration-300 hover:translate-x-2 flex-shrink-0"
                     >
                       <div
                         style={{
-                          borderRadius: "40%",
+                          borderRadius: "35%",
+                    
                           backgroundImage: `url(${destination.img.src})`,
                           backgroundSize: "cover",
                           backgroundPosition: "center",
