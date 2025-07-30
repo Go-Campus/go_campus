@@ -25,6 +25,7 @@ import {
   Search,
   MoveUpRight,
   ArrowUpRight,
+  ArrowRight,
 } from "lucide-react";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
@@ -166,9 +167,12 @@ const HomePage = () => {
   return (
     <div className=" bg-white w-full flex flex-col gap-[98px] items-center justify-center">
       <div className="w-full  px-5 flex gap-5 flex-col items-center justify-center">
-        <div>
-
+        <div className="w-full flex justify-center items-center">
+<div className={`w-full  max-w-[${MAxwidth}]`}>
         <Navbar/>
+
+</div>
+
         </div>
 
         {/* HERO SECTION */}
@@ -298,7 +302,7 @@ const HomePage = () => {
         </section>
 
         {/* LATEST EVENTS SECTION */}
-        <div className="w-full flex  flex-col  gap-[88px]">
+        <div className="w-full flex  flex-col  gap-[50px]">
           <section className=" w-full">
             <div className=" w-full ">
               <div className=" w-full border-b border-t  flex justify-center items-center border-gray-200">
@@ -311,7 +315,7 @@ const HomePage = () => {
                 </div>
               </div>
               {/* Filter buttons with horizontal scroll on mobile */}
-              <div className=" w-full py-[32px]  flex justify-center items-center border-gray-200">
+              <div className=" w-full py-[36px]  flex justify-center items-center border-gray-200">
                 <div
                   className={` w-full  justify-center items-center max-w-[${MAxwidth}]`}
                 >
@@ -359,9 +363,17 @@ const HomePage = () => {
           {/* FEATURED EVENTS SECTION */}
           <section className="flex flex-col items-center   w-full ">
             <div className={` w-full  justify-center items-center max-w-[${MAxwidth}]`}>
-              <h2 className="text-xl sm:text-2xl font-semibold text-gray-800 mb-4">
+              <div className="flex w-full py-[36px] justify-between">
+              <h2 className="text-xl sm:text-2xl font-semibold text-gray-800 ">
                 Featured Events
               </h2>
+              <button className="flex gap-2 items-center text-[#FF553F]">
+              See All
+              <span>
+                <ArrowRight className="w-4 h-4 " />
+              </span>
+              </button>
+              </div>
               <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 w-full h-full">
                 {featuredTitles.map((t, i) => (
                   <Card
