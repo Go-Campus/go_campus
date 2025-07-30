@@ -14,7 +14,7 @@ import {
   PlaceImage
 } from "@/public";
 import Image from "next/image";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Search ,MoveUpRight, ArrowUpRight } from "lucide-react";
 const HomePage = () => {
 
   // banner datas 
@@ -169,7 +169,9 @@ const HomePage = () => {
                   ))}
                 </div>
                 <div className="absolute inset-0 flex justify-center items-center z-30">
-                  <img
+                  <Image
+                    width={50}
+                    height={200}
                     src="/images/barcode.svg"
                     alt="Barcode"
                     className="w-[50px] h-[200px] object-contain"
@@ -181,7 +183,9 @@ const HomePage = () => {
             {/* Mobile Layout */}
             <div className="block lg:hidden bg-white rounded-[36px] overflow-hidden shadow-md">
               <div className="relative h-[400px]">
-                <img
+                <Image
+                  width={50}
+                  height={200}
                   src={banner.image}
                   alt="Hero"
                   className="w-full h-full object-cover"
@@ -210,7 +214,9 @@ const HomePage = () => {
 
               {/* Mobile Barcode */}
               <div className="bg-white py-4 flex justify-center items-center lg:hidden">
-                <img
+                <Image
+                  width={140}
+                  height={60}
                   src="/images/barcode1.svg"
                   alt="Barcode"
                   className="w-[140px] h-[60px] object-contain"
@@ -231,6 +237,8 @@ const HomePage = () => {
                 >
                   <div className="w-10  h-10 ">
                     <Image
+                      width={28}
+                      height={28}
                       src={category.icon}
                       alt={category.label}
                       className="w-full h-full object-contain"
@@ -247,7 +255,7 @@ const HomePage = () => {
 
         {/* LATEST EVENTS SECTION */}
 
-        <div className="w-full bg-red-500">
+        <div className="w-full flex px-4 flex-col gap-[88px]">
         <section className=" w-full">
           <div className="">
             <h2 className="text-xl sm:text-2xl font-semibold text-gray-800 mb-4">
@@ -312,13 +320,13 @@ const HomePage = () => {
         </section>
 
         {/* TOP DESTINATIONS SECTION */}
-        <section className=" w-full ">
-          <div className=" mx-auto">
+        <section className="w-full">
+          <div className="mx-auto">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-xl sm:text-2xl font-semibold text-gray-800">
                 Top destinations
               </h2>
-              <div className="flex gap-3">
+              <div className="hidden sm:flex gap-3">
                 <button className="w-10 h-10 rounded-full bg-gray-100 flex justify-center items-center hover:bg-gray-200 transition">
                   <span className="text-xl font-bold"><ChevronLeft className="text-gray-500" /></span>
                 </button>
@@ -328,48 +336,48 @@ const HomePage = () => {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-              {topDestinations.map((destination, i) => (
-                <div
-                  key={i}
-                  className="w-full rounded-4xl overflow-hidden relative shadow-md"
-                >
-                  <Image
-                    src={destination.img}
-                    alt={destination.name}
-                    width={260}
-                    height={300}
-                    className="w-full h-[200px] sm:h-[250px] md:h-[300px] object-cover rounded-4xl"
-                  />
-                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-3">
-                    <p className="text-white text-lg font-semibold">
-                      {destination.name}
-                    </p>
+            <div className="relative">
+              <div className="flex overflow-x-auto gap-4 pb-4 snap-x snap-mandatory scrollbar-hide">
+                {topDestinations.map((destination, i) => (
+                  <div
+                    key={i}
+                    className="flex-none w-[274px]  h-[390px] snap-start rounded-[40%] overflow-hidden relative shadow-md"
+                  >
+                    <Image
+                      src={destination.img}
+                      alt={destination.name}
+                      width={320}
+                      height={400}
+                      className="w-full h-[200px] sm:h-[250px] md:h-[300px] object-cover rounded-4xl"
+                    />
+                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-3">
+                      <p className="text-white text-lg font-semibold">
+                        {destination.name}
+                      </p>
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
+              <div className="absolute left-0 right-0 bottom-0 h-1 bg-gradient-to-r from-transparent via-gray-200 to-transparent opacity-50" />
             </div>
           </div>
         </section>
 
         {/* POPULAR CITIES SECTION */}
+        <div className="w-full  gap-[50px] flex flex-col">
         <section className=" w-full ">
-          <div className="w-full mx-auto">
-            <h2 className="text-xl sm:text-2xl font-semibold text-gray-800 mb-4">
+          <div className="w-full  flex gap-[24px] flex-col">
+            <h2 className="text-[28px] font-[500] text-gray-800 ">
               Popular Cities
             </h2>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+            <div className="grid grid-cols-2 md:flex md:flex-wrap gap-[16px]">
               {popularCities.map((city, i) => (
                 <button
                   key={i}
-                  className="flex items-center justify-between px-3 py-2 text-sm md:text-base font-medium text-gray-700 hover:bg-gray-100 transition rounded-lg border border-gray-200"
+                  className="flex items-center gap-[10px] py-[6px] px-[14px] text-[14px] font-medium bg-[#F6F8FA] text-[#31353F] hover:bg-gray-100 transition rounded-lg border border-gray-200"
                 >
                   <span className="truncate">{city}</span>
-                  <img
-                    src="icons/arrow-right-up-line.svg"
-                    alt="arrow"
-                    className="w-4 h-4 ml-2 flex-shrink-0"
-                  />
+                  <ArrowUpRight className="w-4 h-4 " />
                 </button>
               ))}
             </div>
@@ -377,27 +385,25 @@ const HomePage = () => {
         </section>
 
         <section className=" w-full ">
-          <div className="w-full mx-auto">
-            <h2 className="text-xl sm:text-2xl font-semibold text-gray-800 mb-4">
+          <div className="w-full flex gap-[24px] flex-col">
+            <h2 className="text-[28px] font-[500]  text-gray-800 ">
               Things to do Around Calicut
             </h2>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+            <div className="grid grid-cols-2 md:flex md:flex-wrap gap-[16px]">
               {popularCities.map((city, i) => (
                 <button
                   key={i}
-                  className="flex items-center justify-between px-3 py-2 text-sm md:text-base font-medium text-gray-700 hover:bg-gray-100 transition rounded-lg border border-gray-200"
+                  className="flex items-center gap-[10px] py-[6px] px-[14px] text-[14px] font-medium bg-[#F6F8FA] text-[#31353F] hover:bg-gray-100 transition rounded-lg border border-gray-200"
                 >
                   <span className="truncate">{city}</span>
-                  <img
-                    src="icons/arrow-right-up-line.svg"
-                    alt="arrow"
-                    className="w-4 h-4 ml-2 flex-shrink-0"
-                  />
+                  <ArrowUpRight className="w-4 h-4 " />
+              
                 </button>
               ))}
             </div>
           </div>
         </section>
+        </div>
         </div>
         {/* HOW IT WORKS SECTION */}
         <section className=" w-full  hidden md:block">
