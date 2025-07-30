@@ -19,7 +19,9 @@ import CultureIcon from "./icons/Culture.svg";
 import WorkshopesIcon from "./icons/Workshopes.svg";
 import CardImage from "./images/cardimage.png";
 import checkImage from "./images/checkImage.svg";
-import PlaceImage from "./placeImage/Group 1000002720.png"
+import PlaceImage from "./placeImage/UKPhotosbyVisaVerge-097.jpg"
+import DubaiImage from "./placeImage/dubai.jpg"
+import UkImage from "./placeImage/uk.png"
 export {
   checkImage,
   LoginImage,
@@ -42,5 +44,7 @@ export {
   WorkshopesIcon,
   entertaimentIcon,
   CardImage,
-  PlaceImage
+  PlaceImage,
+  DubaiImage,
+  UkImage
 };

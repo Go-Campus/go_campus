@@ -11,13 +11,41 @@ import {
   CultureIcon,
   WorkshopesIcon,
   AcadamicIcon,
-  PlaceImage
+  PlaceImage,
+  UkImage,
+  DubaiImage,
+
 } from "@/public";
 import Image from "next/image";
-import { ChevronLeft, ChevronRight, Search ,MoveUpRight, ArrowUpRight } from "lucide-react";
+import {
+  ChevronLeft,
+  ChevronRight,
+  Search,
+  MoveUpRight,
+  ArrowUpRight,
+} from "lucide-react";
 const HomePage = () => {
+  // State for carousel scroll position
+  const carouselRef = React.useRef(null);
+  
+  // Function to handle carousel navigation
+  const handleCarouselScroll = (direction) => {
+    console.log(`Scrolling carousel ${direction}`);
+    
+    if (!carouselRef.current) return;
+    
+    const scrollAmount = 300; // Adjust this value based on your needs
+    const currentScroll = carouselRef.current.scrollLeft;
+    
+    carouselRef.current.scrollTo({
+      left: direction === 'left' 
+        ? currentScroll - scrollAmount 
+        : currentScroll + scrollAmount,
+      behavior: 'smooth'
+    });
+  };
 
-  // banner datas 
+  // banner datas
   const heroBanners = [
     {
       image: PartyImage,
@@ -27,7 +55,7 @@ const HomePage = () => {
       buttonText: "Get Into Music",
     },
   ];
-//  section two categories datas 
+  //  section two categories datas
   const categories = [
     { icon: AcadamicIcon, label: "Academic" },
     { icon: TechnologyIcon, label: "Technology" },
@@ -115,15 +143,20 @@ const HomePage = () => {
   ];
 
   const topDestinations = [
-    { img: "/images/Events/mumbai.svg", name: "Mumbai" },
-    { img: "/images/Events/kochi.svg", name: "Kochi" },
-    { img: "/images/Events/hyderabad.svg", name: "Hyderabad" },
-    { img: "/images/Events/chennai.svg", name: "Chennai" },
-    { img: "/images/Events/delhi.svg", name: "Delhi" },
-    { img: "/images/Events/mumbai.svg", name: "Mumbai" },
-    { img: "/images/Events/kochi.svg", name: "Kochi" },
-    { img: "/images/Events/hyderabad.svg", name: "Hyderabad" },
+    { img: CardImage, name: "Mumbai" },
+    { img: UkImage, name: "London" },
+    { img: DubaiImage, name: "Dubai" },
+    { img: CardImage, name: "Mumbai" },
+    { img: UkImage, name: "London" },
+    { img: DubaiImage, name: "Dubai" },
+    { img: CardImage, name: "Mumbai" },
+    { img: UkImage, name: "London" },
+    { img: DubaiImage, name: "Dubai" },
+
   ];
+
+  // Add logging to debug image loading
+  console.log("Top Destinations:", topDestinations);
 
   return (
     <div className="min-h-screen bg-white w-full flex flex-col items-center justify-center">
@@ -256,154 +289,165 @@ const HomePage = () => {
         {/* LATEST EVENTS SECTION */}
 
         <div className="w-full flex px-4 flex-col gap-[88px]">
-        <section className=" w-full">
-          <div className="">
-            <h2 className="text-xl sm:text-2xl font-semibold text-gray-800 mb-4">
-              Latest Events in Lucknow
-            </h2>
-
-            {/* Filter buttons with horizontal scroll on mobile */}
-            <div className="flex gap-3 overflow-x-auto scrollbar-hide mb-6 sm:flex-wrap sm:overflow-visible">
-              {filterLabels.map((label, i) => (
-                <button
-                  key={i}
-                  className={`flex-shrink-0 px-4 py-2 text-sm rounded-full border ${
-                    i === 0
-                      ? "bg-black text-white"
-                      : "text-gray-600 hover:bg-gray-100 border-gray-300"
-                  } transition`}
-                >
-                  {label}
-                </button>
-              ))}
-            </div>
-
-            {/* Event cards */}
-            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 w-full h-full">
-              {featuredTitles.map((t, i) => (
-                <Card
-                  key={i}
-                  image={CardImage}
-                  date="18 June – 15 July | 03:00 PM"
-                  title={t}
-                  venue={featuredVenues[i]}
-                  price={featuredPrices[i]}
-                  badge={i === 0 ? "Save up to 39%" : ""}
-                  variant="latest"
-                />
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* FEATURED EVENTS SECTION */}
-        <section className="flex flex-col items-center w-full justify-center">
-          <div className="">
-            <h2 className="text-xl sm:text-2xl font-semibold text-gray-800 mb-4">
-              Featured Events
-            </h2>
-            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 w-full h-full">
-              {featuredTitles.map((t, i) => (
-                <Card
-                  key={i}
-                  image={CardImage}
-                  date="18 June – 15 July | 03:00 PM"
-                  title={t}
-                  venue={featuredVenues[i]}
-                  price={featuredPrices[i]}
-                  badge={i === 0 ? "Save up to 39%" : ""}
-                  variant="featured"
-                />
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* TOP DESTINATIONS SECTION */}
-        <section className="w-full">
-          <div className="mx-auto">
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-xl sm:text-2xl font-semibold text-gray-800">
-                Top destinations
+          <section className=" w-full">
+            <div className="">
+              <h2 className="text-xl sm:text-2xl font-semibold text-gray-800 mb-4">
+                Latest Events in Lucknow
               </h2>
-              <div className="hidden sm:flex gap-3">
-                <button className="w-10 h-10 rounded-full bg-gray-100 flex justify-center items-center hover:bg-gray-200 transition">
-                  <span className="text-xl font-bold"><ChevronLeft className="text-gray-500" /></span>
-                </button>
-                <button className="w-10 h-10 rounded-full bg-gray-100 flex justify-center items-center hover:bg-gray-200 transition">
-                  <span className="text-xl font-bold"><ChevronRight className="text-gray-500" /></span>
-                </button>
-              </div>
-            </div>
 
-            <div className="relative">
-              <div className="flex overflow-x-auto gap-4 pb-4 snap-x snap-mandatory scrollbar-hide">
-                {topDestinations.map((destination, i) => (
-                  <div
+              {/* Filter buttons with horizontal scroll on mobile */}
+              <div className="flex gap-3 overflow-x-auto scrollbar-hide mb-6 sm:flex-wrap sm:overflow-visible">
+                {filterLabels.map((label, i) => (
+                  <button
                     key={i}
-                    className="flex-none w-[274px]  h-[390px] snap-start rounded-[40%] overflow-hidden relative shadow-md"
+                    className={`flex-shrink-0 px-4 py-2 text-sm rounded-full border ${
+                      i === 0
+                        ? "bg-black text-white"
+                        : "text-gray-600 hover:bg-gray-100 border-gray-300"
+                    } transition`}
                   >
-                    <Image
-                      src={destination.img}
-                      alt={destination.name}
-                      width={320}
-                      height={400}
-                      className="w-full h-[200px] sm:h-[250px] md:h-[300px] object-cover rounded-4xl"
-                    />
-                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-3">
-                      <p className="text-white text-lg font-semibold">
-                        {destination.name}
-                      </p>
-                    </div>
-                  </div>
+                    {label}
+                  </button>
                 ))}
               </div>
-              <div className="absolute left-0 right-0 bottom-0 h-1 bg-gradient-to-r from-transparent via-gray-200 to-transparent opacity-50" />
-            </div>
-          </div>
-        </section>
 
-        {/* POPULAR CITIES SECTION */}
-        <div className="w-full  gap-[50px] flex flex-col">
-        <section className=" w-full ">
-          <div className="w-full  flex gap-[24px] flex-col">
-            <h2 className="text-[28px] font-[500] text-gray-800 ">
-              Popular Cities
-            </h2>
-            <div className="grid grid-cols-2 md:flex md:flex-wrap gap-[16px]">
-              {popularCities.map((city, i) => (
-                <button
-                  key={i}
-                  className="flex items-center gap-[10px] py-[6px] px-[14px] text-[14px] font-medium bg-[#F6F8FA] text-[#31353F] hover:bg-gray-100 transition rounded-lg border border-gray-200"
-                >
-                  <span className="truncate">{city}</span>
-                  <ArrowUpRight className="w-4 h-4 " />
-                </button>
-              ))}
+              {/* Event cards */}
+              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 w-full h-full">
+                {featuredTitles.map((t, i) => (
+                  <Card
+                    key={i}
+                    image={CardImage}
+                    date="18 June – 15 July | 03:00 PM"
+                    title={t}
+                    venue={featuredVenues[i]}
+                    price={featuredPrices[i]}
+                    badge={i === 0 ? "Save up to 39%" : ""}
+                    variant="latest"
+                  />
+                ))}
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
 
-        <section className=" w-full ">
-          <div className="w-full flex gap-[24px] flex-col">
-            <h2 className="text-[28px] font-[500]  text-gray-800 ">
-              Things to do Around Calicut
-            </h2>
-            <div className="grid grid-cols-2 md:flex md:flex-wrap gap-[16px]">
-              {popularCities.map((city, i) => (
-                <button
-                  key={i}
-                  className="flex items-center gap-[10px] py-[6px] px-[14px] text-[14px] font-medium bg-[#F6F8FA] text-[#31353F] hover:bg-gray-100 transition rounded-lg border border-gray-200"
-                >
-                  <span className="truncate">{city}</span>
-                  <ArrowUpRight className="w-4 h-4 " />
-              
-                </button>
-              ))}
+          {/* FEATURED EVENTS SECTION */}
+          <section className="flex flex-col items-center w-full justify-center">
+            <div className="">
+              <h2 className="text-xl sm:text-2xl font-semibold text-gray-800 mb-4">
+                Featured Events
+              </h2>
+              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 w-full h-full">
+                {featuredTitles.map((t, i) => (
+                  <Card
+                    key={i}
+                    image={CardImage}
+                    date="18 June – 15 July | 03:00 PM"
+                    title={t}
+                    venue={featuredVenues[i]}
+                    price={featuredPrices[i]}
+                    badge={i === 0 ? "Save up to 39%" : ""}
+                    variant="featured"
+                  />
+                ))}
+              </div>
             </div>
+          </section>
+
+          {/* TOP DESTINATIONS SECTION */}
+          <section className="w-full">
+            <div className="mx-auto">
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-xl sm:text-2xl font-semibold text-gray-800">
+                  Top destinations
+                </h2>
+                <div className="hidden sm:flex gap-3">
+                  <button 
+                    onClick={() => handleCarouselScroll('left')}
+                    className="w-10 h-10 rounded-full bg-gray-100 flex justify-center items-center hover:bg-gray-200 transition"
+                  >
+                    <span className="text-xl font-bold">
+                      <ChevronLeft className="text-gray-500" />
+                    </span>
+                  </button>
+                  <button 
+                    onClick={() => handleCarouselScroll('right')}
+                    className="w-10 h-10 rounded-full bg-gray-100 flex justify-center items-center hover:bg-gray-200 transition"
+                  >
+                    <span className="text-xl font-bold">
+                      <ChevronRight className="text-gray-500" />
+                    </span>
+                  </button>
+                </div>
+              </div>
+
+              <div className="relative">
+                <div ref={carouselRef} className="flex gap-4 overflow-x-auto no-scrollbar">
+                  {topDestinations.map((destination, i) => (
+                    <div
+                      key={i}
+                      className="group relative min-w-[274px] h-[390px] rounded-[40%] shadow-md cursor-pointer transition-transform duration-300 hover:translate-x-2 flex-shrink-0"
+                    >
+                      <div
+                        style={{
+                          borderRadius: "40%",
+                          backgroundImage: `url(${destination.img.src})`,
+                          backgroundSize: "cover",
+                          backgroundPosition: "center",
+                          backgroundRepeat: "no-repeat",
+                        }}
+                        className="absolute inset-0 transition-transform duration-300 "
+                      />
+                      <div className="absolute inset-0  rounded-[40%] bg-gradient-to-b from-transparent to-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                      <div className="absolute bottom-16 left-0 right-0 text-center text-white transform translate-y-full  transition-transform duration-300">
+                        <h3 className="text-xl font-semibold">{destination.name}</h3>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <div className="absolute left-0 right-0 bottom-0 h-1 bg-gradient-to-r from-transparent via-gray-200 to-transparent opacity-50" />
+              </div>
+            </div>
+          </section>
+
+          {/* POPULAR CITIES SECTION */}
+          <div className="w-full  gap-[50px] flex flex-col">
+            <section className=" w-full ">
+              <div className="w-full  flex gap-[24px] flex-col">
+                <h2 className="text-[28px] font-[500] text-gray-800 ">
+                  Popular Cities
+                </h2>
+                <div className="grid grid-cols-2 md:flex md:flex-wrap gap-[16px]">
+                  {popularCities.map((city, i) => (
+                    <button
+                      key={i}
+                      className="flex items-center gap-[10px] py-[6px] px-[14px] text-[14px] font-medium bg-[#F6F8FA] text-[#31353F] hover:bg-gray-100 transition rounded-lg border border-gray-200"
+                    >
+                      <span className="truncate">{city}</span>
+                      <ArrowUpRight className="w-4 h-4 " />
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </section>
+
+            <section className=" w-full ">
+              <div className="w-full flex gap-[24px] flex-col">
+                <h2 className="text-[28px] font-[500]  text-gray-800 ">
+                  Things to do Around Calicut
+                </h2>
+                <div className="grid grid-cols-2 md:flex md:flex-wrap gap-[16px]">
+                  {popularCities.map((city, i) => (
+                    <button
+                      key={i}
+                      className="flex items-center gap-[10px] py-[6px] px-[14px] text-[14px] font-medium bg-[#F6F8FA] text-[#31353F] hover:bg-gray-100 transition rounded-lg border border-gray-200"
+                    >
+                      <span className="truncate">{city}</span>
+                      <ArrowUpRight className="w-4 h-4 " />
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </section>
           </div>
-        </section>
-        </div>
         </div>
         {/* HOW IT WORKS SECTION */}
         <section className=" w-full  hidden md:block">
