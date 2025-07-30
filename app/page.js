@@ -6,9 +6,10 @@ import PlaceOrder from "@/components/placeOrder";
 export default function Home() {
   return (
 <>
-{/* <LoginPage /> */}
-<Check />
+{/* <Check /> */}
+<Page />
 {/* <PlaceOrder /> */}
 </>
   );
 }
+

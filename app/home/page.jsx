@@ -1,26 +1,41 @@
 "use client";
 import Card from "../../components/destinationCard/index";
 import React from "react";
-import { CardImage } from "@/public";
+import {
+  CardImage,
+  PartyImage,
+  TechnologyIcon,
+  CareerIcon,
+  entertaimentIcon,
+  SportIcon,
+  CultureIcon,
+  WorkshopesIcon,
+  AcadamicIcon,
+  PlaceImage
+} from "@/public";
+import Image from "next/image";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 const HomePage = () => {
+
+  // banner datas 
   const heroBanners = [
     {
-      image: "/images/partyiamge.png",
+      image: PartyImage,
       title: ["From Pop", "Ballads to Emo", "Encores"],
       description:
         "Experience the magic as pop ballads transform into emo encores, showcasing.",
       buttonText: "Get Into Music",
     },
   ];
-
+//  section two categories datas 
   const categories = [
-    { icon: CardImage, label: "Academic" },
-    { icon: CardImage, label: "Technology" },
-    { icon: CardImage, label: "Entertainment" },
-    { icon: CardImage, label: "Career" },
-    { icon: CardImage, label: "Sports" },
-    { icon: CardImage, label: "Culture" },
-    { icon: CardImage, label: "Workshops" },
+    { icon: AcadamicIcon, label: "Academic" },
+    { icon: TechnologyIcon, label: "Technology" },
+    { icon: entertaimentIcon, label: "Entertainment" },
+    { icon: CareerIcon, label: "Career" },
+    { icon: SportIcon, label: "Sports" },
+    { icon: CultureIcon, label: "Culture" },
+    { icon: WorkshopesIcon, label: "Workshops" },
   ];
 
   const featuredTitles = [
@@ -77,6 +92,18 @@ const HomePage = () => {
     },
   ];
 
+  const filterLabels = [
+    "All",
+    "For You",
+    "Online",
+    "Today",
+    "This Week",
+    "Academic",
+    "Free",
+    "Food & Drink",
+    "Charity",
+  ];
+
   const popularCities = [
     "Things to do in Abilene",
     "Things to do in Kochi",
@@ -87,325 +114,330 @@ const HomePage = () => {
     "Things to do in Antarctica",
   ];
 
+  const topDestinations = [
+    { img: "/images/Events/mumbai.svg", name: "Mumbai" },
+    { img: "/images/Events/kochi.svg", name: "Kochi" },
+    { img: "/images/Events/hyderabad.svg", name: "Hyderabad" },
+    { img: "/images/Events/chennai.svg", name: "Chennai" },
+    { img: "/images/Events/delhi.svg", name: "Delhi" },
+    { img: "/images/Events/mumbai.svg", name: "Mumbai" },
+    { img: "/images/Events/kochi.svg", name: "Kochi" },
+    { img: "/images/Events/hyderabad.svg", name: "Hyderabad" },
+  ];
+
   return (
     <div className="min-h-screen bg-white w-full flex flex-col items-center justify-center">
       <div className="w-full max-w-[1320px] flex flex-col items-center justify-center">
-      {/* HERO SECTION */}
-      {heroBanners.map((banner, index) => (
-        <div key={index} className="w-full px-4 mx-auto my-6 ">
-          {/* Desktop Layout */}
-          <div className="hidden lg:flex relative">
-            {/* Left: Image + Content */}
-            <div className="relative flex-1 h-[400px] rounded-tr-[38px] rounded-br-[38px] overflow-hidden">
-              <div className="absolute inset-0 z-10 bg-gradient-to-r from-black/70 via-black/30 to-transparent" />
-              <img
-                src={banner.image}
-                alt="Hero"
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute inset-0 z-20 flex items-center px-8 py-16">
-                <div className="max-w-lg">
-                  <h1 className="text-5xl font-bold text-white mb-4 leading-tight">
+        {/* HERO SECTION */}
+        {heroBanners.map((banner, index) => (
+          <div key={index} className="w-full px-4 mx-auto my-6 ">
+            {/* Desktop Layout */}
+            <div className="hidden lg:flex relative">
+              {/* Left: Image + Content */}
+              <div className="relative flex-1 h-[400px] rounded-tr-[38px] rounded-br-[38px] overflow-hidden">
+                <div className="absolute inset-0 z-10 bg-gradient-to-r from-black/70 via-black/30 to-transparent" />
+                <Image
+                  src={banner.image}
+                  alt="Hero"
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 z-20 flex items-center px-8 py-16">
+                  <div className="max-w-lg">
+                    <h1 className="text-5xl font-bold text-white mb-4 leading-tight">
+                      {banner.title.map((line, i) => (
+                        <div key={i}>{line}</div>
+                      ))}
+                    </h1>
+                    <p className="text-gray-300 text-lg mb-6">
+                      {banner.description}
+                    </p>
+                    <button className="bg-white text-black px-6 py-3 rounded-full font-medium hover:bg-gray-100 transition-colors">
+                      {banner.buttonText}
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Right: Barcode */}
+              <div className="relative w-[130px] h-[400px] bg-[#E9E6E6] rounded-tl-[36px] z-10  rounded-bl-[36px]">
+                <div className="absolute top-0 left-[-6px] h-full flex flex-col justify-between py-3 z-20">
+                  {Array.from({ length: 28 }).map((_, i) => (
+                    <div
+                      key={i}
+                      className="w-2 h-2 bg-white rounded-full my-[2px]"
+                    />
+                  ))}
+                </div>
+                <div className="absolute inset-0 flex justify-center items-center z-30">
+                  <img
+                    src="/images/barcode.svg"
+                    alt="Barcode"
+                    className="w-[50px] h-[200px] object-contain"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Mobile Layout */}
+            <div className="block lg:hidden bg-white rounded-[36px] overflow-hidden shadow-md">
+              <div className="relative h-[400px]">
+                <img
+                  src={banner.image}
+                  alt="Hero"
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent z-10" />
+                <div className="absolute inset-0 flex flex-col justify-end px-5 pb-6 z-20">
+                  <h1 className="text-3xl font-bold text-white leading-snug mb-2">
                     {banner.title.map((line, i) => (
                       <div key={i}>{line}</div>
                     ))}
                   </h1>
-                  <p className="text-gray-300 text-lg mb-6">
+                  <p className="text-white text-sm mb-4">
                     {banner.description}
                   </p>
-                  <button className="bg-white text-black px-6 py-3 rounded-full font-medium hover:bg-gray-100 transition-colors">
+                  <button className="bg-white text-black text-sm font-semibold px-4 py-2 rounded-full w-fit">
                     {banner.buttonText}
                   </button>
                 </div>
               </div>
-            </div>
 
-            {/* Right: Barcode */}
-            <div className="relative w-[130px] h-[400px] bg-[#E9E6E6] rounded-tl-[36px] z-10  rounded-bl-[36px]">
-              <div className="absolute top-0 left-[-6px] h-full flex flex-col justify-between py-3 z-20">
-                {Array.from({ length: 28 }).map((_, i) => (
-                  <div
-                    key={i}
-                    className="w-2 h-2 bg-white rounded-full my-[2px]"
-                  />
-                ))}
+              <div className="relative h-[20px] bg-white">
+                <div className="absolute inset-0 border-t border-dotted border-gray-300" />
+                <div className="absolute -left-4 top-1/2 -translate-y-1/2 w-8 h-8 bg-white rounded-full border border-gray-200" />
+                <div className="absolute -right-4 top-1/2 -translate-y-1/2 w-8 h-8 bg-white rounded-full border border-gray-200" />
               </div>
-              <div className="absolute inset-0 flex justify-center items-center z-30">
+
+              {/* Mobile Barcode */}
+              <div className="bg-white py-4 flex justify-center items-center lg:hidden">
                 <img
-                  src="/images/barcode.svg"
+                  src="/images/barcode1.svg"
                   alt="Barcode"
-                  className="w-[50px] h-[200px] object-contain"
+                  className="w-[140px] h-[60px] object-contain"
                 />
               </div>
             </div>
           </div>
+        ))}
 
-          {/* Mobile Layout */}
-          <div className="block lg:hidden bg-white rounded-[36px] overflow-hidden shadow-md">
-            <div className="relative h-[400px]">
-              <img
-                src={banner.image}
-                alt="Hero"
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent z-10" />
-              <div className="absolute inset-0 flex flex-col justify-end px-5 pb-6 z-20">
-                <h1 className="text-3xl font-bold text-white leading-snug mb-2">
-                  {banner.title.map((line, i) => (
-                    <div key={i}>{line}</div>
-                  ))}
-                </h1>
-                <p className="text-white text-sm mb-4">{banner.description}</p>
-                <button className="bg-white text-black text-sm font-semibold px-4 py-2 rounded-full w-fit">
-                  {banner.buttonText}
+        {/* CATEGORY SECTION */}
+        <section className="w-full px-4 py-12">
+          <div className="max-w-[1320px] mx-auto">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-4">
+              {categories.map((category, index) => (
+                <div
+                  key={index}
+                  className="flex flex-col items-center w-[146px] h-[146px] justify-center border border-[#ADADAD40] rounded-[26px] text-center cursor-pointer"
+                >
+                  <div className="w-10  h-10 ">
+                    <Image
+                      src={category.icon}
+                      alt={category.label}
+                      className="w-full h-full object-contain"
+                    />
+                  </div>
+                  <span className="text-gray-800 text-sm font-medium">
+                    {category.label}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* LATEST EVENTS SECTION */}
+
+        <div className="w-full bg-red-500">
+        <section className=" w-full">
+          <div className="">
+            <h2 className="text-xl sm:text-2xl font-semibold text-gray-800 mb-4">
+              Latest Events in Lucknow
+            </h2>
+
+            {/* Filter buttons with horizontal scroll on mobile */}
+            <div className="flex gap-3 overflow-x-auto scrollbar-hide mb-6 sm:flex-wrap sm:overflow-visible">
+              {filterLabels.map((label, i) => (
+                <button
+                  key={i}
+                  className={`flex-shrink-0 px-4 py-2 text-sm rounded-full border ${
+                    i === 0
+                      ? "bg-black text-white"
+                      : "text-gray-600 hover:bg-gray-100 border-gray-300"
+                  } transition`}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+
+            {/* Event cards */}
+            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 w-full h-full">
+              {featuredTitles.map((t, i) => (
+                <Card
+                  key={i}
+                  image={CardImage}
+                  date="18 June – 15 July | 03:00 PM"
+                  title={t}
+                  venue={featuredVenues[i]}
+                  price={featuredPrices[i]}
+                  badge={i === 0 ? "Save up to 39%" : ""}
+                  variant="latest"
+                />
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* FEATURED EVENTS SECTION */}
+        <section className="flex flex-col items-center w-full justify-center">
+          <div className="">
+            <h2 className="text-xl sm:text-2xl font-semibold text-gray-800 mb-4">
+              Featured Events
+            </h2>
+            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 w-full h-full">
+              {featuredTitles.map((t, i) => (
+                <Card
+                  key={i}
+                  image={CardImage}
+                  date="18 June – 15 July | 03:00 PM"
+                  title={t}
+                  venue={featuredVenues[i]}
+                  price={featuredPrices[i]}
+                  badge={i === 0 ? "Save up to 39%" : ""}
+                  variant="featured"
+                />
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* TOP DESTINATIONS SECTION */}
+        <section className=" w-full ">
+          <div className=" mx-auto">
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-xl sm:text-2xl font-semibold text-gray-800">
+                Top destinations
+              </h2>
+              <div className="flex gap-3">
+                <button className="w-10 h-10 rounded-full bg-gray-100 flex justify-center items-center hover:bg-gray-200 transition">
+                  <span className="text-xl font-bold"><ChevronLeft className="text-gray-500" /></span>
+                </button>
+                <button className="w-10 h-10 rounded-full bg-gray-100 flex justify-center items-center hover:bg-gray-200 transition">
+                  <span className="text-xl font-bold"><ChevronRight className="text-gray-500" /></span>
                 </button>
               </div>
             </div>
 
-            <div className="relative h-[20px] bg-white">
-              <div className="absolute inset-0 border-t border-dotted border-gray-300" />
-              <div className="absolute -left-4 top-1/2 -translate-y-1/2 w-8 h-8 bg-white rounded-full border border-gray-200" />
-              <div className="absolute -right-4 top-1/2 -translate-y-1/2 w-8 h-8 bg-white rounded-full border border-gray-200" />
-            </div>
-
-            {/* Mobile Barcode */}
-            <div className="bg-white py-4 flex justify-center items-center lg:hidden">
-              <img
-                src="/images/barcode1.svg"
-                alt="Barcode"
-                className="w-[140px] h-[60px] object-contain"
-              />
-            </div>
-          </div>
-        </div>
-      ))}
-
-      {/* CATEGORY SECTION */}
-      <section className="px-4 py-12">
-        <div className="max-w-[1320px] mx-auto">
-          <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-4 lg:grid-cols-7 gap-4">
-            {categories.map((category, index) => (
-              <div
-                key={index}
-                className="flex flex-col items-center text-center cursor-pointer"
-              >
-                <div className="w-10 h-10 mb-2">
-                  <img
-                    src={category.icon}
-                    alt={category.label}
-                    className="w-full h-full object-contain"
+            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+              {topDestinations.map((destination, i) => (
+                <div
+                  key={i}
+                  className="w-full rounded-4xl overflow-hidden relative shadow-md"
+                >
+                  <Image
+                    src={destination.img}
+                    alt={destination.name}
+                    width={260}
+                    height={300}
+                    className="w-full h-[200px] sm:h-[250px] md:h-[300px] object-cover rounded-4xl"
                   />
+                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-3">
+                    <p className="text-white text-lg font-semibold">
+                      {destination.name}
+                    </p>
+                  </div>
                 </div>
-                <span className="text-gray-800 text-sm font-medium">
-                  {category.label}
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-    
-   {/* LATEST EVENTS SECTION */}
-<section className="px-4 pb-16">
-  <div className="max-w-[1320px] mx-auto">
-    <h2 className="text-xl sm:text-2xl font-semibold text-gray-800 mb-4">
-      Latest Events in Lucknow
-    </h2>
-
-    {/* Filter buttons with horizontal scroll on mobile */}
-    <div className="flex gap-3 overflow-x-auto scrollbar-hide mb-6 sm:flex-wrap sm:overflow-visible">
-      {[
-        "All",
-        "For You",
-        "Online",
-        "Today",
-        "This Week",
-        "Academic",
-        "Free",
-        "Food & Drink",
-        "Charity",
-      ].map((label, i) => (
-        <button
-          key={i}
-          className={`flex-shrink-0 px-4 py-2 text-sm rounded-full border ${
-            i === 0
-              ? "bg-black text-white"
-              : "text-gray-600 hover:bg-gray-100 border-gray-300"
-          } transition`}
-        >
-          {label}
-        </button>
-      ))}
-    </div>
-
-    {/* Event cards */}
-    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 w-[100%] h-[100%]">
-      {featuredTitles.map((t, i) => (
-        <Card
-          key={i}
-          image ={CardImage}
-          date="18 June – 15 July | 03:00 PM"
-          title={t}
-          venue={featuredVenues[i]}
-          price={featuredPrices[i]}
-          badge={i === 0 ? "Save up to 39%" : ""}
-          variant="latest"
-        />
-      ))}
-    </div>
-  </div>
-</section>
-
-
-      {/* FEATURED EVENTS SECTION */}
-      <section className="flex flex-col items-center justify-center">
-        <div className="">
-         <h2 className="text-xl sm:text-2xl font-semibold text-gray-800 mb-4">
-         Featured Events
-    </h2>
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 w-[100%] h-[100%]">
-      {featuredTitles.map((t, i) => (
-        <Card
-          key={i}
-          image ={CardImage}
-          date="18 June – 15 July | 03:00 PM"
-          title={t}
-          venue={featuredVenues[i]}
-          price={featuredPrices[i]}
-          badge={i === 0 ? "Save up to 39%" : ""}
-          variant="featured"
-        />
-      ))}
-    </div>
-    </div>
-      </section>
-
-      {/* TOP DESTINATIONS SECTION */}
-      <section className="px-4 py-12 bg-[#F6F8FA]">
-        <div className="max-w-[1320px] mx-auto">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-xl sm:text-2xl font-semibold text-gray-800">
-              Top destinations
-            </h2>
-            <div className="flex gap-3">
-              <button className="w-10 h-10 rounded-full bg-gray-100 flex justify-center items-center hover:bg-gray-200 transition">
-                <span className="text-xl font-bold">{'<'}</span>
-              </button>
-              <button className="w-10 h-10 rounded-full bg-gray-100 flex justify-center items-center hover:bg-gray-200 transition">
-                <span className="text-xl font-bold">{'>'}</span>
-              </button>
+              ))}
             </div>
           </div>
+        </section>
 
-          <div className="flex overflow-x-auto gap-6 scrollbar-hide scroll-smooth  ">
-            {[
-              { img: "/images/Events/mumbai.svg", name: "Mumbai" },
-              { img: "/images/Events/kochi.svg", name: "Kochi" },
-              { img: "/images/Events/hyderabad.svg", name: "Hyderabad" },
-              { img: "/images/Events/chennai.svg", name: "Chennai" },
-              { img: "/images/Events/delhi.svg", name: "Delhi" },
-                 { img: "/images/Events/mumbai.svg", name: "Mumbai" },
-              { img: "/images/Events/kochi.svg", name: "Kochi" },
-              { img: "/images/Events/hyderabad.svg", name: "Hyderabad" },
-            ].map((d, i) => (
-              <div
-                key={i}
-                className="min-w-[180px] sm:min-w-[260px] rounded-4xl overflow-hidden relative shadow-md flex-shrink-0"
-              >
-                <img
-                  src={d.img}
-                  alt={d.name}
-                  className="w-full h-[300px] object-fit  rounded-4xl "
-                />
-                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-3">
-                  <p className="text-white text-lg font-semibold">{d.name}</p>
+        {/* POPULAR CITIES SECTION */}
+        <section className=" w-full ">
+          <div className="w-full mx-auto">
+            <h2 className="text-xl sm:text-2xl font-semibold text-gray-800 mb-4">
+              Popular Cities
+            </h2>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+              {popularCities.map((city, i) => (
+                <button
+                  key={i}
+                  className="flex items-center justify-between px-3 py-2 text-sm md:text-base font-medium text-gray-700 hover:bg-gray-100 transition rounded-lg border border-gray-200"
+                >
+                  <span className="truncate">{city}</span>
+                  <img
+                    src="icons/arrow-right-up-line.svg"
+                    alt="arrow"
+                    className="w-4 h-4 ml-2 flex-shrink-0"
+                  />
+                </button>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className=" w-full ">
+          <div className="w-full mx-auto">
+            <h2 className="text-xl sm:text-2xl font-semibold text-gray-800 mb-4">
+              Things to do Around Calicut
+            </h2>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+              {popularCities.map((city, i) => (
+                <button
+                  key={i}
+                  className="flex items-center justify-between px-3 py-2 text-sm md:text-base font-medium text-gray-700 hover:bg-gray-100 transition rounded-lg border border-gray-200"
+                >
+                  <span className="truncate">{city}</span>
+                  <img
+                    src="icons/arrow-right-up-line.svg"
+                    alt="arrow"
+                    className="w-4 h-4 ml-2 flex-shrink-0"
+                  />
+                </button>
+              ))}
+            </div>
+          </div>
+        </section>
+        </div>
+        {/* HOW IT WORKS SECTION */}
+        <section className=" w-full  hidden md:block">
+          <div className=" mx-auto px-4">
+            {/* Title */}
+            <h2 className="text-lg sm:text-xl md:text-2xl font-medium text-center text-black mb-12">
+              How GoCampus Works
+            </h2>
+
+            {/* Items row */}
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-6 md:gap-10">
+              {howItWorksItems.map((item, idx) => (
+                <div key={idx} className="flex items-start gap-4">
+                  {/* Icon */}
+                  <div
+                    className={`w-14 h-14 flex items-center justify-center rounded-full ${item.bgColor} flex-shrink-0`}
+                  >
+                    <Image
+                      width={28}
+                      height={28}
+                      src={item.icon}
+                      alt={item.heading}
+                      className="w-7 h-7"
+                    />
+                  </div>
+                  {/* Text */}
+                  <div>
+                    <h3 className="text-base font-semibold text-gray-900 mb-1">
+                      {item.heading}
+                    </h3>
+                    <p className="text-sm text-gray-500 leading-relaxed">
+                      {item.text}
+                    </p>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
-
-      {/* POPULAR CITIES SECTION */}
-      <section className="px-4 py-12 bg-white">
-      <div className="max-w-[1320px] mx-auto">
-          <h2 className="text-xl sm:text-2xl font-semibold text-gray-800 mb-4">
-            Popular Cities
-          </h2>
-          <div className="flex flex-wrap gap-3">
-            {popularCities.map((city, i) => (
-              <button
-                key={i}
-                className="flex gap-1 md:gap-1  space-x-1 md:px-4 py-2 text-[10px] md:text-sm font-[500] md:font-medium text-gray-700 hover:bg-gray-100 transition"
-              >
-                {city}
-                <img src="icons/arrow-right-up-line.svg" alt=" arow" />
-              </button>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      
-      <section className="px-4 py-12 bg-white">
-      <div className="max-w-[1320px] mx-auto">
-          <h2 className="text-xl sm:text-2xl font-semibold text-gray-800 mb-4">
-          Things to do Around Calicut
-          </h2>
-          <div className="flex flex-wrap gap-3">
-            {popularCities.map((city, i) => (
-              <button
-                key={i}
-                className="flex gap-1 md:gap-1  space-x-1 md:px-4 py-2 text-[10px] md:text-sm font-[500] md:font-medium text-gray-700 hover:bg-gray-100 transition"
-              >
-                {city}
-             <img src="icons/arrow-right-up-line.svg" alt=" arow" />
-              </button>
-            ))}
-          </div>
-        </div>
-      </section>
-      
-    {/* HOW IT WORKS SECTION */}
-<section className="bg-[#F6F8FA] py-16 hidden md:block">
-  <div className="max-w-[1320px] mx-auto px-4">
-    {/* Title */}
-    <h2 className="text-lg sm:text-xl md:text-2xl font-medium text-center text-black mb-12">
-      How GoCampus Works
-    </h2>
-
-    {/* Items row */}
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-      {howItWorksItems.map((item, idx) => (
-        <div key={idx} className="flex items-start gap-4">
-          {/* Icon */}
-          <div
-            className={`w-14 h-14 flex items-center justify-center rounded-full ${item.bgColor} flex-shrink-0`}
-          >
-            <img
-              src={item.icon}
-              alt={item.heading}
-              className="w-7 h-7"
-            />
-          </div>
-          {/* Text */}
-          <div>
-            <h3 className="text-base font-semibold text-gray-900 mb-1">
-              {item.heading}
-            </h3>
-            <p className="text-sm text-gray-500 leading-relaxed">
-              {item.text}
-            </p>
-          </div>
-        </div>
-      ))}
-    </div>
-  </div>
-</section>
-
-
-    </div>
+        </section>
+      </div>
     </div>
   );
 };

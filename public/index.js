@@ -11,15 +11,15 @@ import MainTicketLeft from "./images/mainticketLeft.svg";
 import MainTicketRight from "./images/mainticketright.svg";
 import Barcode from "./images/barcode.svg";
 import AcadamicIcon from "./icons/acadamic.svg";
-import Technology from "./icons/technology.svg";
-import Career from "./icons/Career.svg";
-import entertaiment from "./icons/Entertainment.svg";
-import Sport from "./icons/Sports.svg";
-import Culture from "./icons/Culture.svg";
-import Workshopes from "./icons/Workshopes.svg";
+import TechnologyIcon from "./icons/technology.svg";
+import CareerIcon from "./icons/Career.svg";
+import entertaimentIcon from "./icons/Entertainment.svg";
+import SportIcon from "./icons/Sports.svg";
+import CultureIcon from "./icons/Culture.svg";
+import WorkshopesIcon from "./icons/Workshopes.svg";
 import CardImage from "./images/cardimage.png";
 import checkImage from "./images/checkImage.svg";
-
+import PlaceImage from "./placeImage/Group 1000002720.png"
 export {
   checkImage,
   LoginImage,
@@ -35,11 +35,12 @@ export {
   MainTicketRight,
   Barcode,
   AcadamicIcon,
-  Technology,
-  Career,
-  Culture,
-  Sport,
-  Workshopes,
-  entertaiment,
-  CardImage
+  TechnologyIcon,
+  CareerIcon,
+  CultureIcon,
+  SportIcon,
+  WorkshopesIcon,
+  entertaimentIcon,
+  CardImage,
+  PlaceImage
 };
