@@ -12,7 +12,7 @@ import Image from "next/image";
 
 export default function Footer() {
   return (
-    <footer className="bg-[#313131] text-[#FFFFFF] px-6   md:px-8 lg:p-[80px] w-full relative">
+    <footer className="bg-[#313131] text-[#FFFFFF] px-6   md:px-8   pt-[36px]  pb-[50px] md:p-[80px] w-full relative">
       <div className="w-full flex flex-col  gap-[34px]">
         {/* Main Footer Content */}
         <div className="flex justify-between md:flex-row flex-col  w-full">
