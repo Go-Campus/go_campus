@@ -1,8 +1,9 @@
 "use client";
 //    src="/images/Events/event2.svg"
 import Image from "next/image";
-import { X, Calendar, MapPin, Minus, Plus, ChevronDown } from "lucide-react";
+import { X, Calendar, MapPin, Minus, Plus, ChevronDown, IdCard } from "lucide-react";
 import { useState, useEffect } from "react";
+import { GooglePayIcon, PaytmIcon } from "@/public";
 
 const formatTime = (seconds) => {
   const minutes = Math.floor(seconds / 60);
@@ -195,7 +196,7 @@ const TicketBookingModal = ({
                       </label>
                       <input
                         type="text"
-                        className="w-full p-2 border rounded-md"
+                        className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#FF5F4A]/50 focus:border-[#FF5F4A] transition-all duration-200"
                         placeholder="Nihla"
                       />
                     </div>
@@ -205,7 +206,7 @@ const TicketBookingModal = ({
                       </label>
                       <input
                         type="text"
-                        className="w-full p-2 border rounded-md"
+                        className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#FF5F4A]/50 focus:border-[#FF5F4A] transition-all duration-200"
                         placeholder="M"
                       />
                     </div>
@@ -216,7 +217,7 @@ const TicketBookingModal = ({
                     </label>
                     <input
                       type="email"
-                      className="w-full p-2 border rounded-md"
+                      className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#FF5F4A]/50 focus:border-[#FF5F4A] transition-all duration-200"
                       placeholder="nihlamj@gmail.com"
                     />
                   </div>
@@ -242,16 +243,18 @@ const TicketBookingModal = ({
                 <div className="mb-6">
                   <h3 className="text-base font-medium mb-4">Pay With</h3>
                   <div className="space-y-3">
-                    <div className="flex items-center gap-3 p-3 border rounded-md">
-                      <input type="radio" name="payment" />
+                    <div className="flex items-center gap-3 p-3 border border-[#E2E4E9] rounded-md">
+                      {/* <input type="radio" name="payment" /> */}
+                      {/* <Image src={PaytmIcon} alt="Paytm" width={20} height={20} className="w-[20px] " /> */}
+                      <IdCard />
                       <span>Credit or Debit Card</span>
                     </div>
-                    <div className="flex items-center gap-3 p-3 border rounded-md">
-                      <input type="radio" name="payment" />
+                    <div className="flex items-center gap-3 p-3  border border-[#E2E4E9] rounded-md">
+                      <Image src={PaytmIcon} alt="GooglePay" width={20} height={20} className="w-[20px] " />
                       <span>PayPal</span>
                     </div>
-                    <div className="flex items-center gap-3 p-3 border rounded-md">
-                      <input type="radio" name="payment" />
+                    <div className="flex items-center gap-3 p-3  border border-[#E2E4E9]rounded-md">
+                      <Image src={GooglePayIcon} alt="GooglePay" width={20} height={20} className="w-[32px] " />  
                       <span>Google Pay</span>
                     </div>
                   </div>
@@ -262,9 +265,7 @@ const TicketBookingModal = ({
                   By Selecting Place Order, I Agree To The <a href="#" className="text-[#FF5F4A]">GoCampus Terms And Services</a>
                 </div>
 
-                <button className="w-full bg-[#FF5F4A] text-white py-3 rounded-md font-medium">
-                  Place Order
-                </button>
+            
               </div>
               ) : (
                null
@@ -316,11 +317,21 @@ const TicketBookingModal = ({
                 </div>
               </div>
             </div>
-            <div className="flex  justify-center">
+            {type === 'checkout' && (
+            <div className={`flex   ${type === 'checkout' ? 'justify-start' : 'justify-center'}`}>
               <button className=" bg-[#FF5F4A] text-[white]  rounded-[12px] py-[10px]  px-[36px] text-[16px] font-[500]">
-                Checkout
+             Place Order
               </button>
             </div>
+            )}
+            {type === 'register' && (
+            <div className={`flex   ${type === 'register' ? 'justify-center' : 'justify-center'}`}>
+              <button className=" bg-[#FF5F4A] text-[white]  rounded-[12px] py-[10px]  px-[36px] text-[16px] font-[500]">
+                Checkout
+
+              </button>
+            </div>
+            )}
           </div>
         </div>
       </div>

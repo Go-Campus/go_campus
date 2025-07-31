@@ -25,6 +25,8 @@ import UkImage from "./placeImage/uk.png"
 import LockColorIcon from "./icons/Lock.png"
 import ProfleColorIcon from "./icons/Profile.png"
 import SearchColorIcon from "./icons/Magnifier.png"
+import GooglePayIcon from "./icons/googlepay.png";
+import PaytmIcon from "./icons/paypal.png";
 export {
   checkImage,
   LoginImage,
@@ -52,5 +54,7 @@ export {
   UkImage,
   LockColorIcon,
   ProfleColorIcon,
-  SearchColorIcon
+  SearchColorIcon,
+  GooglePayIcon,
+  PaytmIcon
 };
