@@ -41,7 +41,10 @@ export default function GoCampusHeader() {
           <div className="flex items-center space-x-2 mr-6">
             <div className="w-8 h-8 rounded-full flex items-center justify-center">
               <span className="text-white font-bold text-sm">
-                <Image src={GoCampusLogo} />
+                <Image
+                width={32}
+                height={32}
+                src={GoCampusLogo} />
               </span>
             </div>
             <span className="text-[24px] font-semibold text-gray-900">
