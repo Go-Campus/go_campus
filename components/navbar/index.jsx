@@ -122,7 +122,7 @@ export default function GoCampusHeader() {
           {/* Right side: Location, User, Toggle */}
           <div className="flex items-center space-x-3">
             {/* Location */}
-            <div className="flex items-center text-gray-700 cursor-pointer">
+            <div className="flex items-center md:block hidden text-gray-700 cursor-pointer">
               <MapPin className="w-4 h-4" />
               <span className="font-medium ml-1">Lucknow</span>
             </div>
@@ -158,10 +158,17 @@ export default function GoCampusHeader() {
 
         {/* Mobile Menu with Animation */}
         <div className={`overflow-hidden transition-all duration-300 ease-in-out ${
-          isMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+          isMenuOpen ? 'w-full absolute z-30 top-[15%] right-0 px-4 bg-whiteopacity-100' : 'max-h-0 opacity-0'
         }`}>
           <div className="mt-4 bg-gray-100 border-gray-200 rounded-lg">
-            <nav className="flex flex-col ">
+            <nav className="flex flex-col">
+              {/* Location Section */}
+              <div className="flex items-center text-gray-700 cursor-pointer p-3 border-b border-gray-200">
+                <MapPin className="w-4 h-4" />
+                <span className="font-medium ml-1">Lucknow</span>
+              </div>
+              
+              {/* Navigation Links */}
               {navBar.map((navbar, index) => (
                 <Link 
                   key={navbar.id} 
