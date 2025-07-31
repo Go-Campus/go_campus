@@ -4,6 +4,7 @@ import Image from "next/image";
 import { X, Calendar, MapPin, Minus, Plus, ChevronDown, IdCard } from "lucide-react";
 import { useState, useEffect } from "react";
 import { GooglePayIcon, PaytmIcon } from "@/public";
+import Swal from 'sweetalert2';
 
 const formatTime = (seconds) => {
   const minutes = Math.floor(seconds / 60);
@@ -19,6 +20,7 @@ const TicketBookingModal = ({
   ticketPrice,
   quantity,
   onQuantityChange,
+  onCheckout,
   type
 }) => {
   console.log("Rendering TicketBookingModal with quantity:", quantity);
@@ -52,6 +54,8 @@ const TicketBookingModal = ({
 
   return (
     <div 
+
+    
       className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4"
       onClick={() => {
         console.log("Closing modal from overlay click");
@@ -253,7 +257,7 @@ const TicketBookingModal = ({
                       <Image src={PaytmIcon} alt="GooglePay" width={20} height={20} className="w-[20px] " />
                       <span>PayPal</span>
                     </div>
-                    <div className="flex items-center gap-3 p-3  border border-[#E2E4E9]rounded-md">
+                    <div className="flex items-center gap-3 p-3  border border-[#E2E4E9] rounded-md">
                       <Image src={GooglePayIcon} alt="GooglePay" width={20} height={20} className="w-[32px] " />  
                       <span>Google Pay</span>
                     </div>
@@ -319,16 +323,31 @@ const TicketBookingModal = ({
             </div>
             {type === 'checkout' && (
             <div className={`flex   ${type === 'checkout' ? 'justify-start' : 'justify-center'}`}>
-              <button className=" bg-[#FF5F4A] text-[white]  rounded-[12px] py-[10px]  px-[36px] text-[16px] font-[500]">
-             Place Order
+              <button 
+                onClick={() => {
+                  onClose();
+                  setTimeout(() => {
+                    Swal.fire({
+                      title: 'Success!',
+                      text: 'Your order has been placed successfully!',
+                      icon: 'success',
+                      confirmButtonColor: '#FF5F4A'
+                    });
+                  }, 1000);
+                }}
+                className="bg-[#FF5F4A] text-[white] rounded-[12px] py-[10px] px-[36px] text-[16px] font-[500]"
+              >
+                Place Order
               </button>
             </div>
             )}
             {type === 'register' && (
             <div className={`flex   ${type === 'register' ? 'justify-center' : 'justify-center'}`}>
-              <button className=" bg-[#FF5F4A] text-[white]  rounded-[12px] py-[10px]  px-[36px] text-[16px] font-[500]">
+              <button 
+                onClick={onCheckout}
+                className="bg-[#FF5F4A] text-[white] rounded-[12px] py-[10px] px-[36px] text-[16px] font-[500]"
+              >
                 Checkout
-
               </button>
             </div>
             )}
