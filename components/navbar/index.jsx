@@ -32,7 +32,7 @@ export default function GoCampusHeader() {
   ];
 
   return (
-    <header className="bg-white w-full py-3">
+    <header className="bg-white w-full py-[32px]">
       {/* Desktop Layout */}
       <div className="hidden lg:flex items-center justify-between">
         {/* First 50%: Logo + Search Bar */}
