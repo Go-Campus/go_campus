@@ -376,6 +376,7 @@ setRegisterModal(true)
         ticketPrice={ticketPrice}
         quantity={quantity}
         onQuantityChange={handleQuantityChange}
+        type={'checkout'}
       />
 
       <Footer />
