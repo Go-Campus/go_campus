@@ -1,6 +1,6 @@
 "use client"
 import { useState } from "react";
-import { Minus, Plus } from "lucide-react";
+import { ChevronDown, Minus,  } from "lucide-react";
 
 const Accordion = (props) => {
 
@@ -21,7 +21,7 @@ const Accordion = (props) => {
             <div className="flex flex-col gap-4 border-b border-gray-200 py-4">
                 <div className="flex justify-between items-center">
                     <h1>{title}</h1>
-                    <button onClick={toggleAccordion}>{isOpen ? <Minus /> : <Plus />}</button>
+                    <button onClick={toggleAccordion}>{isOpen ? <Minus /> : <ChevronDown />}</button>
                     
                 </div>
                 {isOpen && <div className="flex flex-col gap-4">
