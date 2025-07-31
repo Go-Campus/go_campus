@@ -34,9 +34,9 @@ const HomePage = () => {
 
   // widthsetup
   // Define a CSS variable for max-width that can be used throughout the component
-const containerStyle = {
-  "--max-container-width": "1400px" // Change this value to update all container widths
-};
+  const containerStyle = {
+    "--max-container-width": "1400px", // Change this value to update all container widths
+  };
 
   const carouselRef = React.useRef(null);
 
@@ -171,15 +171,19 @@ const containerStyle = {
     <div className=" bg-white w-full flex flex-col gap-[98px] items-center justify-center">
       <div className="w-full  px-5 flex gap-5 flex-col items-center justify-center">
         <div className="w-full flex justify-center items-center">
-<div className="w-full max-w-[var(--max-container-width)]" style={containerStyle}>
-        <Navbar/>
-
-</div>
-
+          <div
+            className="w-full max-w-[var(--max-container-width)]"
+            style={containerStyle}
+          >
+            <Navbar />
+          </div>
         </div>
 
         {/* HERO SECTION */}
-        <section className="w-full max-w-[var(--max-container-width)]" style={containerStyle}>
+        <section
+          className="w-full max-w-[var(--max-container-width)]"
+          style={containerStyle}
+        >
           {heroBanners.map((banner, index) => (
             <div key={index} className="w-full my-6 ">
               {/* Desktop Layout */}
@@ -278,7 +282,10 @@ const containerStyle = {
           ))}
         </section>
         {/* CATEGORY SECTION */}
-        <section className="w-full max-w-[var(--max-container-width)]" style={containerStyle}>
+        <section
+          className="w-full max-w-[var(--max-container-width)]"
+          style={containerStyle}
+        >
           <div className="w-full   flex ">
             <div className="flex flex-wrap w-full   gap-4 items-center justify-between">
               {categories.map((category, index) => (
@@ -310,7 +317,8 @@ const containerStyle = {
             <div className=" w-full ">
               <div className=" w-full border-b border-t  flex justify-center items-center border-gray-200">
                 <div
-                  className="w-full justify-center items-center max-w-[var(--max-container-width)]" style={containerStyle}
+                  className="w-full justify-center items-center max-w-[var(--max-container-width)]"
+                  style={containerStyle}
                 >
                   <h2 className="text-xl    py-[28px] sm:text-2xl font-semibold text-gray-800 ">
                     Latest Events in Lucknow
@@ -320,7 +328,8 @@ const containerStyle = {
               {/* Filter buttons with horizontal scroll on mobile */}
               <div className=" w-full py-[36px]  flex justify-center items-center border-gray-200">
                 <div
-                  className="w-full justify-center items-center max-w-[var(--max-container-width)]" style={containerStyle}
+                  className="w-full justify-center items-center max-w-[var(--max-container-width)]"
+                  style={containerStyle}
                 >
                   <div className="flex gap-3  overflow-x-auto scrollbar-hide mb-6 sm:flex-wrap ">
                     {filterLabels.map((label, i) => (
@@ -342,7 +351,8 @@ const containerStyle = {
               {/* Event cards */}
               <div className="w-full items-center flex justify-center">
                 <div
-                  className="w-full justify-center items-center max-w-[var(--max-container-width)]" style={containerStyle}
+                  className="w-full justify-center items-center max-w-[var(--max-container-width)]"
+                  style={containerStyle}
                 >
                   <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 w-full h-full">
                     {featuredTitles.map((t, i) => (
@@ -365,17 +375,20 @@ const containerStyle = {
 
           {/* FEATURED EVENTS SECTION */}
           <section className="flex flex-col items-center   w-full ">
-            <div className="w-full justify-center items-center max-w-[var(--max-container-width)]" style={containerStyle}>
+            <div
+              className="w-full justify-center items-center max-w-[var(--max-container-width)]"
+              style={containerStyle}
+            >
               <div className="flex w-full py-[36px] justify-between">
-              <h2 className="text-xl sm:text-2xl font-semibold text-gray-800 ">
-                Featured Events
-              </h2>
-              <button className="flex gap-2 items-center text-[#FF553F]">
-              See All
-              <span>
-                <ArrowRight className="w-4 h-4 " />
-              </span>
-              </button>
+                <h2 className="text-xl sm:text-2xl font-semibold text-gray-800 ">
+                  Featured Events
+                </h2>
+                <button className="flex gap-2 items-center text-[#FF553F]">
+                  See All
+                  <span>
+                    <ArrowRight className="w-4 h-4 " />
+                  </span>
+                </button>
               </div>
               <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 w-full h-full">
                 {featuredTitles.map((t, i) => (
@@ -396,7 +409,10 @@ const containerStyle = {
 
           {/* TOP DESTINATIONS SECTION */}
           <section className="w-full  items-center flex justify-center">
-            <div className="w-full justify-center items-center max-w-[var(--max-container-width)]" style={containerStyle}>
+            <div
+              className="w-full justify-center items-center max-w-[var(--max-container-width)]"
+              style={containerStyle}
+            >
               <div className="flex justify-between items-center mb-6">
                 <h2 className="text-xl sm:text-2xl font-semibold text-gray-800">
                   Top destinations
@@ -458,7 +474,10 @@ const containerStyle = {
 
           {/* POPULAR CITIES SECTION */}
           <div className="w-full  gap-[50px] flex flex-col items-center justify-center">
-            <section className="w-full justify-center items-center max-w-[var(--max-container-width)]" style={containerStyle}>
+            <section
+              className="w-full justify-center items-center max-w-[var(--max-container-width)]"
+              style={containerStyle}
+            >
               <div className="w-full  flex gap-[24px] flex-col">
                 <h2 className="text-[28px] font-[500] text-gray-800 ">
                   Popular Cities
@@ -478,7 +497,10 @@ const containerStyle = {
             </section>
 
             <section className=" w-full  items-center flex justify-center">
-              <div className="w-full flex justify-center items-center max-w-[var(--max-container-width)] gap-[24px] flex-col" style={containerStyle}>
+              <div
+                className="w-full flex justify-center items-center max-w-[var(--max-container-width)] gap-[24px] flex-col"
+                style={containerStyle}
+              >
                 <h2 className="text-[28px] text-start w-full font-[500]  text-gray-800 ">
                   Things to do Around Calicut
                 </h2>
@@ -499,44 +521,44 @@ const containerStyle = {
         </div>
       </div>
       {/* HOW IT WORKS SECTION */}
-    
+
       {/* FOOTER SECTION */}
       <div className=" w-full">
-      <section className=" w-full px-0 md:px-[98px]   pt-[35px] pb-[98px] bg-[#F6F8FA]  ">
-        <div className="  ">
-          {/* Title */}
-          <h2 className="text-lg sm:text-xl md:text-2xl font-medium text-center text-black mb-12">
-            How GoCampus Works
-          </h2>
+        <section className=" w-full px-0 md:px-[98px]   pt-[35px] pb-[98px] bg-[#F6F8FA]  ">
+          <div className="  ">
+            {/* Title */}
+            <h2 className="text-lg sm:text-xl md:text-2xl font-medium text-center text-black mb-12">
+              How GoCampus Works
+            </h2>
 
-          {/* Items row */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-10">
-            {howItWorksItems.map((item, idx) => (
-              <div key={idx} className="flex gap-4">
-                {/* Icon */}
-                <div className="min-w-[88px] w-[88px] h-[88px] justify-center items-center flex rounded-full">
-                  <Image
-                    width={20}
-                    height={20}
-                    src={item.icon}
-                    alt={item.heading}
-                    className="   w-[50px] md:w-[86px] object-contain"
-                  />
+            {/* Items row */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-10">
+              {howItWorksItems.map((item, idx) => (
+                <div key={idx} className="flex gap-4">
+                  {/* Icon */}
+                  <div className="min-w-[88px] w-[88px] h-[88px] justify-center items-center flex rounded-full">
+                    <Image
+                      width={20}
+                      height={20}
+                      src={item.icon}
+                      alt={item.heading}
+                      className="   w-[50px] md:w-[86px] object-contain"
+                    />
+                  </div>
+                  {/* Text */}
+                  <div>
+                    <h3 className="text-base font-semibold text-gray-900 mb-1">
+                      {item.heading}
+                    </h3>
+                    <p className="text-sm text-gray-500 leading-relaxed">
+                      {item.text}
+                    </p>
+                  </div>
                 </div>
-                {/* Text */}
-                <div>
-                  <h3 className="text-base font-semibold text-gray-900 mb-1">
-                    {item.heading}
-                  </h3>
-                  <p className="text-sm text-gray-500 leading-relaxed">
-                    {item.text}
-                  </p>
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
         <Footer />
       </div>
     </div>
