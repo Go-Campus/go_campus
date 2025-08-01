@@ -17,6 +17,7 @@ import {
   ProfleColorIcon,
   LockColorIcon,
   SearchColorIcon,
+  TicketFooter,
 } from "@/public";
 import Image from "next/image";
 import {
@@ -269,13 +270,13 @@ const HomePage = () => {
                 </div>
 
                 {/* Mobile Barcode */}
-                <div className="bg-white py-4 flex justify-center items-center lg:hidden">
+                <div className="bg-red-500 flex  w-full lg:hidden">
                   <Image
                     width={140}
                     height={60}
-                    src="/images/barcode1.svg"
-                    alt="Barcode"
-                    className="w-[140px] h-[60px] object-contain"
+                    src={TicketFooter}
+                    alt="Barcodfgde"
+                    className="w-full h-full object-contain"
                   />
                 </div>
               </div>

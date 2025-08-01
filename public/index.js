@@ -27,6 +27,7 @@ import ProfleColorIcon from "./icons/Profile.png"
 import SearchColorIcon from "./icons/Magnifier.png"
 import GooglePayIcon from "./icons/googlepay.png";
 import PaytmIcon from "./icons/paypal.png";
+import TicketFooter from "./images/ticketfooter.png"
 export {
   checkImage,
   LoginImage,
@@ -56,5 +57,6 @@ export {
   ProfleColorIcon,
   SearchColorIcon,
   GooglePayIcon,
-  PaytmIcon
+  PaytmIcon,
+  TicketFooter
 };
