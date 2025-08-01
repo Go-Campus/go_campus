@@ -338,7 +338,7 @@ export default function SearchPage() {
                       Today ×
                     </button>
                   </div>
-                  <div className="grid grid-cols-2 sm:grid-cols-4 xl:grid-cols-1 2xl:grid-cols-2 gap-3 sm:gap-4">
+                  <div className="grid grid-cols-2 sm:grid-cols-2 xl:grid-cols-1 2xl:grid-cols-2 gap-3 sm:gap-4">
                     {searchResults.map((result, index) => (
                       <Card
                         key={index}
@@ -391,7 +391,7 @@ export default function SearchPage() {
                   </button>
                 </div>
 
-                <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
                   {searchResults.slice(0, 3).map((result, index) => (
                     <Card
                       key={index}
@@ -413,7 +413,7 @@ export default function SearchPage() {
                   <h2 className="text-[16px] sm:text-[18px] lg:text-[20px] font-semibold text-gray-900">Based on your most recent searches</h2>
                   <MoveDownRight size={16} className="sm:w-5 sm:h-5" />
                 </div>
-                <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
                   {searchResults.map((result, index) => (
                     <Card
                       key={index}
@@ -438,7 +438,7 @@ export default function SearchPage() {
                   {popularCities.map((city, i) => (
                     <button
                       key={i}
-                      className="flex items-center gap-1 px-2 sm:px-3 lg:px-4 py-1 sm:py-1.5 lg:py-2 text-[10px] sm:text-xs lg:text-sm font-medium text-gray-700 rounded bg-[#F6F8FA] transition"
+                      className="flex items-center gap-1 px-2 sm:px-3 lg:px-4 py-1 sm:py-1.5 lg:py-2 text-[10px] sm:text-xs lg:text-sm font-medium text-gray-700 rounded bg-[#F6F8FA] transition hover:bg-gray-100"
                     >
                       <img src="icons/search.svg" alt="search" className="w-3 h-3 sm:w-4 sm:h-4" />
                       {city}
