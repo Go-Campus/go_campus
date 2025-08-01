@@ -98,8 +98,8 @@ export default function Likes() {
           {popularCities.map((city, i) => (
             <button
               key={i}
-              className="flex items-center gap-1 px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium text-gray-700 bg-white border border-gray-200 rounded hover:bg-gray-100 transition"
-            >
+             className="flex items-center gap-1 px-2 sm:px-3 lg:px-4 py-1 sm:py-1.5 lg:py-2 text-[10px] sm:text-xs lg:text-sm font-medium text-gray-700 rounded bg-[#F6F8FA] transition"
+             >
               <img src="icons/search.svg" alt="search" className="w-4 h-4" />
               {city}
             </button>

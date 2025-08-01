@@ -242,9 +242,9 @@ export default function EventPage() {
                         <Image
                             src="/images/Events/event2.svg"
                             alt="Delhi Beatbox Championship"
-                            width={300}
-                            height={200}
-                            className="object-cover w-full h-auto"
+                            width={100}
+                            height={100}
+                            className="object-cover w-full h-[200px]"
                         />
                     </div>
 
