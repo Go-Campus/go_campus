@@ -43,6 +43,7 @@ export default function EventPage() {
   ];
   const MAxwidth = "1500px";
   const [registerModal, setRegisterModal] = useState(false);
+  const [modalType, setModalType] = useState('register');
   const [quantity, setQuantity] = useState(1);
   const ticketPrice = 499;
 
@@ -60,8 +61,12 @@ export default function EventPage() {
 
   const closeModal = () => {
     setRegisterModal(false);
+    setModalType('register'); // Reset modal type when closing
   };
 
+  const handleCheckout = () => {
+    setModalType('checkout');
+  };
 
 // modal function 
 
@@ -376,7 +381,8 @@ setRegisterModal(true)
         ticketPrice={ticketPrice}
         quantity={quantity}
         onQuantityChange={handleQuantityChange}
-        type={'checkout'}
+        onCheckout={handleCheckout}
+        type={modalType}
       />
 
       <Footer />

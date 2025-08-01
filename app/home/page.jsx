@@ -17,6 +17,9 @@ import {
   ProfleColorIcon,
   LockColorIcon,
   SearchColorIcon,
+  TicketFooter,
+  TicketFooterMobile,
+  BarcodeImagemoblie,
 } from "@/public";
 import Image from "next/image";
 import {
@@ -29,7 +32,27 @@ import {
 } from "lucide-react";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
+import Link from "next/link";
+import { useState, useEffect } from "react";
 const HomePage = () => {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    // Function to check if width is less than or equal to 425px
+    const checkMobile = () => {
+      console.log("Checking mobile width");
+      setIsMobile(window.innerWidth <= 425);
+    };
+
+    // Check on initial load
+    checkMobile();
+
+    // Add event listener for window resize
+    window.addEventListener('resize', checkMobile);
+
+    // Cleanup
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
   // State for carousel scroll position
 
   // widthsetup
@@ -156,15 +179,15 @@ const HomePage = () => {
   ];
 
   const topDestinations = [
-    { img: CardImage, name: "Mumbai" },
-    { img: DubaiImage, name: "London" },
-    { img: DubaiImage, name: "Dubai" },
-    { img: CardImage, name: "Mumbai" },
-    { img: DubaiImage, name: "London" },
-    { img: DubaiImage, name: "Dubai" },
-    { img: CardImage, name: "Mumbai" },
-    { img: DubaiImage, name: "London" },
-    { img: DubaiImage, name: "Dubai" },
+    { id: 'mumbai-1', img: CardImage, name: "Mumbai" },
+    { id: 'london-1', img: DubaiImage, name: "London" },
+    { id: 'dubai-1', img: DubaiImage, name: "Dubai" },
+    { id: 'mumbai-2', img: CardImage, name: "Mumbai" },
+    { id: 'london-2', img: DubaiImage, name: "London" },
+    { id: 'dubai-2', img: DubaiImage, name: "Dubai" },
+    { id: 'mumbai-3', img: CardImage, name: "Mumbai" },
+    { id: 'london-3', img: DubaiImage, name: "London" },
+    { id: 'dubai-3', img: DubaiImage, name: "Dubai" },
   ];
 
   return (
@@ -236,7 +259,7 @@ const HomePage = () => {
               </div>
 
               {/* Mobile Layout */}
-              <div className="block lg:hidden bg-white rounded-[36px] overflow-hidden shadow-md">
+              <div className=" gap-1 lg:hidden  flex flex-col  rounded-[36px] overflow-hidden ">
                 <div className="relative h-[400px]">
                   <Image
                     width={50}
@@ -261,20 +284,27 @@ const HomePage = () => {
                   </div>
                 </div>
 
-                <div className="relative h-[20px] bg-white">
-                  <div className="absolute inset-0 border-t border-dotted border-gray-300" />
-                  <div className="absolute -left-4 top-1/2 -translate-y-1/2 w-8 h-8 bg-white rounded-full border border-gray-200" />
-                  <div className="absolute -right-4 top-1/2 -translate-y-1/2 w-8 h-8 bg-white rounded-full border border-gray-200" />
+                <div className="  lg:block hidden  relative h-[20px] bg-white">
+                  <div className="absolute  lg:block hidden inset-0 border-t border-dotted border-gray-300" />
+                  <div className="absolute -left-4 top-1/2 lg:block hidden -translate-y-1/2 w-8 h-8 bg-white rounded-full border border-gray-200" />
+                  <div className="absolute -right-4 top-1/2 -translate-y-1/2  lg:block hidden w-8 h-8 bg-white rounded-full border border-gray-200" />
                 </div>
 
                 {/* Mobile Barcode */}
-                <div className="bg-white py-4 flex justify-center items-center lg:hidden">
+                <div
+                style={{
+                  backgroundImage: `url(${TicketFooterMobile.src})`,
+                  backgroundSize: isMobile ? "contain" : "cover",
+                  backgroundPosition: "center",
+                  backgroundRepeat: "no-repeat",
+                }}
+                className="flex w-full xs:object-contain sm:object-contain md:object-cover justify-center items-center py-7 lg:hidden">
                   <Image
                     width={140}
                     height={60}
-                    src="/images/barcode1.svg"
-                    alt="Barcode"
-                    className="w-[140px] h-[60px] object-contain"
+                    src={BarcodeImagemoblie}
+                    alt="Barcodfgde"
+                    className="w-56 object-contain"
                   />
                 </div>
               </div>
@@ -294,6 +324,7 @@ const HomePage = () => {
                   className="flex flex-col items-center  w-[146px] h-[146px] justify-center border border-[#ADADAD40] rounded-[26px] text-center cursor-pointer"
                 >
                   <div className="w-10  h-10 ">
+                    <Link href={'/category-page'}>
                     <Image
                       width={28}
                       height={28}
@@ -301,6 +332,7 @@ const HomePage = () => {
                       alt={category.label}
                       className="w-full h-full object-contain"
                     />
+                    </Link>
                   </div>
                   <span className="text-gray-800 text-sm font-medium">
                     {category.label}
@@ -447,18 +479,29 @@ const HomePage = () => {
                       key={i}
                       className="group relative min-w-[274px] h-[390px] rounded-[30%]  cursor-pointer transition-transform duration-300 hover:translate-x-2 flex-shrink-0"
                     >
-                      <div
-                        style={{
-                          borderRadius: "35%",
-
-                          backgroundImage: `url(${destination.img.src})`,
-                          backgroundSize: "cover",
-                          backgroundPosition: "center",
-                          backgroundRepeat: "no-repeat",
+                      <Link 
+                        href={`/destination/${destination.id}?name=${encodeURIComponent(destination.name)}&image=${encodeURIComponent(destination.img.src)}`}
+                        className="block absolute inset-0"
+                        onClick={() => {
+                          console.log('Navigating to destination:', {
+                            id: destination.id,
+                            name: destination.name,
+                            image: destination.img.src
+                          });
                         }}
-                        className="absolute inset-0 transition-transform duration-300 "
-                      />
-                      <div className="absolute inset-0  rounded-[40%] bg-gradient-to-b from-transparent to-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                      >
+                        <div
+                          style={{
+                            borderRadius: "35%",
+                            backgroundImage: `url(${destination.img.src})`,
+                            backgroundSize: "cover",
+                            backgroundPosition: "center",
+                            backgroundRepeat: "no-repeat",
+                          }}
+                          className="absolute inset-0 transition-transform duration-300"
+                        />
+                      </Link>
+                      {/* <div className="absolute inset-0  rounded-[40%] bg-gradient-to-b from-transparent to-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300" /> */}
                       <div className="absolute bottom-16 left-0 right-0 text-center text-white transform translate-y-full  transition-transform duration-300">
                         <h3 className="text-xl font-semibold">
                           {destination.name}
@@ -520,8 +563,7 @@ const HomePage = () => {
           </div>
         </div>
       </div>
-      {/* HOW IT WORKS SECTION */}
-
+   
       {/* FOOTER SECTION */}
       <div className=" w-full">
         <section className=" w-full px-0 md:px-[98px]   pt-[35px] pb-[98px] bg-[#F6F8FA]  ">

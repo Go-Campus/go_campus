@@ -25,6 +25,11 @@ import UkImage from "./placeImage/uk.png"
 import LockColorIcon from "./icons/Lock.png"
 import ProfleColorIcon from "./icons/Profile.png"
 import SearchColorIcon from "./icons/Magnifier.png"
+import GooglePayIcon from "./icons/googlepay.png";
+import PaytmIcon from "./icons/paypal.png";
+import TicketFooter from "./images/ticketfooter.png"
+import TicketFooterMobile from "./images/ticketbgmobile.svg"
+import BarcodeImagemoblie from "./images/barcodeImagemobile.svg"
 export {
   checkImage,
   LoginImage,
@@ -52,5 +57,10 @@ export {
   UkImage,
   LockColorIcon,
   ProfleColorIcon,
-  SearchColorIcon
+  SearchColorIcon,
+  GooglePayIcon,
+  PaytmIcon,
+  TicketFooter,
+  TicketFooterMobile,
+  BarcodeImagemoblie
 };
