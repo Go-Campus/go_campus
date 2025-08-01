@@ -295,6 +295,7 @@ const HomePage = () => {
                   className="flex flex-col items-center  w-[146px] h-[146px] justify-center border border-[#ADADAD40] rounded-[26px] text-center cursor-pointer"
                 >
                   <div className="w-10  h-10 ">
+                    <Link href={'/category-page'}>
                     <Image
                       width={28}
                       height={28}
@@ -302,6 +303,7 @@ const HomePage = () => {
                       alt={category.label}
                       className="w-full h-full object-contain"
                     />
+                    </Link>
                   </div>
                   <span className="text-gray-800 text-sm font-medium">
                     {category.label}

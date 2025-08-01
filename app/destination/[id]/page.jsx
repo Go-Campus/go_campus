@@ -28,33 +28,54 @@ import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import { useSearchParams } from 'next/navigation';
 const DestinationPage = ({ params, searchParams }) => {
-
-  const { id } = params;
-  const searchParamsHook = useSearchParams();
-  const destinationName = searchParamsHook.get('name') || id;
-  const destinationImage = searchParamsHook.get('image');
+  console.log('Page params:', params);
   
-  console.log('Destination page mounted:', {
-    id,
-    destinationName,
-    destinationImage
+  // Handle params in useEffect to avoid hydration mismatch
+  const [pageParams, setPageParams] = React.useState({
+    id: params?.id || 'default',
+    name: 'Your Destination',
+    image: PartyImage
   });
+
+  const searchParamsHook = useSearchParams();
+  
+  React.useEffect(() => {
+    const id = params?.id || '';
+    const name = searchParamsHook?.get('name') || id;
+    const image = searchParamsHook?.get('image');
+    
+    setPageParams({
+      id,
+      name,
+      image
+    });
+    
+    console.log('Destination page params updated:', { id, name, image });
+  }, [params, searchParamsHook]);
+  
+  console.log('Destination page mounted:', pageParams);
   const [destinationData, setDestinationData] = React.useState(null);
   const [loading, setLoading] = React.useState(true);
+  const [isClient, setIsClient] = React.useState(false);
+
+  // Handle client-side only rendering
+  React.useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   React.useEffect(() => {
     const fetchDestinationData = async () => {
       try {
-        console.log('Fetching data for destination:', destinationName);
+        console.log('Fetching data for destination:', pageParams.name);
         setLoading(true);
         // TODO: Replace with your actual API endpoint
-        // const response = await fetch(`/api/destinations/${destinationName}`);
+        // const response = await fetch(`/api/destinations/${pageParams.name}`);
         // const data = await response.json();
         
         // For now, using mock data
         const mockData = {
-          name: destinationName,
-          image: destinationImage,
+          name: pageParams.name,
+          image: pageParams.image,
           events: featuredTitles.map((title, i) => ({
             title,
             venue: featuredVenues[i],
@@ -79,10 +100,10 @@ const DestinationPage = ({ params, searchParams }) => {
       }
     };
 
-    if (destinationName) {
+    if (pageParams.name) {
       fetchDestinationData();
     }
-  }, [destinationName, destinationImage]);
+  }, [pageParams]);
 
   // widthsetup
   // Define a CSS variable for max-width that can be used throughout the component
@@ -96,14 +117,14 @@ const DestinationPage = ({ params, searchParams }) => {
   // banner datas
   const heroBanners = [
     {
-      image: imageSrc || PartyImage,
+      image: pageParams.image || PartyImage,
       title: [
         "Explore",
-        destinationName || "Your Destination",
+        pageParams.name || "Your Destination",
         "Events"
       ],
       description:
-        `Discover amazing events and experiences in ${destinationName || "your chosen destination"}.`,
+        `Discover amazing events and experiences in ${pageParams.name || "your chosen destination"}.`,
       buttonText: "Explore Events",
     },
   ];
@@ -206,7 +227,7 @@ const DestinationPage = ({ params, searchParams }) => {
     { img: DubaiImage, name: "Dubai" },
   ];
 
-  if (loading) {
+  if (!isClient || loading) {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gray-900"></div>
@@ -239,7 +260,7 @@ const DestinationPage = ({ params, searchParams }) => {
                 <div className="relative flex-1 h-[400px] rounded-tr-[38px] rounded-br-[38px] overflow-hidden">
                   <div className="absolute inset-0 z-10 bg-gradient-to-r from-black/70 via-black/30 to-transparent" />
                   <Image
-                    src={destinationImage}
+                    src={pageParams.image || PartyImage}
                     alt="Hero"
                     width={1200}
                     height={400}
