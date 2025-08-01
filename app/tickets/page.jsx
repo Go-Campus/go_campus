@@ -88,7 +88,9 @@ export default function Tickets() {
                   src={ticket.image}
                   alt="Event"
                   fill
-                  className="object-cover"
+                  className={`object-cover transition-all duration-300 ${
+                    activeTab === "past" ? "grayscale" : ""
+                  }`}
                   
                 />
               </div>
@@ -100,10 +102,17 @@ export default function Tickets() {
                     Ticket ID – {ticket.ticketId}
                   </h4>
                   <p className="text-gray-600">{ticket.title}</p>
-                  <p className="text-red-500 mt-1">
-                    {ticket.date} |{" "}
-                    <span className="font-semibold">{ticket.time}</span>
-                  </p>
+                  {activeTab === "upcoming" ? (
+                    <p className="text-red-500 mt-1">
+                      {ticket.date} |{" "}
+                      <span className="font-semibold">{ticket.time}</span>
+                    </p>
+                  ) : (
+                    <p className="text-gray-400 mt-1">
+                      {ticket.date} |{" "}
+                      <span className="font-semibold">{ticket.time}</span>
+                    </p>
+                  )}
                 </div>
                 <div className="mt-3 text-gray-500 space-y-1">
                   <div className="flex items-center gap-1">
@@ -140,7 +149,9 @@ export default function Tickets() {
                   alt="QR Code"
                   width={90}
                   height={90}
-                  className="object-contain"
+                  className={`object-contain transition-all duration-300 ${
+                    activeTab === "past" ? "grayscale" : ""
+                  }`}
                 />
               </div>
             </div>
