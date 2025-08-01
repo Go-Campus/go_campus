@@ -1,5 +1,5 @@
 "use client";
-import Card from "../../components/destinationCard/index";
+import Card from "../../../components/destinationCard/index";
 import React from "react";
 import {
   CardImage,
@@ -20,15 +20,69 @@ import Image from "next/image";
 import {
   ChevronLeft,
   ChevronRight,
-
   ArrowUpRight,
   ArrowRight,
   Search,
 } from "lucide-react";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
-const DestinationPage = () => {
-  // State for carousel scroll position
+import { useSearchParams } from 'next/navigation';
+const DestinationPage = ({ params, searchParams }) => {
+
+  const { id } = params;
+  const searchParamsHook = useSearchParams();
+  const destinationName = searchParamsHook.get('name') || id;
+  const destinationImage = searchParamsHook.get('image');
+  
+  console.log('Destination page mounted:', {
+    id,
+    destinationName,
+    destinationImage
+  });
+  const [destinationData, setDestinationData] = React.useState(null);
+  const [loading, setLoading] = React.useState(true);
+
+  React.useEffect(() => {
+    const fetchDestinationData = async () => {
+      try {
+        console.log('Fetching data for destination:', destinationName);
+        setLoading(true);
+        // TODO: Replace with your actual API endpoint
+        // const response = await fetch(`/api/destinations/${destinationName}`);
+        // const data = await response.json();
+        
+        // For now, using mock data
+        const mockData = {
+          name: destinationName,
+          image: destinationImage,
+          events: featuredTitles.map((title, i) => ({
+            title,
+            venue: featuredVenues[i],
+            price: featuredPrices[i],
+            date: "18 June – 15 July | 03:00 PM",
+            image: CardImage
+          })),
+          neighborhoods: [
+            "Downtown",
+            "Historic District",
+            "Cultural Quarter",
+            "University Area"
+          ]
+        };
+        
+        setDestinationData(mockData);
+        console.log('Destination data loaded:', mockData);
+      } catch (error) {
+        console.error('Error fetching destination data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (destinationName) {
+      fetchDestinationData();
+    }
+  }, [destinationName, destinationImage]);
 
   // widthsetup
   // Define a CSS variable for max-width that can be used throughout the component
@@ -38,32 +92,19 @@ const DestinationPage = () => {
 
   const carouselRef = React.useRef(null);
 
-  // Function to handle carousel navigation
-  const handleCarouselScroll = (direction) => {
-    console.log(`Scrolling carousel ${direction}`);
-
-    if (!carouselRef.current) return;
-
-    const scrollAmount = 300; // Adjust this value based on your needs
-    const currentScroll = carouselRef.current.scrollLeft;
-
-    carouselRef.current.scrollTo({
-      left:
-        direction === "left"
-          ? currentScroll - scrollAmount
-          : currentScroll + scrollAmount,
-      behavior: "smooth",
-    });
-  };
 
   // banner datas
   const heroBanners = [
     {
-      image: PartyImage,
-      title: ["From Pop", "Ballads to Emo", "Encores"],
+      image: imageSrc || PartyImage,
+      title: [
+        "Explore",
+        destinationName || "Your Destination",
+        "Events"
+      ],
       description:
-        "Experience the magic as pop ballads transform into emo encores, showcasing.",
-      buttonText: "Get Into Music",
+        `Discover amazing events and experiences in ${destinationName || "your chosen destination"}.`,
+      buttonText: "Explore Events",
     },
   ];
   //  section two categories datas
@@ -165,9 +206,17 @@ const DestinationPage = () => {
     { img: DubaiImage, name: "Dubai" },
   ];
 
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gray-900"></div>
+      </div>
+    );
+  }
+
   return (
-    <div className=" bg-white w-full flex flex-col gap-[98px] items-center justify-center">
-      <div className="w-full  px-5 flex gap-5 flex-col items-center justify-center">
+    <div className="bg-white w-full flex flex-col gap-[98px] items-center justify-center">
+      <div className="w-full px-5 flex gap-5 flex-col items-center justify-center">
         <div className="w-full flex justify-center items-center">
           <div
             className="w-full max-w-[var(--max-container-width)]"
@@ -190,8 +239,10 @@ const DestinationPage = () => {
                 <div className="relative flex-1 h-[400px] rounded-tr-[38px] rounded-br-[38px] overflow-hidden">
                   <div className="absolute inset-0 z-10 bg-gradient-to-r from-black/70 via-black/30 to-transparent" />
                   <Image
-                    src={banner.image}
+                    src={destinationImage}
                     alt="Hero"
+                    width={1200}
+                    height={400}
                     className="w-full h-full object-cover"
                   />
                   <div className="absolute inset-0 z-20 flex items-center px-8 py-16">
@@ -237,9 +288,9 @@ const DestinationPage = () => {
               <div className="block lg:hidden bg-white rounded-[36px] overflow-hidden shadow-md">
                 <div className="relative h-[400px]">
                   <Image
-                    width={50}
-                    height={200}
-                    src={banner.image}
+                    width={400}
+                    height={400}
+                    src={typeof banner.image === 'string' ? banner.image : banner.image.src}
                     alt="Hero"
                     className="w-full h-full object-cover"
                   />
@@ -304,14 +355,14 @@ const DestinationPage = () => {
                   style={containerStyle}
                 >
                   <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 w-full h-full">
-                    {featuredTitles.map((t, i) => (
+                    {destinationData?.events.map((event, i) => (
                       <Card
                         key={i}
-                        image={CardImage}
-                        date="18 June – 15 July | 03:00 PM"
-                        title={t}
-                        venue={featuredVenues[i]}
-                        price={featuredPrices[i]}
+                        image={event.image}
+                        date={event.date}
+                        title={event.title}
+                        venue={event.venue}
+                        price={event.price}
                         badge={i === 0 ? "Save up to 39%" : ""}
                         variant="latest"
                       />

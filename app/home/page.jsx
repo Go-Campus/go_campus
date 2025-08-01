@@ -29,6 +29,7 @@ import {
 } from "lucide-react";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
+import Link from "next/link";
 const HomePage = () => {
   // State for carousel scroll position
 
@@ -156,15 +157,15 @@ const HomePage = () => {
   ];
 
   const topDestinations = [
-    { img: CardImage, name: "Mumbai" },
-    { img: DubaiImage, name: "London" },
-    { img: DubaiImage, name: "Dubai" },
-    { img: CardImage, name: "Mumbai" },
-    { img: DubaiImage, name: "London" },
-    { img: DubaiImage, name: "Dubai" },
-    { img: CardImage, name: "Mumbai" },
-    { img: DubaiImage, name: "London" },
-    { img: DubaiImage, name: "Dubai" },
+    { id: 'mumbai-1', img: CardImage, name: "Mumbai" },
+    { id: 'london-1', img: DubaiImage, name: "London" },
+    { id: 'dubai-1', img: DubaiImage, name: "Dubai" },
+    { id: 'mumbai-2', img: CardImage, name: "Mumbai" },
+    { id: 'london-2', img: DubaiImage, name: "London" },
+    { id: 'dubai-2', img: DubaiImage, name: "Dubai" },
+    { id: 'mumbai-3', img: CardImage, name: "Mumbai" },
+    { id: 'london-3', img: DubaiImage, name: "London" },
+    { id: 'dubai-3', img: DubaiImage, name: "Dubai" },
   ];
 
   return (
@@ -447,18 +448,29 @@ const HomePage = () => {
                       key={i}
                       className="group relative min-w-[274px] h-[390px] rounded-[30%]  cursor-pointer transition-transform duration-300 hover:translate-x-2 flex-shrink-0"
                     >
-                      <div
-                        style={{
-                          borderRadius: "35%",
-
-                          backgroundImage: `url(${destination.img.src})`,
-                          backgroundSize: "cover",
-                          backgroundPosition: "center",
-                          backgroundRepeat: "no-repeat",
+                      <Link 
+                        href={`/destination/${destination.id}?name=${encodeURIComponent(destination.name)}&image=${encodeURIComponent(destination.img.src)}`}
+                        className="block absolute inset-0"
+                        onClick={() => {
+                          console.log('Navigating to destination:', {
+                            id: destination.id,
+                            name: destination.name,
+                            image: destination.img.src
+                          });
                         }}
-                        className="absolute inset-0 transition-transform duration-300 "
-                      />
-                      <div className="absolute inset-0  rounded-[40%] bg-gradient-to-b from-transparent to-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                      >
+                        <div
+                          style={{
+                            borderRadius: "35%",
+                            backgroundImage: `url(${destination.img.src})`,
+                            backgroundSize: "cover",
+                            backgroundPosition: "center",
+                            backgroundRepeat: "no-repeat",
+                          }}
+                          className="absolute inset-0 transition-transform duration-300"
+                        />
+                      </Link>
+                      {/* <div className="absolute inset-0  rounded-[40%] bg-gradient-to-b from-transparent to-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300" /> */}
                       <div className="absolute bottom-16 left-0 right-0 text-center text-white transform translate-y-full  transition-transform duration-300">
                         <h3 className="text-xl font-semibold">
                           {destination.name}
@@ -520,8 +532,7 @@ const HomePage = () => {
           </div>
         </div>
       </div>
-      {/* HOW IT WORKS SECTION */}
-
+   
       {/* FOOTER SECTION */}
       <div className=" w-full">
         <section className=" w-full px-0 md:px-[98px]   pt-[35px] pb-[98px] bg-[#F6F8FA]  ">
