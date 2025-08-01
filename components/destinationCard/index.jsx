@@ -13,13 +13,13 @@ const Card = ({
   const isLikes = variant === "likes";
 
   const containerClasses = isLikes
-    ? "flex  gap-2 rounded-xl  bg-white shadow-sm border border-gray-200 relative  trnasition w-fullflex gap-2 rounded-xl bg-white shadow-sm border border-gray-200 relative transition w-full"
+    ? "flex  rounded-xl bg-white shadow-sm border border-gray-200 relative transition w-full p-3"
     : variant === "featured"
     ? "rounded-2xl overflow-hidden shadow-sm bg-white hover:shadow-md transition relative border-b-[3px] border-[#FF5F4A]"
     : "rounded-2xl overflow-hidden shadow-sm bg-white hover:shadow-md transition relative";
 
   const imageClasses = isLikes
-    ? "w-[100px] h-[100%] object-cover  rounded-2xl"
+    ? "w-[100px] h-[100%] object-cover  rounded-xl"
     : "w-full object-cover rounded-2xl";
 
   return (
