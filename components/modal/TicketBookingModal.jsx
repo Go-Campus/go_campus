@@ -360,7 +360,7 @@ const TicketBookingModal = ({
                   setTimeout(() => {
                     Swal.fire({
                       title: 'Success!',
-                      text: 'Your order has been placed successfully!',
+                      text: 'Your Payment Successfully Processed',
                       icon: 'success',
                       confirmButtonColor: '#FF5F4A'
                     });

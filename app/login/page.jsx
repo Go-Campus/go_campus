@@ -116,8 +116,8 @@ export default function LoginPage() {
               </div>
             </div>
 
-            <div>
-              <Button type="submit">Sign in</Button>
+            <div className="w-full flex justify-center">
+              <Button type="submit" className="bg-[#FF5F4A] rounded-[12px] text-white w-full">Sign in</Button>
             </div>
 
             <div className="mt-6">

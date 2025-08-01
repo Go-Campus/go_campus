@@ -5,7 +5,12 @@ import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import Card from "../../components/destinationCard/index";
 import Image from "next/image";
-import { MoveDownRight, Filter, ArrowDownRight } from "lucide-react";
+import {
+  MoveDownRight,
+  Filter,
+  ArrowDownRight,
+  ChevronDown,
+} from "lucide-react";
 import SearchPageSidebar from "@/components/searchPageSidebar";
 
 export default function SearchPage() {
@@ -73,8 +78,7 @@ export default function SearchPage() {
   const languages = ["English", "German", "French", "Spanish"];
   const currency = ["U.S. Dollar", "Canadian Dollar", "Euro", "British Pound"];
 
-// mobilemenubar
-
+  // mobilemenubar
 
   return (
     <div className="bg-white w-full flex flex-col items-center justify-center">
@@ -101,14 +105,6 @@ export default function SearchPage() {
               Home / Kochi / TechEvents
             </p>
           </div>
-          
-
-          {/* navbar mibile */}
-     {/* <div className="w-full">
-              <h1 className="text-[16px] sm:text-[18px] text-center lg:text-[20px] font-semibold text-gray-900">
-                Filterscd
-              </h1>
-            </div> */}
 
           <div className="w-full py-4 sm:py-6">
             <h1 className="text-[20px] sm:text-[24px] lg:text-[32px] font-semibold leading-[28px] sm:leading-[36px] lg:leading-[50px] text-gray-800 mb-2">
@@ -176,7 +172,10 @@ export default function SearchPage() {
                   <div className="bg-white overflow-hidden">
                     <div className="p-2 flex justify-between items-center">
                       <button className="text-xs sm:text-sm text-gray-700 flex items-center gap-1">
-                        View map <span className="text-xs">▼</span>
+                        View map{" "}
+                        <span className="text-xs">
+                          <ChevronDown size={16} />
+                        </span>
                       </button>
                     </div>
                     <div className="relative w-full h-[300px] sm:h-[400px] xl:h-[591px] bg-gray-100 rounded-2xl overflow-hidden">
@@ -209,8 +208,11 @@ export default function SearchPage() {
                   <h2 className="text-[16px] sm:text-[18px] lg:text-[20px] font-semibold text-gray-900">
                     Popular Events
                   </h2>
-                  <button className="text-[12px] sm:text-[14px] text-gray-700 hover:underline flex items-center gap-1">
-                    Explore more events <span className="text-xs">▼</span>
+                  <button className="text-[12px] sm:text-[14px] text-gray-700  justify-center hover:underline flex items-center gap-1">
+                    Explore more events{" "}
+                    <span className="text-xs">
+                      <ChevronDown size={16} />
+                    </span>
                   </button>
                 </div>
 

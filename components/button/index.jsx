@@ -17,7 +17,7 @@ const Button = ({
     <button
       type={type}
       onClick={handleClick}
-      className={`p-4 bg-red-50 ${className}`}
+      className={`p-4  ${className}`}
       {...props}
     >
       {children}

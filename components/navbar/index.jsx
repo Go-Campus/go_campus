@@ -121,12 +121,6 @@ export default function GoCampusHeader() {
 
           {/* Right side: Location, User, Toggle */}
           <div className="flex items-center space-x-3">
-            {/* Location */}
-            <div className="flex items-center text-gray-700 cursor-pointer">
-              <MapPin className="w-4 h-4" />
-              <span className="font-medium ml-1">Lucknow</span>
-            </div>
-            
             {/* User Avatar */}
             <div className="w-10 h-10 bg-orange-500 rounded-full flex items-center justify-center cursor-pointer">
               <User className="w-5 h-5 text-white" />
@@ -161,7 +155,26 @@ export default function GoCampusHeader() {
           isMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
         }`}>
           <div className="mt-4 bg-gray-100 border-gray-200 rounded-lg">
-            <nav className="flex flex-col ">
+            <nav className="flex flex-col">
+              {/* Location Selection */}
+              <div className="flex items-center text-gray-700 cursor-pointer p-3 hover:bg-gray-200 rounded transition-all duration-200">
+                <MapPin className="w-4 h-4" />
+                <span className="font-medium ml-2">Select Location</span>
+                <svg
+                  className="w-4 h-4 ml-auto"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M19 9l-7 7-7-7"
+                  />
+                </svg>
+              </div>
+              {/* Navigation Links */}
               {navBar.map((navbar, index) => (
                 <Link 
                   key={navbar.id} 
