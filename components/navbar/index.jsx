@@ -3,10 +3,24 @@ import { Search, MapPin, User, Menu, X } from "lucide-react";
 import Link from "next/link";
 import { GoCampusLogo, ProfileIcon } from "../../public";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 
 export default function GoCampusHeader() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const menuRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setIsMenuOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
   
   const navBar = [
     {
@@ -32,11 +46,12 @@ export default function GoCampusHeader() {
   ];
 
   return (
-    <header className="bg-white w-full py-[32px]">
+    <header className="bg-white w-full py-4 sm:py-6 md:py-[32px] sticky top-0 z-50 shadow-sm">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       {/* Desktop Layout */}
       <div className="hidden lg:flex items-center justify-between">
         {/* First 50%: Logo + Search Bar */}
-        <div className="flex items-center w-[40%] rounded-lg">
+        <div className="flex items-center w-full lg:w-[40%] rounded-lg">
           {/* Logo */}
           <div className="flex items-center space-x-2 mr-6">
             <div className="w-8 h-8 rounded-full flex items-center justify-center">
@@ -125,7 +140,7 @@ export default function GoCampusHeader() {
           {/* Right side: Location, User, Toggle */}
           <div className="flex items-center space-x-3">
             {/* Location */}
-            <div className="flex items-center md:block hidden text-gray-700 cursor-pointer">
+            <div className=" items-center  hidden text-gray-700 md:flex">
               <MapPin className="w-4 h-4" />
               <span className="font-medium ml-1">Lucknow</span>
             </div>
@@ -160,7 +175,9 @@ export default function GoCampusHeader() {
         </div>
 
         {/* Mobile Menu with Animation */}
-        <div className={`overflow-hidden transition-all duration-300 ease-in-out ${
+        <div 
+          ref={menuRef}
+          className={`overflow-hidden transition-all duration-300 ease-in-out ${
           isMenuOpen ? 'w-full absolute z-30 top-[15%] right-0 px-4 bg-whiteopacity-100' : 'max-h-0 opacity-0'
         }`}>
           <div className="mt-4 bg-gray-100 border-gray-200 rounded-lg">
@@ -192,6 +209,7 @@ export default function GoCampusHeader() {
             </nav>
           </div>
         </div>
+      </div>
       </div>
     </header>
   );

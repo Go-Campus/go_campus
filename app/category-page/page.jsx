@@ -172,12 +172,23 @@ const categorypage = () => {
       <div className="w-full  px-5 flex gap-5 flex-col items-center justify-center">
         <div className="w-full flex justify-center items-center">
           <div
-            className="w-full max-w-[var(--max-container-width)]"
+            className="w-full  max-w-[var(--max-container-width)]"
             style={containerStyle}
           >
             <Navbar />
           </div>
         </div>
+
+        <section className="w-full bg-red-300">
+{/* left  */}
+<div></div>
+{/* right   */}
+<div>
+
+
+</div>
+
+        </section>
 
         {/* HERO SECTION */}
         <section

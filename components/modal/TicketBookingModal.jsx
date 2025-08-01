@@ -221,7 +221,7 @@ const TicketBookingModal = ({
                     </label>
                     <input
                       type="email"
-                      className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#FF5F4A]/50 focus:border-[#FF5F4A] transition-all duration-200"
+                      className="w-full p-2 border  border-[#E2E4E9] rounded-md focus:outline-none focus:ring-2 focus:ring-[#FF5F4A]/50 focus:border-[#FF5F4A] transition-all duration-200"
                       placeholder="nihlamj@gmail.com"
                     />
                   </div>
