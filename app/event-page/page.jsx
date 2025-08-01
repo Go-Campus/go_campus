@@ -384,7 +384,6 @@ setRegisterModal(true)
         onCheckout={handleCheckout}
         type={modalType}
       />
-
       <Footer />
     </div>
   );

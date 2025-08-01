@@ -26,6 +26,7 @@ const TicketBookingModal = ({
   console.log("Rendering TicketBookingModal with quantity:", quantity);
   const [activeButton, setActiveButton] = useState(null); // 'minus' or 'plus'
   const [timeLeft, setTimeLeft] = useState(600); // 10 minutes in seconds
+  const [isClosing, setIsClosing] = useState(false);
 
   useEffect(() => {
     console.log('Timer initialized with timeLeft:', timeLeft);
@@ -50,6 +51,20 @@ const TicketBookingModal = ({
     };
   }, [isOpen, onClose]);
 
+  useEffect(() => {
+    if (!isOpen) {
+      setIsClosing(false);
+    }
+  }, [isOpen]);
+
+  const handleClose = () => {
+    console.log("Modal closing with animation...");
+    setIsClosing(true);
+    setTimeout(() => {
+      onClose();
+    }, 300); // Match animation duration
+  };
+
   if (!isOpen) return null;
 
   return (
@@ -57,13 +72,10 @@ const TicketBookingModal = ({
 
     
       className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4"
-      onClick={() => {
-        console.log("Closing modal from overlay click");
-        onClose();
-      }}
+      onClick={handleClose}
     >
       <div
-        className="bg-white rounded-lg shadow-2xl w-full max-w-5xl p-5 overflow-y-auto max-h-[90vh] md:max-h-[85vh]"
+        className={`bg-white rounded-lg shadow-2xl w-full max-w-5xl p-5 overflow-y-auto max-h-[90vh] md:max-h-[85vh] ${isClosing ? 'animate-slide-left' : 'animate-slide-right'}`}
         onClick={(e) => {
           // Prevent clicks inside the modal from closing it
           e.stopPropagation();
@@ -76,6 +88,28 @@ const TicketBookingModal = ({
         <style jsx>{`
           div::-webkit-scrollbar {
             display: none;
+          }
+          @keyframes slideRight {
+            from {
+              transform: translateX(-100%);
+            }
+            to {
+              transform: translateX(0);
+            }
+          }
+          @keyframes slideLeft {
+            from {
+              transform: translateX(0);
+            }
+            to {
+              transform: translateX(-100%);
+            }
+          }
+          .animate-slide-right {
+            animation: slideRight 0.3s ease-out forwards;
+          }
+          .animate-slide-left {
+            animation: slideLeft 0.3s ease-out forwards;
           }
         `}</style>
         {/* Modal Content */}
@@ -289,10 +323,7 @@ const TicketBookingModal = ({
                     />
                     <div
                       className="w-[38px] md:w-[42px] absolute top-1 right-0 rounded-full flex items-center justify-center h-[38px] md:h-[42px] bg-white/70 shadow-md cursor-pointer hover:bg-gray-100 transition-colors"
-                      onClick={() => {
-                        console.log("Modal closing...");
-                        onClose();
-                      }}
+                      onClick={handleClose}
                     >
                       <X color="#525866" className="w-[14px] md:w-[16px]" />
                     </div>
