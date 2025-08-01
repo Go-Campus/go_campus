@@ -19,7 +19,7 @@ const Card = ({
     : "rounded-2xl overflow-hidden shadow-sm bg-white hover:shadow-md transition relative";
 
   const imageClasses = isLikes
-    ? "w-[181px] h-[100%] object-cover  rounded-2xl"
+    ? "w-[100px] h-[100%] object-cover  rounded-2xl"
     : "w-full object-cover rounded-2xl";
 
   return (
