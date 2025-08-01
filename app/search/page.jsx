@@ -408,7 +408,11 @@ export default function SearchPage() {
               </div>
 
               {/* Based on Recent Searches */}
-              <div className="w-full mb-4 sm:mb-6">
+             
+            </div>
+            
+          </div>
+          <div className="w-full mb-4 sm:mb-6">
                 <div className="flex items-center gap-2 sm:gap-4 mb-3 sm:mb-4">
                   <h2 className="text-[16px] sm:text-[18px] lg:text-[20px] font-semibold text-gray-900">Based on your most recent searches</h2>
                   <MoveDownRight size={16} className="sm:w-5 sm:h-5" />
@@ -446,8 +450,6 @@ export default function SearchPage() {
                   ))}
                 </div>
               </section>
-            </div>
-          </div>
         </div>
       </div>
 
