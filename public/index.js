@@ -28,6 +28,8 @@ import SearchColorIcon from "./icons/Magnifier.png"
 import GooglePayIcon from "./icons/googlepay.png";
 import PaytmIcon from "./icons/paypal.png";
 import TicketFooter from "./images/ticketfooter.png"
+import TicketFooterMobile from "./images/ticketbgmobile.svg"
+import BarcodeImagemoblie from "./images/barcodeImagemobile.svg"
 export {
   checkImage,
   LoginImage,
@@ -58,5 +60,7 @@ export {
   SearchColorIcon,
   GooglePayIcon,
   PaytmIcon,
-  TicketFooter
+  TicketFooter,
+  TicketFooterMobile,
+  BarcodeImagemoblie
 };

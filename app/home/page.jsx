@@ -18,6 +18,8 @@ import {
   LockColorIcon,
   SearchColorIcon,
   TicketFooter,
+  TicketFooterMobile,
+  BarcodeImagemoblie,
 } from "@/public";
 import Image from "next/image";
 import {
@@ -31,7 +33,26 @@ import {
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import Link from "next/link";
+import { useState, useEffect } from "react";
 const HomePage = () => {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    // Function to check if width is less than or equal to 425px
+    const checkMobile = () => {
+      console.log("Checking mobile width");
+      setIsMobile(window.innerWidth <= 425);
+    };
+
+    // Check on initial load
+    checkMobile();
+
+    // Add event listener for window resize
+    window.addEventListener('resize', checkMobile);
+
+    // Cleanup
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
   // State for carousel scroll position
 
   // widthsetup
@@ -238,7 +259,7 @@ const HomePage = () => {
               </div>
 
               {/* Mobile Layout */}
-              <div className="block lg:hidden bg-white rounded-[36px] overflow-hidden shadow-md">
+              <div className=" gap-1 lg:hidden  flex flex-col  rounded-[36px] overflow-hidden ">
                 <div className="relative h-[400px]">
                   <Image
                     width={50}
@@ -263,20 +284,27 @@ const HomePage = () => {
                   </div>
                 </div>
 
-                <div className="relative h-[20px] bg-white">
-                  <div className="absolute inset-0 border-t border-dotted border-gray-300" />
-                  <div className="absolute -left-4 top-1/2 -translate-y-1/2 w-8 h-8 bg-white rounded-full border border-gray-200" />
-                  <div className="absolute -right-4 top-1/2 -translate-y-1/2 w-8 h-8 bg-white rounded-full border border-gray-200" />
+                <div className="  lg:block hidden  relative h-[20px] bg-white">
+                  <div className="absolute  lg:block hidden inset-0 border-t border-dotted border-gray-300" />
+                  <div className="absolute -left-4 top-1/2 lg:block hidden -translate-y-1/2 w-8 h-8 bg-white rounded-full border border-gray-200" />
+                  <div className="absolute -right-4 top-1/2 -translate-y-1/2  lg:block hidden w-8 h-8 bg-white rounded-full border border-gray-200" />
                 </div>
 
                 {/* Mobile Barcode */}
-                <div className="bg-red-500 flex  w-full lg:hidden">
+                <div
+                style={{
+                  backgroundImage: `url(${TicketFooterMobile.src})`,
+                  backgroundSize: isMobile ? "contain" : "cover",
+                  backgroundPosition: "center",
+                  backgroundRepeat: "no-repeat",
+                }}
+                className="flex w-full xs:object-contain sm:object-contain md:object-cover justify-center items-center py-7 lg:hidden">
                   <Image
                     width={140}
                     height={60}
-                    src={TicketFooter}
+                    src={BarcodeImagemoblie}
                     alt="Barcodfgde"
-                    className="w-full h-full object-contain"
+                    className="w-56 object-contain"
                   />
                 </div>
               </div>
