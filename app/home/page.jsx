@@ -323,18 +323,18 @@ const HomePage = () => {
                   key={index}
                   className="flex flex-col items-center  w-[146px] h-[146px] justify-center border border-[#ADADAD40] rounded-[26px] text-center cursor-pointer"
                 >
-                  <div className="w-10  h-10 ">
+                  <div className="w-16    h-16">
                     <Link href={'/category-page'}>
                     <Image
-                      width={28}
-                      height={28}
+                      width={32}
+                      height={32}
                       src={category.icon}
                       alt={category.label}
                       className="w-full h-full object-contain"
                     />
                     </Link>
                   </div>
-                  <span className="text-gray-800 text-sm font-medium">
+                  <span className="text-gray-800 text-[16px] font-medium">
                     {category.label}
                   </span>
                 </div>
@@ -367,10 +367,10 @@ const HomePage = () => {
                     {filterLabels.map((label, i) => (
                       <button
                         key={i}
-                        className={`flex-shrink-0 px-[13px] py-[3px] text-[14px] rounded-[6px] border ${
+                        className={`flex-shrink-0 px-[13px] py-[3px] text-[14px] rounded-[6px]  ${
                           i === 0
                             ? "bg-[#CDD0D5] text-black  border-none"
-                            : "text-[#868C98] hover:bg-gray-100 border-gray-300"
+                            : "text-[#868C98] hover:bg-gray-100 "
                         } transition`}
                       >
                         {label}
