@@ -10,3 +10,11 @@
     scrollbar-width: none;  /* Firefox */
   }
 }
+
+:root {
+  --font-jakarta: 'Plus Jakarta Sans', sans-serif;
+  --font-manrope: 'Manrope', sans-serif;
+}
+body {
+  font-family: var(--font-jakarta); /* or var(--font-manrope) */
+}

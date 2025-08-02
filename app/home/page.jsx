@@ -503,7 +503,7 @@ const HomePage = () => {
                       </Link>
                       {/* <div className="absolute inset-0  rounded-[40%] bg-gradient-to-b from-transparent to-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300" /> */}
                       <div className="absolute bottom-16 left-0 right-0 text-center text-white transform translate-y-full  transition-transform duration-300">
-                        <h3 className="text-xl font-semibold">
+                        <h3 className="text-[12px] md:text-[26px] font-[600]">
                           {destination.name}
                         </h3>
                       </div>
@@ -532,7 +532,7 @@ const HomePage = () => {
                       className="flex items-center gap-[10px] py-[6px] px-[14px] text-[14px] font-medium bg-[#F6F8FA] text-[#31353F] hover:bg-gray-100 transition rounded-lg border border-gray-200"
                     >
                       <span className="truncate">{city}</span>
-                      <ArrowUpRight className="w-4 h-4 " />
+                      <ArrowUpRight  color="#868C98" className="w-4 h-4 " />
                     </button>
                   ))}
                 </div>
@@ -566,10 +566,10 @@ const HomePage = () => {
    
       {/* FOOTER SECTION */}
       <div className=" w-full">
-        <section className=" w-full px-0 md:px-[98px]   pt-[35px] pb-[98px] bg-[#F6F8FA]  ">
+        <section className="  md:flex hidden w-full px-0 md:px-[98px]   pt-[35px] pb-[98px] bg-[#F6F8FA]  ">
           <div className="  ">
             {/* Title */}
-            <h2 className="text-lg sm:text-xl md:text-2xl font-medium text-center text-black mb-12">
+            <h2 className="text-[14px] sm:text-xl md:text-[28px] font-[500] text-center text-black mb-12">
               How GoCampus Works
             </h2>
 
@@ -589,10 +589,10 @@ const HomePage = () => {
                   </div>
                   {/* Text */}
                   <div>
-                    <h3 className="text-base font-semibold text-gray-900 mb-1">
+                    <h3 className="text-[22px] font-[500] text-gray-900 mb-1">
                       {item.heading}
                     </h3>
-                    <p className="text-sm text-gray-500 leading-relaxed">
+                    <p className="text-[16px] text-gray-500 font-[500] leading-relaxed">
                       {item.text}
                     </p>
                   </div>

@@ -22,9 +22,9 @@ import checkImage from "./images/checkImage.svg";
 import PlaceImage from "./placeImage/UKPhotosbyVisaVerge-097.jpg"
 import DubaiImage from "./placeImage/dubai.jpg"
 import UkImage from "./placeImage/uk.png"
-import LockColorIcon from "./icons/Lock.png"
-import ProfleColorIcon from "./icons/Profile.png"
-import SearchColorIcon from "./icons/Magnifier.png"
+import LockColorIcon from "./icons/Lock.svg"
+import ProfleColorIcon from "./icons/Profile.svg"
+import SearchColorIcon from "./icons/Magnifier.svg"
 import GooglePayIcon from "./icons/googlepay.png";
 import PaytmIcon from "./icons/paypal.png";
 import TicketFooter from "./images/ticketfooter.png"

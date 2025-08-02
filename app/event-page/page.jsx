@@ -1,13 +1,13 @@
 "use client";
 
-import React,{useState} from "react";
+import React, { useState } from "react";
 import { InfoCard } from "@/components/infoCard/index";
 import {
   aboutEventContent,
   faqs,
   socialIcons,
 } from "../../constants/aboutEvent";
-import { Calendar, Clock, MapPin, Users } from 'lucide-react';
+import { Calendar, Clock, MapPin, Users } from "lucide-react";
 import Navbar from "@/components/navbar";
 import Button from "@/components/button";
 import Card from "../../components/destinationCard/index";
@@ -43,7 +43,7 @@ export default function EventPage() {
   ];
   const MAxwidth = "1500px";
   const [registerModal, setRegisterModal] = useState(false);
-  const [modalType, setModalType] = useState('register');
+  const [modalType, setModalType] = useState("register");
   const [quantity, setQuantity] = useState(1);
   const ticketPrice = 499;
 
@@ -52,28 +52,27 @@ export default function EventPage() {
   };
 
   const handleQuantityChange = (action) => {
-    if (action === 'increase') {
-      setQuantity(prev => prev + 1);
-    } else if (action === 'decrease' && quantity > 1) {
-      setQuantity(prev => prev - 1);
+    if (action === "increase") {
+      setQuantity((prev) => prev + 1);
+    } else if (action === "decrease" && quantity > 1) {
+      setQuantity((prev) => prev - 1);
     }
   };
 
   const closeModal = () => {
     setRegisterModal(false);
-    setModalType('register'); // Reset modal type when closing
+    setModalType("register"); // Reset modal type when closing
   };
 
   const handleCheckout = () => {
-    setModalType('checkout');
+    setModalType("checkout");
   };
 
-// modal function 
+  // modal function
 
-const openModal = ()=>{
-setRegisterModal(true)
-
-}
+  const openModal = () => {
+    setRegisterModal(true);
+  };
   return (
     <div className="bg-white w-full flex flex-col  items-center justify-center">
       <div
@@ -85,33 +84,39 @@ setRegisterModal(true)
 
       {/* Top Grid */}
       <div
-        className="w-full max-w-[var(--max-container-width)] px-4 sm:px-6 py-6 grid grid-cols-1 lg:grid-cols-3 gap-10"
+        className="w-full max-w-[var(--max-container-width)]   flex"
         style={containerStyle}
       >
         {/* Poster */}
-        <div className="lg:col-span-2 md:h-[605px] w-full rounded-2xl overflow-hidden border border-gray-100 shadow-lg relative ">
-          <Image
-            src="/images/Events/event2.svg"
-            alt="Event 2"
-            fill
-            className="object-cover"
-          />
-        </div>
+        <div className="w-full gap-[34px] py-[68px] flex">
+          <div className="w-[50%]">
+            <Image
+              src="/images/Events/event2.svg"
+              alt="Event 2"
+              width={10} // set a large width
+              height={100}
+              className="w-[100%] h-[600px] rounded-2xl object-cover"
+            />
+          </div>
 
-        {/* Info Cards */}
-        <div className="flex flex-col justify-between space-y-4 h-full">
-          <InfoCard
-            bgColor="bg-red-50"
-            borderColor="border-red-100"
-            iconSrc="/icons/Calendar.svg"
-            decorativeImageSrc="/images/decorativeCalendar.svg"
-          />
-          <InfoCard
-            bgColor="bg-red-50"
-            borderColor="border-orange-100"
-            iconSrc="/icons/locationWhite.svg"
-            decorativeImageSrc="/images/decorativeLocation.svg"
-          />
+          <div className="w-[50%] flex flex-col gap-[20px] ">
+            <div className="w-full h-[50%]  ">
+              <InfoCard
+                bgColor="bg-red-50"
+                borderColor="border-red-100"
+                iconSrc="/icons/Calendar.svg"
+                decorativeImageSrc="/images/decorativeCalendar.svg"
+              />
+            </div>
+            <div className="w-full h-[50%] ">
+              <InfoCard
+                bgColor="bg-red-50"
+                borderColor="border-red-100"
+                iconSrc="/icons/Calendar.svg"
+                decorativeImageSrc="/images/decorativeCalendar.svg"
+              />
+            </div>
+          </div>
         </div>
       </div>
 
@@ -315,7 +320,10 @@ setRegisterModal(true)
 
           {/* Button */}
           <div className="flex justify-center mb-4">
-            <button  onClick={openModal} className="px-5 py-2 text-white bg-[#FF5F4A] rounded-md text-sm font-medium">
+            <button
+              onClick={openModal}
+              className="px-5 py-2 text-white bg-[#FF5F4A] rounded-md text-sm font-medium"
+            >
               Register Now
             </button>
           </div>
