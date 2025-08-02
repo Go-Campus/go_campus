@@ -30,6 +30,10 @@ import PaytmIcon from "./icons/paypal.png";
 import TicketFooter from "./images/ticketfooter.png"
 import TicketFooterMobile from "./images/ticketbgmobile.svg"
 import BarcodeImagemoblie from "./images/barcodeImagemobile.svg"
+import SideTicket from "./images/sideticket.png"
+import LocationMap from "./icons/locationMap.svg"
+import EventPAgeboxIcon from "./icons/eventpageicon.svg"
+import Sideticketimage from "./images/sideticketimage.svg"
 export {
   checkImage,
   LoginImage,
@@ -62,5 +66,9 @@ export {
   PaytmIcon,
   TicketFooter,
   TicketFooterMobile,
-  BarcodeImagemoblie
+  BarcodeImagemoblie,
+  SideTicket,
+  LocationMap,
+  EventPAgeboxIcon,
+  Sideticketimage
 };

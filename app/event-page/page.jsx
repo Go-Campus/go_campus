@@ -7,7 +7,7 @@ import {
   faqs,
   socialIcons,
 } from "../../constants/aboutEvent";
-import { Calendar, Clock, MapPin, Users } from "lucide-react";
+import { Calendar, ChevronDown, Clock, Facebook, MapPin, MessageCircleMore, Users, Youtube } from "lucide-react";
 import Navbar from "@/components/navbar";
 import Button from "@/components/button";
 import Card from "../../components/destinationCard/index";
@@ -15,7 +15,14 @@ import Accordion from "@/components/Accordion";
 import Image from "next/image";
 import Footer from "@/components/footer";
 import TicketBookingModal from "@/components/modal/TicketBookingModal";
-
+import { EventPAgeboxIcon, LocationMap, SideTicket } from "@/public";
+import {
+  faFacebookF,
+  faWhatsapp,
+  faInstagram,
+  faYoutube,
+} from "@fortawesome/free-brands-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 export default function EventPage() {
   const featuredTitles = [
     "Clay Sculpting",
@@ -73,6 +80,15 @@ export default function EventPage() {
   const openModal = () => {
     setRegisterModal(true);
   };
+
+
+  
+  const socialIcons = [
+    { icon: <FontAwesomeIcon  color="#525866" icon={faFacebookF} />, link: "https://facebook.com" },
+    { icon: <FontAwesomeIcon   color="#525866" icon={faWhatsapp} />, link: "https://wa.me" },
+    { icon: <FontAwesomeIcon   color="#525866"  icon={faInstagram} />, link: "https://instagram.com" },
+    { icon: <FontAwesomeIcon  color="#525866" icon={faYoutube} />, link: "https://youtube.com" },
+  ]
   return (
     <div className="bg-white w-full flex flex-col  items-center justify-center">
       <div
@@ -88,8 +104,8 @@ export default function EventPage() {
         style={containerStyle}
       >
         {/* Poster */}
-        <div className="w-full gap-[34px] py-[68px] flex">
-          <div className="w-[50%]">
+        <div className="w-full gap-[34px] py-[68px] px-4 flex md:flex-row flex-col">
+          <div className="w-full md:w-[50%]">
             <Image
               src="/images/Events/event2.svg"
               alt="Event 2"
@@ -99,8 +115,8 @@ export default function EventPage() {
             />
           </div>
 
-          <div className="w-[50%] flex flex-col gap-[20px] ">
-            <div className="w-full h-[50%]  ">
+          <div className="w-full md:w-[50%] flex h-[100%]    flex-row md:flex-col gap-[20px] ">
+            <div className="w-full md:h-[50%]  h-[100%]">
               <InfoCard
                 bgColor="bg-red-50"
                 borderColor="border-red-100"
@@ -108,7 +124,7 @@ export default function EventPage() {
                 decorativeImageSrc="/images/decorativeCalendar.svg"
               />
             </div>
-            <div className="w-full h-[50%] ">
+            <div className="w-full md:h-[50%]  h-[100%]">
               <InfoCard
                 bgColor="bg-red-50"
                 borderColor="border-red-100"
@@ -121,212 +137,205 @@ export default function EventPage() {
       </div>
 
       {/* Details and Register */}
-      <div
-        className=" w-full max-w-[var(--max-container-width)] px-4 grid grid-cols-1 lg:grid-cols-3 gap-6"
-        style={containerStyle}
-      >
-        {/* Details */}
-        <div className="lg:col-span-2">
-          <h1 className=" font-medium text-[42px] leading-[55px] capitalize align-middle">
-            Best Comedy Lineup ft. Famous
-            <br /> Star Comedians
-          </h1>
 
-          <div className="border-t border-gray-200 pt-4 ">
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-              <div className="flex items-center gap-4">
-                <div className="w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center overflow-hidden">
-                  <Image
-                    src={"/icons/TablonIcon.svg"}
-                    alt="Tablon Global"
-                    width={50}
-                    height={30}
-                    className="w-8 h-8 object-contain"
-                  />
+      <div
+        style={containerStyle}
+        className="  bg-green-300 justify-between w-full px-5 flex md:flex-row flex-col max-w-[var(--max-container-width)]"
+      >
+        <div className="md:w-[60%] w-full ">
+          <div>
+            <h1 className="  text-[42px] font-[500] capitalize align-middle">
+              Best Comedy Lineup ft. Famous
+              <br /> Star Comedians
+            </h1>
+          </div>
+
+          {/* second  */}
+          <div className="flex flex-col w-full  gap-[25px]">
+            <div className="flex flex-col gap-[12px]">
+              <h1 className="text-[18px] font-[400]">About Event</h1>
+
+              <p className="leading-[28px] text-[18px] font-[400] text-[#404040]">
+                Kerala's biggest and most awaited dentistry expo is back in full
+                force. KEDDA Dental Expo 2023 organized by Kerala Dental Dealers
+                Association will be held on the 12th and 13th of August at CIAL
+                Convention Center in Nedumbassery, Coachin. Don’t miss out the
+                Kerala’s Biggest Dental Trade Fair. Schedule your visit to the
+                CIAL Convention Center on the 12th and 13th of August 2023 for
+                Kerala's Grand Dental Event, the KEDDA Dental Expo 2023.
+              </p>
+
+              <p className="leading-[28px] text-[18px] font-[400] text-[#404040]">
+                This expo will feature 100+ National and international
+                exhibitors from the reputable dental industry displaying a
+                comprehensive range of innovative dental equipments,
+                consumables, and accessories. All dentists and dental
+                professionals are invited to attend the expo, which is hosted by
+                the Kerala Dental Dealers Association and take advantage of the
+                exclusive expo discounts offered by the exhibitors.
+              </p>
+            </div>
+
+            {/* third  */}
+
+            <div>
+              <h1 className="text-[22px] font-[500]">Key Features</h1>
+              <ul className="list-disc pl-5 flex flex-col gap-[12px]">
+                <li className="text-[#292929] text[18px] font-[300]">
+                  Submit dessert recipe and photo of the dish.
+                </li>
+                <li className="text-[#292929] text[18px] font-[300]">
+                  Photo should make dessert look appetizing.
+                </li>
+                <li className="text-[#292929] text[18px] font-[300]">
+                  Judges select top 20 based on recipe/photo quality,
+                  creativity, and originality.
+                </li>
+                <li className="text-[#292929] text[18px] font-[300]">
+                  Final 120 must prepare dessert in person on May 19th.
+                </li>
+                <li className="text-[#292929] text[18px] font-[300]">
+                  Judging criteria include taste, presentation, creativity, and
+                  overall appeal.
+                </li>
+                <li className="text-[#292929] text[18px] font-[300]">
+                  Winner announced at end of competition.
+                </li>
+              </ul>
+            </div>
+
+            {/* location  */}
+
+            <div>
+              <h1 className="text-[22px] font-[500] mb-2">Location</h1>
+              <div className="bg-[#FDDDD266] flex flex-col gap-[16px] py-[20px] px-[26px]">
+                <div className="flex gap-[14px]">
+                  <div className="w-[44px] h-[44px]">
+                    <Image
+                      alt="location"
+                      width={100}
+                      height={100}
+                      src={LocationMap}
+                    />
+                  </div>
+                  <div>
+                    <h1 className="text-[16px] font-[500]">
+                      Cial Convention Center
+                    </h1>
+                    <p className="text-[12px] font-[400]">
+                      Athani, Nedumbassheri, Cochin
+                    </p>
+                  </div>
                 </div>
-                <div className="text-lg text-gray-900 font-medium">
-                  By <span className="font-semibold">Tablon Global</span>
+                <iframe
+                  className="w-full h-[300px] rounded-lg"
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3890.985857137017!2d77.5946!3d12.9716!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae1670c8f0e4a3%3A0x20a0c9e143c1b3ef!2sBangalore!5e0!3m2!1sen!2sin!4v1665678894100!5m2!1sen!2sin"
+                  allowFullScreen=""
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                ></iframe>
+              </div>
+            </div>
+
+            {/* dropdown  */}
+
+            <div className="w-full ">
+            <p className="w-full flex items-center justify-between py-[26px] text-[#0A0D14] text-[16px] font-[500] border-b border-[#CDD0D5]">
+            Who can Join this community?
+                <span>
+                  <ChevronDown size={16} color="#868C98" />
+                </span>
+              </p>
+
+              <p className="w-full flex items-center justify-between py-[26px] text-[#0A0D14] text-[16px] font-[500] border-b border-[#CDD0D5]">
+              Is joining free?
+                <span>
+                  <ChevronDown size={16} color="#868C98" />
+                </span>
+              </p>
+
+              <p className="w-full flex items-center justify-between py-[26px] text-[#0A0D14] text-[16px] font-[500] border-b border-[#CDD0D5]">
+              Insert your accordion title here{" "}
+                <span>
+                  <ChevronDown size={16} color="#868C98" />
+                </span>
+              </p>
+
+              <p className="w-full flex items-center justify-between py-[26px] text-[#0A0D14] text-[16px] font-[500] border-b border-[#CDD0D5]">
+              What if I have more questions?{" "}
+                <span>
+                  <ChevronDown size={16} color="#868C98" />
+                </span>
+              </p>
+            </div>
+
+            {/* box */}
+
+            <div className="bg-[#FFBABA] p-[28px] rounded-[30px] gap-[36px] flex flex-col w-full">
+              <div className="w-full justify-between items-center flex">
+                <div className=" flex gap-[22px] items-center ">
+                  <div
+                    style={{
+                      backgroundImage: `url(${EventPAgeboxIcon})`,
+                      backgroundPosition: "center",
+                    }}
+                    className="w-[70px]  object-cover h-[70px] rounded-full flex items-center bg-amber-50 justify-center"
+                  >
+                    {/* <Image src={EventPAgeboxIcon} /> */}
+                  </div>
+                  <p className="text-[18px] font-[400]">By Tablon Global</p>
+                </div>
+
+                <div>
+                  <button className="bg-[#FF5F4A] text-white py-[10px] px-[30px] rounded-[10px]">
+                    Follow
+                  </button>
                 </div>
               </div>
 
-              <button className="px-5 py-2 text-sm bg-gray-200 text-gray-600 rounded border border-gray-300">
-                Follow
-              </button>
-            </div>
-          </div>
+              <div>
+                <p className="text-[18px] font-[400] leading-[28px] text-[#404040]">
+                  Tablon is B2B Networking company to connect Investors &
+                  Founders. Both Investors & Founders believe meeting in-person
+                  is far more effective to discuss investment rather than
+                  sending emails, cold calls & knocking on doors.
+                </p>
+              </div>
 
-          <hr className="border-t border-gray-200 my-2" />
-
-          {/* About Event */}
-          <div className="w-ful">
-            <h3 className="font-medium text-[22px] leading-[60px] capitalize align-middle">
-              About Event
-            </h3>
-            {aboutEventContent.paragraphs.map((para, index) => (
-              <p
-                key={index}
-                className=" text-[18px] leading-[28px] text-gray-700 mb-4"
-              >
-                {para}
-              </p>
-            ))}
-            <h3 className="font-medium text-[22px] leading-[60px] capitalize align-middle">
-              {aboutEventContent.listTitle}
-            </h3>
-            <ul className="list-disc list-inside text-gray-700 text-[18px] leading-[37px] space-y-2">
-              {aboutEventContent.listItems.map((item, index) => (
-                <li key={index}>{item}</li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Location */}
-          <div className="mt-10">
-            <h2 className="font-semibold text-[22px] leading-[60px] capitalize align-middle">
-              Location
-            </h2>
-            <div className="bg-red-50 rounded-lg border border-gray-200 overflow-hidden">
-              <div className="p-4 flex items-start space-x-3">
-                <div
-                  className="w-10 h-10 rounded-lg flex items-center justify-center p-1"
-                  style={{
-                    background:
-                      "linear-gradient(to bottom right, #FFC7C7, #FF5F4A)",
-                  }}
-                >
-                  <Image
-                    src={"/icons/locationWhite.svg"}
-                    alt="Icon"
-                    width={50}
-                    height={30}
-                    className="w-7 h-7 object-contain"
-                  />
-                </div>
+              <div className="w-full flex items-center justify-between">
                 <div>
-                  <h3 className="font-semibold text-gray-900 text-[16px] leading-[20px] ">
-                    CIAL Convention Center
-                  </h3>
-                  <p className="text-gray-600 text-xs mt-1">
-                    Athani, Nedumbassery, Cochin
+                  <p className=" text-[14px] font-[400] text-[#404040]">
+                    www.tablonglobal.com
                   </p>
                 </div>
-              </div>
-              <div
-                className="w-full h-[500px] m-4 bg-cover bg-center"
-                style={{ backgroundImage: "url('/images/map.svg')" }}
-              ></div>
-            </div>
-          </div>
 
-          {/* FAQs */}
-          <div className="mt-10">
-            <div className="space-y-4  text-[18px] leading-[37px] ">
-              {faqs.map((item, index) => (
-                <Accordion
-                  key={index}
-                  title={item.title}
-                  content={item.content}
-                />
-              ))}
-            </div>
-          </div>
-
-          {/* Organizer Info */}
-          <div className="mt-10 bg-red-50 rounded-2xl border border-red-100 p-6">
-            <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-4 gap-4">
-              <div className="flex items-center space-x-3">
-                <div className="w-12 h-12 bg-white rounded-full shadow-sm border border-gray-200 flex items-center justify-center">
-                  <Image
-                    src={"/icons/TablonIcon.svg"}
-                    alt="Tablon Global"
-                    width={50}
-                    height={30}
-                    className="w-8 h-8 object-contain"
-                  />
-                </div>
-                <h3 className="font-semibold text-gray-900 text-lg">
-                  By Tablon Global
-                </h3>
+                <div className="flex gap-4 justify-center items-center">
+      {socialIcons.map((item, index) => (
+        <a
+          key={index}
+          href={item.link}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="w-10 h-10 flex items-center justify-center border border-gray-400 rounded-full hover:bg-gray-200 transition"
+        >
+          {item.icon}
+        </a>
+      ))}
+    </div>
               </div>
-              <div className="self-start sm:self-center">
-                <button className="w-full sm:w-auto bg-[#FF5F4A] px-3 py-2 text-white rounded-md">
-                  Follow
-                </button>
-              </div>
-            </div>
 
-            <p className="text-gray-700 text-[18px] leading=[28px] mb-4">
-              Tablon is B2B Networking company to connect Investors & Founders.
-              Both Investors & Founders believe meeting in-person is far more
-              effective to discuss investment rather than sending emails, cold
-              calls & knocking on doors.
-            </p>
-
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-              <a
-                href="https://www.tablonglobal.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gray-600 text-sm hover:underline break-all"
-              >
-                www.tablonglobal.com
-              </a>
-              <div className="flex items-center space-x-2">
-                {socialIcons.map((icon, index) => (
-                  <button
-                    key={index}
-                    className="w-8 h-8 border border-gray-300 rounded-full flex items-center justify-center hover:bg-gray-100"
-                    aria-label={icon.name}
-                  >
-                    {icon.icon}
-                  </button>
-                ))}
-              </div>
+              <div></div>
             </div>
           </div>
         </div>
-        <div className="bg-[#FFEDEA] border border-[#FFD4D4]  rounded-[30px] shadow-md h-fit w-full max-w-sm mx-auto">
-          {/* Image */}
-          <div className="rounded-2xl overflow-hidden p-5 ">
-            <Image
-              src="/images/Events/event2.svg"
-              alt="Delhi Beatbox Championship"
-              width={300}
-              height={200}
-              className="object-cover w-full h-auto"
-            />
-          </div>
 
-          {/* Title + Details */}
-          <h4 className="text-center font-semibold text-gray-900 text-lg mb-1">
-            Delhi Beatbox Championship
-          </h4>
-          <p className="text-center text-sm text-gray-700">
-            24 Aug 2024 – 28 Aug 2024
-          </p>
-          <p className="text-center text-sm text-gray-600 mb-2">
-            Banasura Mountain View Resort
-          </p>
+        <div 
+        style={{
+backgroundImage:`url(${SideTicket})`
 
-          {/* Custom Divider with Notches */}
-          <div className="relative flex items-center justify-center my-3">
-            {/* Left Notch */}
-            <div className="absolute -left-3 w-5 h-5 bg-white rounded-full z-10 border-r border-[#FFD4D4]" />
-            {/* Right Notch */}
-            <div className="absolute -right-3 w-5 h-5 bg-white rounded-full z-10 border-l border-[#FFD4D4]" />
-            {/* Dotted Divider */}
-            <div className="w-full border-t border-dotted border-[#FFD4D4]" />
-          </div>
+        }}
+        className="  w-full md:w-[30%]">
 
-          {/* Button */}
-          <div className="flex justify-center mb-4">
-            <button
-              onClick={openModal}
-              className="px-5 py-2 text-white bg-[#FF5F4A] rounded-md text-sm font-medium"
-            >
-              Register Now
-            </button>
-          </div>
         </div>
       </div>
 
