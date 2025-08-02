@@ -7,7 +7,16 @@ import {
   faqs,
   socialIcons,
 } from "../../constants/aboutEvent";
-import { Calendar, ChevronDown, Clock, Facebook, MapPin, MessageCircleMore, Users, Youtube } from "lucide-react";
+import {
+  Calendar,
+  ChevronDown,
+  Clock,
+  Facebook,
+  MapPin,
+  MessageCircleMore,
+  Users,
+  Youtube,
+} from "lucide-react";
 import Navbar from "@/components/navbar";
 import Button from "@/components/button";
 import Card from "../../components/destinationCard/index";
@@ -15,7 +24,12 @@ import Accordion from "@/components/Accordion";
 import Image from "next/image";
 import Footer from "@/components/footer";
 import TicketBookingModal from "@/components/modal/TicketBookingModal";
-import { EventPAgeboxIcon, LocationMap, SideTicket } from "@/public";
+import {
+  EventPAgeboxIcon,
+  LocationMap,
+  SideTicket,
+  Sideticketimage,
+} from "@/public";
 import {
   faFacebookF,
   faWhatsapp,
@@ -31,6 +45,7 @@ export default function EventPage() {
     "Music Quiz",
   ];
 
+  const Backimage = "../../public/images/sideticketimage.svg";
   const featuredVenues = [
     "Venue to be announced, Delhi",
     "Nojoto Creator Hub, Delhi",
@@ -81,14 +96,24 @@ export default function EventPage() {
     setRegisterModal(true);
   };
 
-
-  
   const socialIcons = [
-    { icon: <FontAwesomeIcon  color="#525866" icon={faFacebookF} />, link: "https://facebook.com" },
-    { icon: <FontAwesomeIcon   color="#525866" icon={faWhatsapp} />, link: "https://wa.me" },
-    { icon: <FontAwesomeIcon   color="#525866"  icon={faInstagram} />, link: "https://instagram.com" },
-    { icon: <FontAwesomeIcon  color="#525866" icon={faYoutube} />, link: "https://youtube.com" },
-  ]
+    {
+      icon: <FontAwesomeIcon color="#525866" icon={faFacebookF} />,
+      link: "https://facebook.com",
+    },
+    {
+      icon: <FontAwesomeIcon color="#525866" icon={faWhatsapp} />,
+      link: "https://wa.me",
+    },
+    {
+      icon: <FontAwesomeIcon color="#525866" icon={faInstagram} />,
+      link: "https://instagram.com",
+    },
+    {
+      icon: <FontAwesomeIcon color="#525866" icon={faYoutube} />,
+      link: "https://youtube.com",
+    },
+  ];
   return (
     <div className="bg-white w-full flex flex-col  items-center justify-center">
       <div
@@ -240,29 +265,29 @@ export default function EventPage() {
             {/* dropdown  */}
 
             <div className="w-full ">
-            <p className="w-full flex items-center justify-between py-[26px] text-[#0A0D14] text-[16px] font-[500] border-b border-[#CDD0D5]">
-            Who can Join this community?
+              <p className="w-full flex items-center justify-between py-[26px] text-[#0A0D14] text-[16px] font-[500] border-b border-[#CDD0D5]">
+                Who can Join this community?
                 <span>
                   <ChevronDown size={16} color="#868C98" />
                 </span>
               </p>
 
               <p className="w-full flex items-center justify-between py-[26px] text-[#0A0D14] text-[16px] font-[500] border-b border-[#CDD0D5]">
-              Is joining free?
+                Is joining free?
                 <span>
                   <ChevronDown size={16} color="#868C98" />
                 </span>
               </p>
 
               <p className="w-full flex items-center justify-between py-[26px] text-[#0A0D14] text-[16px] font-[500] border-b border-[#CDD0D5]">
-              Insert your accordion title here{" "}
+                Insert your accordion title here{" "}
                 <span>
                   <ChevronDown size={16} color="#868C98" />
                 </span>
               </p>
 
               <p className="w-full flex items-center justify-between py-[26px] text-[#0A0D14] text-[16px] font-[500] border-b border-[#CDD0D5]">
-              What if I have more questions?{" "}
+                What if I have more questions?{" "}
                 <span>
                   <ChevronDown size={16} color="#868C98" />
                 </span>
@@ -310,35 +335,60 @@ export default function EventPage() {
                 </div>
 
                 <div className="flex gap-4 justify-center items-center">
-      {socialIcons.map((item, index) => (
-        <a
-          key={index}
-          href={item.link}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="w-10 h-10 flex items-center justify-center border border-gray-400 rounded-full hover:bg-gray-200 transition"
-        >
-          {item.icon}
-        </a>
-      ))}
-    </div>
+                  {socialIcons.map((item, index) => (
+                    <a
+                      key={index}
+                      href={item.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-10 h-10 flex items-center justify-center border border-gray-400 rounded-full hover:bg-gray-200 transition"
+                    >
+                      {item.icon}
+                    </a>
+                  ))}
+                </div>
               </div>
 
               <div></div>
             </div>
           </div>
         </div>
+        <div className="w-[30%]  bg-red-500">
+          <div className="w-full h-[400px] relative overflow-hidden rounded-lg">
+            {/* Background Image */}
+            <Image
+              src={SideTicket}
+              alt="Event background"
+              className="w-full h-full object-contain"
+            />
 
-        <div 
-        style={{
-backgroundImage:`url(${SideTicket})`
+            {/* Overlay Image - positioned on top */}
+            <div className="relative flex items-center justify-center">
+              <Image
+                src={Sideticketimage}
+                alt="Overlay image"
+                className="object-contain"
+              />
+              <div>
+                <Image
+                  width={50}
+                  height={50}
+                  src={Sideticketimage}
+                  alt="Mini Ticket"
+                  className="absolute border border-red-500"
+                />
+              </div>
+            </div>
 
-        }}
-        className="  w-full md:w-[30%]">
-
+            {/* Optional: Add text or other content */}
+            {/* <div className="absolute bottom-4 left-[20%] text-white">
+              <h3 className="text-lg font-bold">Delhi Beatbox Championship</h3>
+              <p className="text-sm">24 Aug 2024 - 28 Aug 2024</p>
+              <p className="text-sm">banasura mountain view resort</p>
+            </div> */}
+          </div>
         </div>
       </div>
-
       {/* More Events Section */}
       <section
         className="w-full max-w-[var(--max-container-width)] px-4 gap-6 mt-5"
