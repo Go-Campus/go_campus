@@ -46,7 +46,7 @@ export default function EventPage() {
                     {/* Poster */}
                     <div className="lg:col-span-2 h-[320px] sm:h-[360px] md:h-[400px] lg:h-[470px] rounded-2xl overflow-hidden border border-gray-100 shadow-lg">
                         <img
-                            src="/images/eventImage.svg"
+                            src="/images/loginImage.svg"
                             alt="Event Poster"
                             className="w-full h-full object-cover"
                         />
@@ -243,7 +243,7 @@ export default function EventPage() {
                     <div className="relative bg-[#FFEDEA] border border-[#FFD4D4] p-4 rounded-[30px] shadow-md w-full h-fit">
                         <div className="rounded-xl overflow-hidden mb-4">
                             <img
-                                src="/images/eventImage.svg"
+                                src="/images/loginImage.svg"
                                 alt="Event"
                                 className="w-full h-[230px] object-cover rounded-2xl"
                             />

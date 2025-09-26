@@ -6,16 +6,49 @@ import Input from "../../components/input/input.jsx";
 import Button from "../../components/button/index.jsx";
 import { AppleIcon, FaceBookIcon, GoogleIcon, GoWhiteIcon } from "../../public/index.js";
 import Image from "next/image.js";
+import { postData } from "../../utils/api.js";
+import { loginUser } from "../../utils/auth.js";
+import { useRouter } from "next/navigation";
 
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const router = useRouter();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle login logic here
-    console.log("Login attempt:", { email, password });
+    setLoading(true);
+    setError("");
+
+    try {
+      const response = await postData("/auth/login", {
+        email,
+        password,
+        authenticationType: "email"
+      });
+
+      if (response.success) {
+        // Store token and user data
+        loginUser(response.token, response.user);
+        
+        // Redirect to home page or dashboard
+        router.push("/home");
+      } else {
+        setError(response.message || "Login failed");
+      }
+    } catch (err) {
+      console.error("Login error:", err);
+      setError(
+        err.response?.data?.message || 
+        err.message || 
+        "An error occurred during login. Please try again."
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleSocialLogin = (provider) => {
@@ -75,6 +108,12 @@ export default function LoginPage() {
           </div>
 
           <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+            {error && (
+              <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg text-sm">
+                {error}
+              </div>
+            )}
+            
             <div className="space-y-4">
               <div>
                 <Input
@@ -117,7 +156,9 @@ export default function LoginPage() {
             </div>
 
             <div>
-              <Button type="submit">Sign in</Button>
+              <Button type="submit" disabled={loading}>
+                {loading ? "Signing in..." : "Sign in"}
+              </Button>
             </div>
 
             <div className="mt-6">

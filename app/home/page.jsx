@@ -34,8 +34,12 @@ import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import { getData } from "@/utils/api";
+
 const HomePage = () => {
   const [isMobile, setIsMobile] = useState(false);
+  const [events, setEvents] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     // Function to check if width is less than or equal to 425px
@@ -53,6 +57,64 @@ const HomePage = () => {
     // Cleanup
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
+
+  // Fetch events data
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        setLoading(true);
+        const response = await getData('/event?skip=0&limit=8');
+        if (response.success && response.response) {
+          setEvents(response.response);
+        }
+      } catch (error) {
+        console.error('Error fetching events:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchEvents();
+  }, []); // Empty dependency array to prevent infinite loop
+
+  // Format date function
+  const formatEventDate = (startDate, endDate) => {
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    
+    const startDay = start.getDate();
+    const startMonth = start.toLocaleDateString('en-US', { month: 'short' });
+    const startYear = start.getFullYear();
+    const startTime = start.toLocaleTimeString('en-US', { 
+      hour: '2-digit', 
+      minute: '2-digit',
+      hour12: true 
+    });
+    
+    const endDay = end.getDate();
+    const endMonth = end.toLocaleDateString('en-US', { month: 'short' });
+    const endYear = end.getFullYear();
+    
+    if (startYear === endYear && startMonth === endMonth && startDay === endDay) {
+      return `${startDay} ${startMonth} ${startYear} | ${startTime}`;
+    } else {
+      return `${startDay} ${startMonth} – ${endDay} ${endMonth} | ${startTime}`;
+    }
+  };
+
+  // Get image URL with CDN
+  const getImageUrl = (imagePath) => {
+    if (!imagePath) return CardImage;
+    
+    // If it's already a full URL, return as is
+    if (imagePath.startsWith('http')) {
+      return imagePath;
+    }
+    
+    // Use CDN URL from environment or fallback to API URL
+    const cdnUrl = process.env.NEXT_PUBLIC_CDN_URL || process.env.NEXT_APP_CDN || 'https://event-manager.syd1.cdn.digitaloceanspaces.com';
+    return `${cdnUrl}/${imagePath}`;
+  };
   // State for carousel scroll position
 
   // widthsetup
@@ -387,18 +449,34 @@ const HomePage = () => {
                   style={containerStyle}
                 >
                   <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 w-full h-full">
-                    {featuredTitles.map((t, i) => (
-                      <Card
-                        key={i}
-                        image={CardImage}
-                        date="18 June – 15 July | 03:00 PM"
-                        title={t}
-                        venue={featuredVenues[i]}
-                        price={featuredPrices[i]}
-                        badge={i === 0 ? "Save up to 39%" : ""}
-                        variant="latest"
-                      />
-                    ))}
+                    {loading ? (
+                      // Loading skeleton
+                      Array.from({ length: 8 }).map((_, i) => (
+                        <div key={i} className="rounded-2xl overflow-hidden shadow-sm bg-gray-100 animate-pulse">
+                          <div className="w-full h-48 bg-gray-200"></div>
+                          <div className="p-4 space-y-2">
+                            <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+                            <div className="h-3 bg-gray-200 rounded w-1/2"></div>
+                            <div className="h-3 bg-gray-200 rounded w-2/3"></div>
+                            <div className="h-4 bg-gray-200 rounded w-1/3"></div>
+                          </div>
+                        </div>
+                      ))
+                    ) : (
+                      events.map((event, i) => (
+                        <Link key={event._id} href={`/event-page?slug=${event.slug}`}>
+                          <Card
+                            image={getImageUrl(event.banner)}
+                            date={formatEventDate(event.startDate, event.endDate)}
+                            title={event.title}
+                            venue={event.venue}
+                            price={event.ticketType === 'free' ? 'Free' : '499'} // Default price, can be updated based on ticket data
+                            badge={i === 0 ? "Save up to 39%" : ""}
+                            variant="latest"
+                          />
+                        </Link>
+                      ))
+                    )}
                   </div>
                 </div>
               </div>
@@ -415,26 +493,42 @@ const HomePage = () => {
                 <h2 className="text-xl sm:text-2xl font-semibold text-gray-800 ">
                   Featured Events
                 </h2>
-                <button className="flex gap-2 items-center text-[#FF553F]">
+                <Link href="/events" className="flex gap-2 items-center text-[#FF553F] hover:text-[#FF553F]/80 transition-colors">
                   See All
                   <span>
                     <ArrowRight className="w-4 h-4 " />
                   </span>
-                </button>
+                </Link>
               </div>
               <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 w-full h-full">
-                {featuredTitles.map((t, i) => (
-                  <Card
-                    key={i}
-                    image={CardImage}
-                    date="18 June – 15 July | 03:00 PM"
-                    title={t}
-                    venue={featuredVenues[i]}
-                    price={featuredPrices[i]}
-                    badge={i === 0 ? "Save up to 39%" : ""}
-                    variant="featured"
-                  />
-                ))}
+                {loading ? (
+                  // Loading skeleton
+                  Array.from({ length: 8 }).map((_, i) => (
+                    <div key={i} className="rounded-2xl overflow-hidden shadow-sm bg-gray-100 animate-pulse">
+                      <div className="w-full h-48 bg-gray-200"></div>
+                      <div className="p-4 space-y-2">
+                        <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+                        <div className="h-3 bg-gray-200 rounded w-1/2"></div>
+                        <div className="h-3 bg-gray-200 rounded w-2/3"></div>
+                        <div className="h-4 bg-gray-200 rounded w-1/3"></div>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  events.map((event, i) => (
+                    <Link key={event._id} href={`/event-page?slug=${event.slug}`}>
+                      <Card
+                        image={getImageUrl(event.banner)}
+                        date={formatEventDate(event.startDate, event.endDate)}
+                        title={event.title}
+                        venue={event.venue}
+                        price={event.ticketType === 'free' ? 'Free' : '499'} // Default price, can be updated based on ticket data
+                        badge={i === 0 ? "Save up to 39%" : ""}
+                        variant="featured"
+                      />
+                    </Link>
+                  ))
+                )}
               </div>
             </div>
           </section>

@@ -9,23 +9,33 @@ const Card = ({
   price,
   badge,
   variant = "latest",
+  onClick,
 }) => {
   const isLikes = variant === "likes";
 
   const containerClasses = isLikes
     ? "flex  rounded-xl bg-white shadow-sm border border-gray-200 relative transition w-full p-3"
     : variant === "featured"
-    ? "rounded-2xl overflow-hidden shadow-sm bg-white hover:shadow-md transition relative border-b-[3px] border-[#FF5F4A]"
-    : "rounded-2xl overflow-hidden shadow-sm bg-white hover:shadow-md transition relative";
+    ? "rounded-2xl overflow-hidden shadow-sm bg-white hover:shadow-md transition relative border-b-[3px] border-[#FF5F4A] flex flex-col h-full"
+    : "rounded-2xl overflow-hidden shadow-sm bg-white hover:shadow-md transition relative flex flex-col h-full";
 
   const imageClasses = isLikes
     ? "w-[100px] h-[100%] object-cover  rounded-xl"
-    : "w-full object-cover rounded-2xl";
+    : "w-full h-[230px] object-cover rounded-2xl";
 
   return (
-    <div className={containerClasses}>
+    <div className={containerClasses} onClick={onClick} style={{ cursor: onClick ? 'pointer' : 'default' }}>
       {/* Image */}
-      <img src={image?.src || image} alt={title} className={imageClasses} />
+      <img 
+        src={image?.src || image} 
+        alt={title} 
+        className={imageClasses}
+        onError={(e) => {
+          // Prevent infinite onError loop and set a valid local fallback
+          e.currentTarget.onerror = null;
+          e.currentTarget.src = '/images/loginImage.svg';
+        }}
+      />
 
       {/* Content */}
       <div className="p-4 flex flex-col justify-between flex-1 space-y-2 relative">
@@ -52,8 +62,8 @@ const Card = ({
         {/* Date */}
         <p className="text-sm text-[#FF5F4A] font-medium">{date}</p>
 
-       <div>
-       <h3 className="text-medium  font-semibold ">{title}</h3>
+       <div className="min-h-[88px] flex flex-col justify-start">
+       <h3 className="text-medium font-semibold leading-snug">{title}</h3>
        <p className="text-sm font-semibold ">{place}</p>
        </div>
         
@@ -92,7 +102,7 @@ const Card = ({
 
         {/* Price */}
         <span className="text-sm sm:text-base font-semibold whitespace-nowrap">
-          ₹{price}
+          {price === 'Free' ? 'Free' : `₹${price}`}
         </span>
       </div>
     </div>
