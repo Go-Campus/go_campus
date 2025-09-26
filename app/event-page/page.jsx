@@ -1,6 +1,6 @@
 "use client";
 
-import React,{useState} from "react";
+import React,{useState, useEffect, useMemo} from "react";
 import { InfoCard } from "@/components/infoCard/index";
 import {
   aboutEventContent,
@@ -13,10 +13,20 @@ import Button from "@/components/button";
 import Card from "../../components/destinationCard/index";
 import Accordion from "@/components/Accordion";
 import Image from "next/image";
+import Link from "next/link";
 import Footer from "@/components/footer";
 import TicketBookingModal from "@/components/modal/TicketBookingModal";
+import { getData } from "@/utils/api";
+import { useSearchParams } from "next/navigation";
 
 export default function EventPage() {
+  const searchParams = useSearchParams();
+  const slug = searchParams.get('slug');
+
+  const [event, setEvent] = useState(null);
+  const [tickets, setTickets] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [moreEvents, setMoreEvents] = useState([]);
   const featuredTitles = [
     "Clay Sculpting",
     "The Universe in a Pot",
@@ -46,6 +56,76 @@ export default function EventPage() {
   const [modalType, setModalType] = useState('register');
   const [quantity, setQuantity] = useState(1);
   const ticketPrice = 499;
+
+  // Build image URL via CDN or API base
+  const getImageUrl = (imagePath) => {
+    if (!imagePath) return "/images/Events/event2.svg";
+    if (typeof imagePath !== 'string') return "/images/Events/event2.svg";
+    // If it's a public asset path, return as-is
+    if (imagePath.startsWith('/')) return imagePath;
+    // If it's already a full URL, return as-is
+    if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) return imagePath;
+    const cdnUrl = process.env.NEXT_PUBLIC_CDN_URL ||'https://event-manager.syd1.cdn.digitaloceanspaces.com';
+    // Ensure single slash between base and path
+    return `${cdnUrl.replace(/\/$/, '')}/${imagePath.replace(/^\//, '')}`;
+  };
+
+  const formattedDateRange = useMemo(() => {
+    if (!event?.startDate || !event?.endDate) return null;
+    const start = new Date(event.startDate);
+    const end = new Date(event.endDate);
+    const startDay = start.getDate();
+    const startMonth = start.toLocaleDateString('en-US', { month: 'short' });
+    const startYear = start.getFullYear();
+    const startTime = start.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
+    const endDay = end.getDate();
+    const endMonth = end.toLocaleDateString('en-US', { month: 'short' });
+    if (startYear === end.getFullYear() && startMonth === endMonth && startDay === endDay) {
+      return `${startDay} ${startMonth} ${startYear} | ${startTime}`;
+    }
+    return `${startDay} ${startMonth} – ${endDay} ${endMonth} | ${startTime}`;
+  }, [event]);
+
+  useEffect(() => {
+    const fetchDetails = async () => {
+      if (!slug) return;
+      try {
+        setLoading(true);
+        const evRes = await getData(`/event?slug=${encodeURIComponent(slug)}&limit=1`);
+        const ev = evRes?.response?.[0] || null;
+        // const franchise = evRes?.response?.[0]?.franchise?._id || evRes?.response?.[0]?.franchise || null;
+        setEvent(ev);
+        if (ev?._id) {
+          const tkRes = await getData(`/ticket?event=${encodeURIComponent(ev._id)}`);
+          setTickets(tkRes?.response || []);
+          console.log(tkRes, "tkRes");
+
+          // Fetch more events from the same franchise (organizer)
+          // const franchiseId = typeof ev.franchise === 'object' ? ev.franchise?._id : ev.franchise;
+          const franchise = tkRes?.response?.[0]?.event?.franchise || tkRes?.response?.[0]?.event?.franchise?._id || null;
+          console.log(franchise, "franchise");
+          if (franchise) {
+            const moreRes = await getData(`/event?franchise=${encodeURIComponent(franchise)}&limit=8&skip=0`);
+            console.log(moreRes, "moreRes");
+            const list = (moreRes?.response || [])
+            .filter((e) => e._id !== ev._id);
+            console.log(list, "list");
+            setMoreEvents(list);
+          } else {
+            setMoreEvents([]);
+          }
+        } else {
+          setTickets([]);
+          setMoreEvents([]);
+        }
+      } catch (e) {
+        console.error('Failed to load event details', e);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchDetails();
+  }, [slug]);
 
   const containerStyle = {
     "--max-container-width": "1400px", // Match home page max width
@@ -91,8 +171,8 @@ setRegisterModal(true)
         {/* Poster */}
         <div className="lg:col-span-2 md:h-[605px] w-full rounded-2xl overflow-hidden border border-gray-100 shadow-lg relative ">
           <Image
-            src="/images/Events/event2.svg"
-            alt="Event 2"
+            src={getImageUrl(event?.banner || event?.logo || "/images/Events/event2.svg")}
+            alt={event?.title || "Event"}
             fill
             className="object-cover"
           />
@@ -123,8 +203,7 @@ setRegisterModal(true)
         {/* Details */}
         <div className="lg:col-span-2">
           <h1 className=" font-medium text-[42px] leading-[55px] capitalize align-middle">
-            Best Comedy Lineup ft. Famous
-            <br /> Star Comedians
+            {event?.title || 'Event Title'}
           </h1>
 
           <div className="border-t border-gray-200 pt-4 ">
@@ -154,17 +233,14 @@ setRegisterModal(true)
 
           {/* About Event */}
           <div className="w-ful">
-            <h3 className="font-medium text-[22px] leading-[60px] capitalize align-middle">
-              About Event
-            </h3>
-            {aboutEventContent.paragraphs.map((para, index) => (
-              <p
-                key={index}
-                className=" text-[18px] leading-[28px] text-gray-700 mb-4"
-              >
-                {para}
-              </p>
-            ))}
+            <h3 className="font-medium text-[22px] leading-[60px] capitalize align-middle">About Event</h3>
+            {event?.description ? (
+              <div className="text-[18px] leading-[28px] text-gray-700 mb-4" dangerouslySetInnerHTML={{ __html: event.description }} />
+            ) : (
+              aboutEventContent.paragraphs.map((para, index) => (
+                <p key={index} className=" text-[18px] leading-[28px] text-gray-700 mb-4">{para}</p>
+              ))
+            )}
             <h3 className="font-medium text-[22px] leading-[60px] capitalize align-middle">
               {aboutEventContent.listTitle}
             </h3>
@@ -198,12 +274,7 @@ setRegisterModal(true)
                   />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-gray-900 text-[16px] leading-[20px] ">
-                    CIAL Convention Center
-                  </h3>
-                  <p className="text-gray-600 text-xs mt-1">
-                    Athani, Nedumbassery, Cochin
-                  </p>
+                  <h3 className="font-semibold text-gray-900 text-[16px] leading-[20px] ">{event?.venue || 'Venue to be announced'}</h3>
                 </div>
               </div>
               <div
@@ -212,6 +283,22 @@ setRegisterModal(true)
               ></div>
             </div>
           </div>
+
+          {/* Tickets */}
+          {tickets.length > 0 && (
+            <div className="mt-10">
+              <h2 className="font-semibold text-[22px] leading-[60px] capitalize align-middle">Tickets</h2>
+              <ul className="list-disc list-inside text-gray-700 text-[16px] leading-[28px] space-y-1">
+                {tickets.map((t) => (
+                  <li key={t._id}>
+                    <span className="font-medium">{t.title}</span>
+                    {" "}- <span className="text-gray-600">{t.enablePricing ? (t.price ? `₹${t.price}` : 'Paid') : 'Free'}</span>
+                    {t.status ? ` • ${t.status}` : ''}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
 
           {/* FAQs */}
           <div className="mt-10">
@@ -284,8 +371,8 @@ setRegisterModal(true)
           {/* Image */}
           <div className="rounded-2xl overflow-hidden p-5 ">
             <Image
-              src="/images/Events/event2.svg"
-              alt="Delhi Beatbox Championship"
+              src={getImageUrl(event?.banner || event?.logo || "/images/Events/event2.svg")}
+              alt={event?.title || "Event"}
               width={300}
               height={200}
               className="object-cover w-full h-auto"
@@ -293,15 +380,13 @@ setRegisterModal(true)
           </div>
 
           {/* Title + Details */}
-          <h4 className="text-center font-semibold text-gray-900 text-lg mb-1">
-            Delhi Beatbox Championship
-          </h4>
-          <p className="text-center text-sm text-gray-700">
-            24 Aug 2024 – 28 Aug 2024
-          </p>
-          <p className="text-center text-sm text-gray-600 mb-2">
-            Banasura Mountain View Resort
-          </p>
+          <h4 className="text-center font-semibold text-gray-900 text-lg mb-1">{event?.title || 'Event Title'}</h4>
+          {formattedDateRange && (
+            <p className="text-center text-sm text-gray-700">{formattedDateRange}</p>
+          )}
+          {event?.venue && (
+            <p className="text-center text-sm text-gray-600 mb-2">{event.venue}</p>
+          )}
 
           {/* Custom Divider with Notches */}
           <div className="relative flex items-center justify-center my-3">
@@ -331,17 +416,18 @@ setRegisterModal(true)
           More events from this organizer
         </h2>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {featuredTitles.map((t, i) => (
-            <Card
-              key={i}
-              image={`/images/Events/event${i + 1}.svg`}
-              date="18 June – 15 July | 03:00 PM"
-              title={t}
-              venue={featuredVenues[i]}
-              price={featuredPrices[i]}
-              badge={i === 0 ? "Save up to 39%" : ""}
-              variant="varient"
-            />
+          {(moreEvents.length ? moreEvents : []).map((ev) => (
+            <Link key={ev._id} href={`/event-page?slug=${ev.slug}`}>
+              <Card
+                image={getImageUrl(ev.banner)}
+                date={formattedDateRange}
+                title={ev.title}
+                venue={ev.venue}
+                price={ev.ticketType === 'paid' ? (ev.price || '—') : 'Free'}
+                badge={""}
+                variant="varient"
+              />
+            </Link>
           ))}
         </div>
       </section>

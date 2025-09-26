@@ -41,7 +41,7 @@ export default function GoCampusHeader() {
           <div className="flex items-center space-x-2 mr-6">
             <div className="w-8 h-8 rounded-full flex items-center justify-center">
               <span className="text-white font-bold text-sm">
-                <Image src={GoCampusLogo} />
+                <Image src={GoCampusLogo} alt="GoCampus logo" />
               </span>
             </div>
             <span className="text-[24px] font-semibold text-gray-900">
@@ -111,7 +111,7 @@ export default function GoCampusHeader() {
           <div className="flex items-center space-x-2">
             <div className="w-8 h-8 rounded-full flex items-center justify-center">
               <span className="text-white font-bold text-sm">
-                <Image src={GoCampusLogo} />
+                <Image src={GoCampusLogo} alt="GoCampus logo" />
               </span>
             </div>
             <span className="text-[24px] font-semibold text-gray-900">
