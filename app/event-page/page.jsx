@@ -2,11 +2,7 @@
 
 import React,{useState, useEffect, useMemo} from "react";
 import { InfoCard } from "@/components/infoCard/index";
-import {
-  aboutEventContent,
-  faqs,
-  socialIcons,
-} from "../../constants/aboutEvent";
+import { aboutEventContent, socialIcons } from "../../constants/aboutEvent";
 import { Calendar, Clock, MapPin, Users } from 'lucide-react';
 import Navbar from "@/components/navbar";
 import Button from "@/components/button";
@@ -27,6 +23,8 @@ export default function EventPage() {
   const [tickets, setTickets] = useState([]);
   const [loading, setLoading] = useState(true);
   const [moreEvents, setMoreEvents] = useState([]);
+  const [otherEvents, setOtherEvents] = useState([]);
+  const [faqsData, setFaqsData] = useState([]);
   const featuredTitles = [
     "Clay Sculpting",
     "The Universe in a Pot",
@@ -114,9 +112,18 @@ export default function EventPage() {
           } else {
             setMoreEvents([]);
           }
+          // Fetch FAQs for this event
+          const faqRes = await getData(`/faq?event=${encodeURIComponent(ev._id)}`);
+          setFaqsData(faqRes?.response || []);
+          // Fetch generic other events (limit 4)
+          const othersRes = await getData(`/event?limit=4&skip=0`);
+          const others = (othersRes?.response || []).filter((e) => e._id !== ev._id);
+          setOtherEvents(others);
         } else {
           setTickets([]);
           setMoreEvents([]);
+          setOtherEvents([]);
+          setFaqsData([]);
         }
       } catch (e) {
         console.error('Failed to load event details', e);
@@ -170,28 +177,41 @@ setRegisterModal(true)
       >
         {/* Poster */}
         <div className="lg:col-span-2 md:h-[605px] w-full rounded-2xl overflow-hidden border border-gray-100 shadow-lg relative ">
-          <Image
-            src={getImageUrl(event?.banner || event?.logo || "/images/Events/event2.svg")}
-            alt={event?.title || "Event"}
-            fill
-            className="object-cover"
-          />
+          {loading ? (
+            <div className="w-full h-full bg-gray-200 animate-pulse" />
+          ) : (
+            <Image
+              src={getImageUrl(event?.banner || event?.logo || "/images/Events/event2.svg")}
+              alt={event?.title || "Event"}
+              fill
+              className="object-cover"
+            />
+          )}
         </div>
 
         {/* Info Cards */}
         <div className="flex flex-col justify-between space-y-4 h-full">
-          <InfoCard
-            bgColor="bg-red-50"
-            borderColor="border-red-100"
-            iconSrc="/icons/Calendar.svg"
-            decorativeImageSrc="/images/decorativeCalendar.svg"
-          />
-          <InfoCard
-            bgColor="bg-red-50"
-            borderColor="border-orange-100"
-            iconSrc="/icons/locationWhite.svg"
-            decorativeImageSrc="/images/decorativeLocation.svg"
-          />
+          {loading ? (
+            <>
+              <div className="bg-gray-100 rounded-2xl h-32 animate-pulse" />
+              <div className="bg-gray-100 rounded-2xl h-32 animate-pulse" />
+            </>
+          ) : (
+            <>
+              <InfoCard
+                bgColor="bg-red-50"
+                borderColor="border-red-100"
+                iconSrc="/icons/Calendar.svg"
+                decorativeImageSrc="/images/decorativeCalendar.svg"
+              />
+              <InfoCard
+                bgColor="bg-red-50"
+                borderColor="border-orange-100"
+                iconSrc="/icons/locationWhite.svg"
+                decorativeImageSrc="/images/decorativeLocation.svg"
+              />
+            </>
+          )}
         </div>
       </div>
 
@@ -202,24 +222,34 @@ setRegisterModal(true)
       >
         {/* Details */}
         <div className="lg:col-span-2">
-          <h1 className=" font-medium text-[42px] leading-[55px] capitalize align-middle">
-            {event?.title || 'Event Title'}
-          </h1>
+          {loading ? (
+            <div className="h-[55px] w-2/3 bg-gray-200 rounded animate-pulse" />
+          ) : (
+            <h1 className=" font-medium text-[42px] leading-[55px] capitalize align-middle">{event?.title}</h1>
+          )}
 
           <div className="border-t border-gray-200 pt-4 ">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
               <div className="flex items-center gap-4">
-                <div className="w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center overflow-hidden">
-                  <Image
-                    src={"/icons/TablonIcon.svg"}
-                    alt="Tablon Global"
-                    width={50}
-                    height={30}
-                    className="w-8 h-8 object-contain"
-                  />
-                </div>
+                {loading ? (
+                  <div className="w-10 h-10 rounded-full bg-gray-200 animate-pulse" />
+                ) : (
+                  <div className="w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center overflow-hidden">
+                    <Image
+                      src={getImageUrl(event?.franchise?.logo || event?.logo || "/images/Events/event2.svg")}
+                      alt={event?.franchise?.name ? `${event.franchise.name} logo` : (event?.title || 'Event')}
+                      width={40}
+                      height={40}
+                      className="w-10 h-10 object-cover"
+                    />
+                  </div>
+                )}
                 <div className="text-lg text-gray-900 font-medium">
-                  By <span className="font-semibold">Tablon Global</span>
+                  {loading ? (
+                    <div className="h-5 w-40 bg-gray-200 rounded animate-pulse" />
+                  ) : (
+                    <>By <span className="font-semibold">{event?.franchise?.name || 'Organizer'}</span></>
+                  )}
                 </div>
               </div>
 
@@ -233,22 +263,26 @@ setRegisterModal(true)
 
           {/* About Event */}
           <div className="w-ful">
-            <h3 className="font-medium text-[22px] leading-[60px] capitalize align-middle">About Event</h3>
-            {event?.description ? (
-              <div className="text-[18px] leading-[28px] text-gray-700 mb-4" dangerouslySetInnerHTML={{ __html: event.description }} />
+            {/* <h3 className="font-medium text-[22px] leading-[60px] capitalize align-middle">About Event</h3> */}
+            {loading ? (
+              <>
+                <div className="h-5 bg-gray-200 rounded mb-3 w-11/12 animate-pulse" />
+                <div className="h-5 bg-gray-200 rounded mb-3 w-10/12 animate-pulse" />
+                <div className="h-5 bg-gray-200 rounded mb-3 w-9/12 animate-pulse" />
+              </>
             ) : (
-              aboutEventContent.paragraphs.map((para, index) => (
-                <p key={index} className=" text-[18px] leading-[28px] text-gray-700 mb-4">{para}</p>
-              ))
+              event?.description && (
+                <div className="text-[18px] leading-[28px] text-gray-700 mb-4" dangerouslySetInnerHTML={{ __html: event.description }} />
+              )
             )}
-            <h3 className="font-medium text-[22px] leading-[60px] capitalize align-middle">
+            {/* <h3 className="font-medium text-[22px] leading-[60px] capitalize align-middle">
               {aboutEventContent.listTitle}
-            </h3>
-            <ul className="list-disc list-inside text-gray-700 text-[18px] leading-[37px] space-y-2">
+            </h3> */}
+            {/* <ul className="list-disc list-inside text-gray-700 text-[18px] leading-[37px] space-y-2">
               {aboutEventContent.listItems.map((item, index) => (
                 <li key={index}>{item}</li>
               ))}
-            </ul>
+            </ul> */}
           </div>
 
           {/* Location */}
@@ -274,7 +308,11 @@ setRegisterModal(true)
                   />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-gray-900 text-[16px] leading-[20px] ">{event?.venue || 'Venue to be announced'}</h3>
+                  {loading ? (
+                    <div className="h-5 w-56 bg-gray-200 rounded animate-pulse" />
+                  ) : (
+                    <h3 className="font-semibold text-gray-900 text-[16px] leading-[20px] ">{event?.venue || 'Venue to be announced'}</h3>
+                  )}
                 </div>
               </div>
               <div
@@ -285,7 +323,7 @@ setRegisterModal(true)
           </div>
 
           {/* Tickets */}
-          {tickets.length > 0 && (
+          {!loading && tickets.length > 0 && (
             <div className="mt-10">
               <h2 className="font-semibold text-[22px] leading-[60px] capitalize align-middle">Tickets</h2>
               <ul className="list-disc list-inside text-gray-700 text-[16px] leading-[28px] space-y-1">
@@ -301,33 +339,47 @@ setRegisterModal(true)
           )}
 
           {/* FAQs */}
-          <div className="mt-10">
-            <div className="space-y-4  text-[18px] leading-[37px] ">
-              {faqs.map((item, index) => (
-                <Accordion
-                  key={index}
-                  title={item.title}
-                  content={item.content}
-                />
-              ))}
+          {loading ? (
+            <div className="mt-10 space-y-3">
+              <div className="h-6 w-40 bg-gray-200 rounded animate-pulse" />
+              <div className="h-14 w-full bg-gray-100 rounded animate-pulse" />
+              <div className="h-14 w-full bg-gray-100 rounded animate-pulse" />
             </div>
-          </div>
+          ) : (
+            faqsData.length > 0 && (
+              <div className="mt-10">
+                <div className="space-y-4  text-[18px] leading-[37px] ">
+                  {faqsData.map((f) => (
+                    <Accordion key={f._id} title={f.question} content={f.answer} />
+                  ))}
+                </div>
+              </div>
+            )
+          )}
 
           {/* Organizer Info */}
           <div className="mt-10 bg-red-50 rounded-2xl border border-red-100 p-6">
             <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-4 gap-4">
               <div className="flex items-center space-x-3">
-                <div className="w-12 h-12 bg-white rounded-full shadow-sm border border-gray-200 flex items-center justify-center">
-                  <Image
-                    src={"/icons/TablonIcon.svg"}
-                    alt="Tablon Global"
-                    width={50}
-                    height={30}
-                    className="w-8 h-8 object-contain"
-                  />
-                </div>
+                {loading ? (
+                  <div className="w-12 h-12 bg-gray-200 rounded-full animate-pulse" />
+                ) : (
+                  <div className="w-12 h-12 bg-white rounded-full shadow-sm border border-gray-200 overflow-hidden flex items-center justify-center">
+                    <Image
+                      src={getImageUrl(event?.franchise?.logo || event?.logo || "/images/Events/event2.svg")}
+                      alt={event?.franchise?.name ? `${event.franchise.name} logo` : (event?.title || 'Event')}
+                      width={48}
+                      height={48}
+                      className="w-12 h-12 object-cover"
+                    />
+                  </div>
+                )}
                 <h3 className="font-semibold text-gray-900 text-lg">
-                  By Tablon Global
+                  {loading ? (
+                    <div className="h-5 w-48 bg-gray-200 rounded animate-pulse" />
+                  ) : (
+                    <>By {event?.franchise?.name || 'Organizer'}</>
+                  )}
                 </h3>
               </div>
               <div className="self-start sm:self-center">
@@ -337,22 +389,50 @@ setRegisterModal(true)
               </div>
             </div>
 
-            <p className="text-gray-700 text-[18px] leading=[28px] mb-4">
-              Tablon is B2B Networking company to connect Investors & Founders.
-              Both Investors & Founders believe meeting in-person is far more
-              effective to discuss investment rather than sending emails, cold
-              calls & knocking on doors.
-            </p>
+            {loading ? (
+              <>
+                <div className="h-4 w-11/12 bg-gray-200 rounded mb-2 animate-pulse" />
+                <div className="h-4 w-10/12 bg-gray-200 rounded mb-2 animate-pulse" />
+                <div className="h-4 w-8/12 bg-gray-200 rounded mb-2 animate-pulse" />
+              </>
+            ) : (
+              (() => {
+                const org = event?.franchise || {};
+                const orgName = org?.name || 'Organizer';
+                const orgDesc = org?.description && String(org.description).trim();
+                const orgEmail = org?.email;
+                const orgPhone = org?.phone;
+                const orgLocation = org?.location;
+
+                if (orgDesc) {
+                  return (
+                    <p className="text-gray-700 text-[18px] leading=[28px] mb-4">{orgDesc}</p>
+                  );
+                }
+                const parts = [];
+                if (orgEmail) parts.push(`email ${orgEmail}`);
+                if (orgPhone) parts.push(`phone ${orgPhone}`);
+                const contact = parts.length ? ` via ${parts.join(' or ')}` : '';
+                const locationText = orgLocation ? ` Based in ${orgLocation}.` : '';
+                return (
+                  <p className="text-gray-700 text-[18px] leading=[28px] mb-4">
+                    {orgName} is organizing this event.{contact}{locationText}
+                  </p>
+                );
+              })()
+            )}
 
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-              <a
-                href="https://www.tablonglobal.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gray-600 text-sm hover:underline break-all"
-              >
-                www.tablonglobal.com
-              </a>
+              {(!loading && event?.franchise?.website) && (
+                <a
+                  href={event.franchise.website}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gray-600 text-sm hover:underline break-all"
+                >
+                  {event.franchise.website}
+                </a>
+              )}
               <div className="flex items-center space-x-2">
                 {socialIcons.map((icon, index) => (
                   <button
@@ -370,22 +450,36 @@ setRegisterModal(true)
         <div className="bg-[#FFEDEA] border border-[#FFD4D4]  rounded-[30px] shadow-md h-fit w-full max-w-sm mx-auto">
           {/* Image */}
           <div className="rounded-2xl overflow-hidden p-5 ">
-            <Image
-              src={getImageUrl(event?.banner || event?.logo || "/images/Events/event2.svg")}
-              alt={event?.title || "Event"}
-              width={300}
-              height={200}
-              className="object-cover w-full h-auto"
-            />
+            {loading ? (
+              <div className="w-full h-[200px] bg-gray-200 rounded-2xl animate-pulse" />
+            ) : (
+              <Image
+                src={getImageUrl(event?.banner || event?.logo || "/images/Events/event2.svg")}
+                alt={event?.title || "Event"}
+                width={300}
+                height={200}
+                className="object-cover w-full h-auto"
+              />
+            )}
           </div>
 
           {/* Title + Details */}
-          <h4 className="text-center font-semibold text-gray-900 text-lg mb-1">{event?.title || 'Event Title'}</h4>
-          {formattedDateRange && (
-            <p className="text-center text-sm text-gray-700">{formattedDateRange}</p>
-          )}
-          {event?.venue && (
-            <p className="text-center text-sm text-gray-600 mb-2">{event.venue}</p>
+          {loading ? (
+            <>
+              <div className="h-5 w-3/4 bg-gray-200 rounded mx-auto mb-2 animate-pulse" />
+              <div className="h-4 w-1/2 bg-gray-200 rounded mx-auto mb-2 animate-pulse" />
+              <div className="h-4 w-1/3 bg-gray-200 rounded mx-auto mb-2 animate-pulse" />
+            </>
+          ) : (
+            <>
+              <h4 className="text-center font-semibold text-gray-900 text-lg mb-1">{event?.title}</h4>
+              {formattedDateRange && (
+                <p className="text-center text-sm text-gray-700">{formattedDateRange}</p>
+              )}
+              {event?.venue && (
+                <p className="text-center text-sm text-gray-600 mb-2">{event.venue}</p>
+              )}
+            </>
           )}
 
           {/* Custom Divider with Notches */}
@@ -415,12 +509,13 @@ setRegisterModal(true)
         <h2 className="text-2xl font-semibold text-gray-800 mb-4">
           More events from this organizer
         </h2>
+        {moreEvents.length > 0 && (
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {(moreEvents.length ? moreEvents : []).map((ev) => (
+          {moreEvents.map((ev) => (
             <Link key={ev._id} href={`/event-page?slug=${ev.slug}`}>
               <Card
                 image={getImageUrl(ev.banner)}
-                date={formattedDateRange}
+                date={''}
                 title={ev.title}
                 venue={ev.venue}
                 price={ev.ticketType === 'paid' ? (ev.price || '—') : 'Free'}
@@ -430,6 +525,7 @@ setRegisterModal(true)
             </Link>
           ))}
         </div>
+        )}
       </section>
 
       {/* Horizontal Scroll Events */}
@@ -444,17 +540,25 @@ setRegisterModal(true)
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {featuredTitles.map((t, i) => (
-            <Card
-              image={`/images/Events/event${i + 1}.svg`}
-              date="18 June – 15 July | 03:00 PM"
-              title={t}
-              venue={featuredVenues[i]}
-              price={featuredPrices[i]}
-              badge={i === 0 ? "Save up to 39%" : ""}
-              variant="latest"
-            />
-          ))}
+          {loading ? (
+            Array.from({ length: 4 }).map((_, idx) => (
+              <div key={idx} className="rounded-2xl bg-gray-100 h-80 animate-pulse" />
+            ))
+          ) : (
+            otherEvents.map((ev) => (
+              <Link key={ev._id} href={`/event-page?slug=${ev.slug}`}>
+                <Card
+                  image={getImageUrl(ev.banner)}
+                  date={''}
+                  title={ev.title}
+                  venue={ev.venue}
+                  price={ev.ticketType === 'paid' ? (ev.price || '—') : 'Free'}
+                  badge={""}
+                  variant="latest"
+                />
+              </Link>
+            ))
+          )}
         </div>
       </section>
 
