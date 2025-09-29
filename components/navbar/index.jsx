@@ -5,7 +5,7 @@ import { GoCampusLogo, ProfileIcon } from "../../public";
 import Image from "next/image";
 import { useState } from "react";
 
-export default function GoCampusHeader() {
+export default function GoCampusHeader({ searchQuery, setSearchQuery, onSearch }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   
   const navBar = [
@@ -53,10 +53,21 @@ export default function GoCampusHeader() {
             <div className="relative">
               <input
                 type="text"
+                value={searchQuery || ''}
+                onChange={(e) => setSearchQuery && setSearchQuery(e.target.value)}
+                onKeyPress={(e) => {
+                  if (e.key === 'Enter' && onSearch) {
+                    e.preventDefault();
+                    onSearch(e);
+                  }
+                }}
                 placeholder="Search events"
                 className="w-full pl-4 pr-10 py-2 bg-[#F6F8FA] rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent text-gray-700 placeholder-gray-500"
               />
-              <button className="absolute right-3 top-1/2 transform -translate-y-1/2">
+              <button 
+                onClick={onSearch}
+                className="absolute right-3 top-1/2 transform -translate-y-1/2"
+              >
                 <Search className="w-5 h-5 text-gray-400" />
               </button>
             </div>
@@ -147,10 +158,21 @@ export default function GoCampusHeader() {
           <div className="relative">
             <input
               type="text"
+              value={searchQuery || ''}
+              onChange={(e) => setSearchQuery && setSearchQuery(e.target.value)}
+              onKeyPress={(e) => {
+                if (e.key === 'Enter' && onSearch) {
+                  e.preventDefault();
+                  onSearch(e);
+                }
+              }}
               placeholder="Search events"
               className="w-full pl-4 pr-10 py-2 bg-[#F6F8FA] rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent text-gray-700 placeholder-gray-500"
             />
-            <button className="absolute right-3 top-1/2 transform -translate-y-1/2">
+            <button 
+              onClick={onSearch}
+              className="absolute right-3 top-1/2 transform -translate-y-1/2"
+            >
               <Search className="w-5 h-5 text-gray-400" />
             </button>
           </div>

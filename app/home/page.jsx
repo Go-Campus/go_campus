@@ -43,6 +43,8 @@ const HomePage = () => {
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [categoriesLoading, setCategoriesLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [isSearching, setIsSearching] = useState(false);
 
   useEffect(() => {
     // Function to check if width is less than or equal to 425px
@@ -105,6 +107,9 @@ const HomePage = () => {
         if (selectedCategory) {
           url += `&eventCategory=${selectedCategory.id}`;
         }
+        if (searchQuery.trim()) {
+          url += `&searchkey=${encodeURIComponent(searchQuery.trim())}`;
+        }
         const response = await getData(url);
         if (response.success && response.response) {
           setEvents(response.response);
@@ -117,7 +122,7 @@ const HomePage = () => {
     };
 
     fetchEvents();
-  }, [selectedCategory]); // Re-fetch when category changes
+  }, [selectedCategory, searchQuery]); // Re-fetch when category or search changes
 
   // Format date function
   const formatEventDate = (startDate, endDate) => {
@@ -198,6 +203,19 @@ const HomePage = () => {
   // Category selection handler
   const handleCategorySelect = (category) => {
     setSelectedCategory(category);
+  };
+
+  // Search handler
+  const handleSearch = (e) => {
+    e.preventDefault();
+    setIsSearching(true);
+    // The useEffect will handle the actual search
+  };
+
+  // Clear search
+  const clearSearch = () => {
+    setSearchQuery('');
+    setIsSearching(false);
   };
 
   const featuredTitles = [
@@ -296,7 +314,11 @@ const HomePage = () => {
             className="w-full max-w-[var(--max-container-width)]"
             style={containerStyle}
           >
-            <Navbar />
+            <Navbar 
+              searchQuery={searchQuery}
+              setSearchQuery={setSearchQuery}
+              onSearch={handleSearch}
+            />
           </div>
         </div>
 
@@ -409,6 +431,7 @@ const HomePage = () => {
             </div>
           ))}
         </section>
+
         {/* CATEGORY SECTION */}
         <section
           className="w-full max-w-[var(--max-container-width)]"
@@ -439,18 +462,18 @@ const HomePage = () => {
                     onClick={() => handleCategorySelect(category)}
                   >
                     <div className="w-10 h-10">
-                      <Image
-                        width={28}
-                        height={28}
-                        src={category.icon}
+                    <Image
+                      width={28}
+                      height={28}
+                      src={category.icon}
                         alt={category.value}
-                        className="w-full h-full object-contain"
-                      />
-                    </div>
-                    <span className="text-gray-800 text-sm font-medium">
-                      {category.value}
-                    </span>
+                      className="w-full h-full object-contain"
+                    />
                   </div>
+                  <span className="text-gray-800 text-sm font-medium">
+                      {category.value}
+                  </span>
+                </div>
                 ))
               )}
             </div>
@@ -467,32 +490,36 @@ const HomePage = () => {
                   style={containerStyle}
                 >
                   <h2 className="text-xl    py-[28px] sm:text-2xl font-semibold text-gray-800 ">
-                    Latest Events in Lucknow
+                    {searchQuery ? `Search Results for "${searchQuery}"` : 
+                     selectedCategory ? `${selectedCategory.value} Events` : 
+                     'Latest Events in Lucknow'}
                   </h2>
                 </div>
               </div>
               {/* Filter buttons with horizontal scroll on mobile */}
-              <div className=" w-full py-[36px]  flex justify-center items-center border-gray-200">
-                <div
-                  className="w-full justify-center items-center max-w-[var(--max-container-width)]"
-                  style={containerStyle}
-                >
-                  <div className="flex gap-3  overflow-x-auto scrollbar-hide mb-6 sm:flex-wrap ">
-                    {filterLabels.map((label, i) => (
-                      <button
-                        key={i}
-                        className={`flex-shrink-0 px-[13px] py-[3px] text-[14px] rounded-[6px] border ${
-                          i === 0
-                            ? "bg-[#CDD0D5] text-black  border-none"
-                            : "text-[#868C98] hover:bg-gray-100 border-gray-300"
-                        } transition`}
-                      >
-                        {label}
-                      </button>
-                    ))}
+              {!searchQuery && (
+                <div className=" w-full py-[36px]  flex justify-center items-center border-gray-200">
+                  <div
+                    className="w-full justify-center items-center max-w-[var(--max-container-width)]"
+                    style={containerStyle}
+                  >
+                    <div className="flex gap-3  overflow-x-auto scrollbar-hide mb-6 sm:flex-wrap ">
+                      {filterLabels.map((label, i) => (
+                        <button
+                          key={i}
+                          className={`flex-shrink-0 px-[13px] py-[3px] text-[14px] rounded-[6px] border ${
+                            i === 0
+                              ? "bg-[#CDD0D5] text-black  border-none"
+                              : "text-[#868C98] hover:bg-gray-100 border-gray-300"
+                          } transition`}
+                        >
+                          {label}
+                        </button>
+                      ))}
+                    </div>
                   </div>
                 </div>
-              </div>
+              )}
 
               {/* Event cards */}
               <div className="w-full items-center flex justify-center">
@@ -514,7 +541,7 @@ const HomePage = () => {
                           </div>
                         </div>
                       ))
-                    ) : (
+                    ) : events.length > 0 ? (
                       events.map((event, i) => (
                         <Link key={event._id} href={`/event-page?slug=${event.slug}`}>
                           <Card
@@ -528,6 +555,22 @@ const HomePage = () => {
                           />
                         </Link>
                       ))
+                    ) : (
+                      <div className="col-span-full text-center py-12">
+                        <div className="text-gray-500 text-lg mb-2">
+                          {searchQuery ? `No events found for "${searchQuery}"` : 
+                           selectedCategory ? `No ${selectedCategory.value} events found` : 
+                           'No events found'}
+                        </div>
+                        {searchQuery && (
+                          <button
+                            onClick={clearSearch}
+                            className="text-[#FF553F] hover:text-[#FF553F]/80 transition-colors"
+                          >
+                            Clear search
+                          </button>
+                        )}
+                      </div>
                     )}
                   </div>
                 </div>
@@ -536,54 +579,56 @@ const HomePage = () => {
           </section>
 
           {/* FEATURED EVENTS SECTION */}
-          <section className="flex flex-col items-center   w-full ">
-            <div
-              className="w-full justify-center items-center max-w-[var(--max-container-width)]"
-              style={containerStyle}
-            >
-              <div className="flex w-full py-[36px] justify-between">
-                <h2 className="text-xl sm:text-2xl font-semibold text-gray-800 ">
-                  Featured Events
-                </h2>
-                <Link href="/events" className="flex gap-2 items-center text-[#FF553F] hover:text-[#FF553F]/80 transition-colors">
-                  See All
-                  <span>
-                    <ArrowRight className="w-4 h-4 " />
-                  </span>
-                </Link>
-              </div>
-              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 w-full h-full">
-                {loading ? (
-                  // Loading skeleton
-                  Array.from({ length: 8 }).map((_, i) => (
-                    <div key={i} className="rounded-2xl overflow-hidden shadow-sm bg-gray-100 animate-pulse">
-                      <div className="w-full h-48 bg-gray-200"></div>
-                      <div className="p-4 space-y-2">
-                        <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-                        <div className="h-3 bg-gray-200 rounded w-1/2"></div>
-                        <div className="h-3 bg-gray-200 rounded w-2/3"></div>
-                        <div className="h-4 bg-gray-200 rounded w-1/3"></div>
+          {!searchQuery && (
+            <section className="flex flex-col items-center   w-full ">
+              <div
+                className="w-full justify-center items-center max-w-[var(--max-container-width)]"
+                style={containerStyle}
+              >
+                <div className="flex w-full py-[36px] justify-between">
+                  <h2 className="text-xl sm:text-2xl font-semibold text-gray-800 ">
+                    Featured Events
+                  </h2>
+                  <Link href="/events" className="flex gap-2 items-center text-[#FF553F] hover:text-[#FF553F]/80 transition-colors">
+                    See All
+                    <span>
+                      <ArrowRight className="w-4 h-4 " />
+                    </span>
+                  </Link>
+                </div>
+                <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 w-full h-full">
+                  {loading ? (
+                    // Loading skeleton
+                    Array.from({ length: 8 }).map((_, i) => (
+                      <div key={i} className="rounded-2xl overflow-hidden shadow-sm bg-gray-100 animate-pulse">
+                        <div className="w-full h-48 bg-gray-200"></div>
+                        <div className="p-4 space-y-2">
+                          <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+                          <div className="h-3 bg-gray-200 rounded w-1/2"></div>
+                          <div className="h-3 bg-gray-200 rounded w-2/3"></div>
+                          <div className="h-4 bg-gray-200 rounded w-1/3"></div>
+                        </div>
                       </div>
-                    </div>
-                  ))
-                ) : (
-                  events.map((event, i) => (
-                    <Link key={event._id} href={`/event-page?slug=${event.slug}`}>
-                      <Card
-                        image={getImageUrl(event.banner)}
-                        date={formatEventDate(event.startDate, event.endDate)}
-                        title={event.title}
-                        venue={event.venue}
-                        price={event.ticketType === 'free' ? 'Free' : (event.price || 'Contact for price')}
-                        badge={i === 0 ? "Save up to 39%" : ""}
-                        variant="featured"
-                      />
-                    </Link>
-                  ))
-                )}
+                    ))
+                  ) : (
+                    events.map((event, i) => (
+                      <Link key={event._id} href={`/event-page?slug=${event.slug}`}>
+                        <Card
+                          image={getImageUrl(event.banner)}
+                          date={formatEventDate(event.startDate, event.endDate)}
+                          title={event.title}
+                          venue={event.venue}
+                          price={event.ticketType === 'free' ? 'Free' : (event.price || 'Contact for price')}
+                          badge={i === 0 ? "Save up to 39%" : ""}
+                          variant="featured"
+                        />
+                      </Link>
+                    ))
+                  )}
+                </div>
               </div>
-            </div>
-          </section>
+            </section>
+          )}
 
           {/* TOP DESTINATIONS SECTION */}
           <section className="w-full  items-center flex justify-center">
