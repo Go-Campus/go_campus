@@ -53,7 +53,14 @@ export default function EventPage() {
   const [registerModal, setRegisterModal] = useState(false);
   const [modalType, setModalType] = useState('register');
   const [quantity, setQuantity] = useState(1);
-  const ticketPrice = 499;
+  
+  // Calculate ticket price from actual ticket data
+  const ticketPrice = useMemo(() => {
+    if (!tickets || tickets.length === 0) return 0;
+    const firstTicket = tickets[0];
+    if (!firstTicket.enablePricing) return 0; // Free ticket
+    return firstTicket.paymentAmount || 0;
+  }, [tickets]);
 
   // Build image URL via CDN or API base
   const getImageUrl = (imagePath) => {
@@ -330,7 +337,7 @@ setRegisterModal(true)
                 {tickets.map((t) => (
                   <li key={t._id}>
                     <span className="font-medium">{t.title}</span>
-                    {" "}- <span className="text-gray-600">{t.enablePricing ? (t.price ? `₹${t.price}` : 'Paid') : 'Free'}</span>
+                    {" "}- <span className="text-gray-600">{t.enablePricing ? (t.paymentAmount ? `₹${t.paymentAmount}` : 'Paid') : 'Free'}</span>
                     {t.status ? ` • ${t.status}` : ''}
                   </li>
                 ))}
@@ -495,7 +502,7 @@ setRegisterModal(true)
           {/* Button */}
           <div className="flex justify-center mb-4">
             <button  onClick={openModal} className="px-5 py-2 text-white bg-[#FF5F4A] rounded-md text-sm font-medium">
-              Register Now
+              {ticketPrice > 0 ? 'Register Now' : 'Get Free Ticket'}
             </button>
           </div>
         </div>

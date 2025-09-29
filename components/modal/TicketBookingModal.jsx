@@ -78,7 +78,7 @@ const TicketBookingModal = ({
     ...createTicketInterface(),
     title: "General Admission",
     description: "General admission ticket",
-    enablePricing: true,
+    enablePricing: ticketPrice > 0,
     paymentAmount: ticketPrice || 0,
     enableCoupenCode: false
   };
@@ -222,7 +222,7 @@ const TicketBookingModal = ({
                   <div className="flex justify-between py-[16px] md:py-[20px] px-[16px] md:px-[24px] gap-4">
                     <div>
                       <h4 className="text-[16px] md:text-[18px] font-[600]">
-                        ₹{quantity * ticketPrice}{" "}
+                        {ticketPrice > 0 ? `₹${quantity * ticketPrice}` : 'Free'}{" "}
                       </h4>
                       <p className="text-sm md:text-base">
                         Sales end on jul 22, 2025
@@ -372,18 +372,18 @@ const TicketBookingModal = ({
                     </h3>
                     <p className="flex w-full justify-between py-[12px] text-sm md:text-base">
                       {quantity}x General Admission
-                      <span>₹{ticketPrice}</span>
+                      <span>{ticketPrice > 0 ? `₹${ticketPrice}` : 'Free'}</span>
                     </p>
                     <p className="flex w-full border-b border-gray-200 border-t py-[12px] justify-between text-sm md:text-base">
                       <span>Subtotal</span>
-                      <span>₹{quantity * ticketPrice}</span>
+                      <span>{ticketPrice > 0 ? `₹${quantity * ticketPrice}` : 'Free'}</span>
                     </p>
                     <p className="flex w-full py-[12px] justify-between">
                       <span className="text-[18px] md:text-[20px] font-[600]">
                         Total
                       </span>
                       <span className="text-[18px] md:text-[20px] font-[600]">
-                        ₹{quantity * ticketPrice}
+                        {ticketPrice > 0 ? `₹${quantity * ticketPrice}` : 'Free'}
                       </span>
                     </p>
                   </div>
