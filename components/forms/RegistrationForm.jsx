@@ -227,7 +227,7 @@ const RegistrationForm = ({
       
       formDataPayload.append("finalAmount", String(finalPrice));
 
-      const apiUrl = process.env.NEXT_APP_API || 'http://localhost:3001/api/v1/';
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api/v1/';
       console.log("[RegistrationForm] API URL:", apiUrl);
       if (!apiUrl) {
         console.error("[RegistrationForm] API URL is not configured");
