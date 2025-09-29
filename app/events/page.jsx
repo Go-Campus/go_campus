@@ -74,7 +74,7 @@ const EventsPage = () => {
     }
     
     // Use CDN URL from environment or fallback to API URL
-    const cdnUrl = process.env.NEXT_PUBLIC_CDN_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+    const cdnUrl = process.env.NEXT_PUBLIC_CDN_URL ;
     return `${cdnUrl}/${imagePath}`;
   };
 

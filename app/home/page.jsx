@@ -154,7 +154,7 @@ const HomePage = () => {
     }
     
     // Use CDN URL from environment or fallback to API URL
-    const cdnUrl = process.env.NEXT_PUBLIC_CDN_URL || process.env.NEXT_APP_CDN || 'https://event-manager.syd1.cdn.digitaloceanspaces.com';
+    const cdnUrl = process.env.NEXT_PUBLIC_CDN_URL ;
     return `${cdnUrl}/${imagePath}`;
   };
   // State for carousel scroll position

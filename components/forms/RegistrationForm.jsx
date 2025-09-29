@@ -42,7 +42,7 @@ const getImageUrl = (imagePath) => {
   if (imagePath.startsWith('/')) return imagePath;
   // If it's already a full URL, return as-is
   if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) return imagePath;
-  const cdnUrl = process.env.NEXT_PUBLIC_CDN_URL || 'https://event-manager.syd1.cdn.digitaloceanspaces.com';
+  const cdnUrl = process.env.NEXT_PUBLIC_CDN_URL ;
   // Ensure single slash between base and path
   return `${cdnUrl.replace(/\/$/, '')}/${imagePath.replace(/^\//, '')}`;
 };
@@ -227,7 +227,7 @@ const RegistrationForm = ({
       
       formDataPayload.append("finalAmount", String(finalPrice));
 
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api/v1/';
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL ;
       console.log("[RegistrationForm] API URL:", apiUrl);
       if (!apiUrl) {
         console.error("[RegistrationForm] API URL is not configured");

@@ -80,7 +80,7 @@ export default function RegisterPage() {
     if (typeof imagePath !== 'string') return "/images/Events/event2.svg";
     if (imagePath.startsWith('/')) return imagePath;
     if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) return imagePath;
-    const cdnUrl = process.env.NEXT_PUBLIC_CDN_URL || 'https://event-manager.syd1.cdn.digitaloceanspaces.com';
+    const cdnUrl = process.env.NEXT_PUBLIC_CDN_URL ;
     return `${cdnUrl.replace(/\/$/, '')}/${imagePath.replace(/^\//, '')}`;
   };
 

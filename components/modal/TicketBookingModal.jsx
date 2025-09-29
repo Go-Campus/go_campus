@@ -91,7 +91,7 @@ const TicketBookingModal = ({
     if (imagePath.startsWith('/')) return imagePath;
     // If it's already a full URL, return as-is
     if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) return imagePath;
-    const cdnUrl = process.env.NEXT_PUBLIC_CDN_URL || 'https://event-manager.syd1.cdn.digitaloceanspaces.com';
+    const cdnUrl = process.env.NEXT_PUBLIC_CDN_URL ;
     // Ensure single slash between base and path
     return `${cdnUrl.replace(/\/$/, '')}/${imagePath.replace(/^\//, '')}`;
   };
