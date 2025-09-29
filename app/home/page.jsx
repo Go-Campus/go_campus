@@ -40,6 +40,9 @@ const HomePage = () => {
   const [isMobile, setIsMobile] = useState(false);
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [categories, setCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [categoriesLoading, setCategoriesLoading] = useState(true);
 
   useEffect(() => {
     // Function to check if width is less than or equal to 425px
@@ -58,12 +61,51 @@ const HomePage = () => {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
+  // Fetch categories data
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        setCategoriesLoading(true);
+        const response = await getData('/event-category/select');
+        if (response && Array.isArray(response)) {
+          // Map categories with icons
+          const categoryIconMap = {
+            'Academic': AcadamicIcon,
+            'Technology': TechnologyIcon,
+            'Entertainment': entertaimentIcon,
+            'Career': CareerIcon,
+            'Sports': SportIcon,
+            'Culture': CultureIcon,
+            'Workshops': WorkshopesIcon,
+          };
+          
+          const mappedCategories = response.map(category => ({
+            ...category,
+            icon: categoryIconMap[category.value] || TechnologyIcon // Default icon
+          }));
+          
+          setCategories(mappedCategories);
+        }
+      } catch (error) {
+        console.error('Error fetching categories:', error);
+      } finally {
+        setCategoriesLoading(false);
+      }
+    };
+
+    fetchCategories();
+  }, []);
+
   // Fetch events data
   useEffect(() => {
     const fetchEvents = async () => {
       try {
         setLoading(true);
-        const response = await getData('/event?skip=0&limit=8');
+        let url = '/event?skip=0&limit=8';
+        if (selectedCategory) {
+          url += `&eventCategory=${selectedCategory.id}`;
+        }
+        const response = await getData(url);
         if (response.success && response.response) {
           setEvents(response.response);
         }
@@ -75,7 +117,7 @@ const HomePage = () => {
     };
 
     fetchEvents();
-  }, []); // Empty dependency array to prevent infinite loop
+  }, [selectedCategory]); // Re-fetch when category changes
 
   // Format date function
   const formatEventDate = (startDate, endDate) => {
@@ -153,16 +195,10 @@ const HomePage = () => {
       buttonText: "Get Into Music",
     },
   ];
-  //  section two categories datas
-  const categories = [
-    { icon: AcadamicIcon, label: "Academic" },
-    { icon: TechnologyIcon, label: "Technology" },
-    { icon: entertaimentIcon, label: "Entertainment" },
-    { icon: CareerIcon, label: "Career" },
-    { icon: SportIcon, label: "Sports" },
-    { icon: CultureIcon, label: "Culture" },
-    { icon: WorkshopesIcon, label: "Workshops" },
-  ];
+  // Category selection handler
+  const handleCategorySelect = (category) => {
+    setSelectedCategory(category);
+  };
 
   const featuredTitles = [
     "Clay Sculpting",
@@ -380,27 +416,43 @@ const HomePage = () => {
         >
           <div className="w-full   flex ">
             <div className="flex flex-wrap w-full   gap-4 items-center justify-between">
-              {categories.map((category, index) => (
-                <div
-                  key={index}
-                  className="flex flex-col items-center  w-[146px] h-[146px] justify-center border border-[#ADADAD40] rounded-[26px] text-center cursor-pointer"
-                >
-                  <div className="w-10  h-10 ">
-                    <Link href={'/category-page'}>
-                    <Image
-                      width={28}
-                      height={28}
-                      src={category.icon}
-                      alt={category.label}
-                      className="w-full h-full object-contain"
-                    />
-                    </Link>
+              {categoriesLoading ? (
+                // Loading skeleton for categories
+                Array.from({ length: 7 }).map((_, i) => (
+                  <div
+                    key={i}
+                    className="flex flex-col items-center w-[146px] h-[146px] justify-center border border-[#ADADAD40] rounded-[26px] text-center animate-pulse"
+                  >
+                    <div className="w-10 h-10 bg-gray-200 rounded"></div>
+                    <div className="h-4 bg-gray-200 rounded w-16 mt-2"></div>
                   </div>
-                  <span className="text-gray-800 text-sm font-medium">
-                    {category.label}
-                  </span>
-                </div>
-              ))}
+                ))
+              ) : (
+                categories.map((category, index) => (
+                  <div
+                    key={category.id || index}
+                    className={`flex flex-col items-center w-[146px] h-[146px] justify-center border rounded-[26px] text-center cursor-pointer transition-colors ${
+                      selectedCategory?.id === category.id 
+                        ? 'border-[#FF553F] bg-[#FF553F]/10' 
+                        : 'border-[#ADADAD40] hover:border-[#FF553F]/50'
+                    }`}
+                    onClick={() => handleCategorySelect(category)}
+                  >
+                    <div className="w-10 h-10">
+                      <Image
+                        width={28}
+                        height={28}
+                        src={category.icon}
+                        alt={category.value}
+                        className="w-full h-full object-contain"
+                      />
+                    </div>
+                    <span className="text-gray-800 text-sm font-medium">
+                      {category.value}
+                    </span>
+                  </div>
+                ))
+              )}
             </div>
           </div>
         </section>
@@ -470,7 +522,7 @@ const HomePage = () => {
                             date={formatEventDate(event.startDate, event.endDate)}
                             title={event.title}
                             venue={event.venue}
-                            price={event.ticketType === 'free' ? 'Free' : '499'} // Default price, can be updated based on ticket data
+                            price={event.ticketType === 'free' ? 'Free' : (event.price || 'Contact for price')}
                             badge={i === 0 ? "Save up to 39%" : ""}
                             variant="latest"
                           />
@@ -522,7 +574,7 @@ const HomePage = () => {
                         date={formatEventDate(event.startDate, event.endDate)}
                         title={event.title}
                         venue={event.venue}
-                        price={event.ticketType === 'free' ? 'Free' : '499'} // Default price, can be updated based on ticket data
+                        price={event.ticketType === 'free' ? 'Free' : (event.price || 'Contact for price')}
                         badge={i === 0 ? "Save up to 39%" : ""}
                         variant="featured"
                       />
