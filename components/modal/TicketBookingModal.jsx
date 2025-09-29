@@ -5,6 +5,8 @@ import { X, Calendar, MapPin, Minus, Plus, ChevronDown, IdCard } from "lucide-re
 import { useState, useEffect } from "react";
 import { GooglePayIcon, PaytmIcon } from "@/public";
 import Swal from 'sweetalert2';
+import RegistrationForm from "../forms/RegistrationForm";
+import { createEventInterface, createTicketInterface, createFormFieldInterface } from "../../types";
 
 const formatTime = (seconds) => {
   const minutes = Math.floor(seconds / 60);
@@ -21,11 +23,78 @@ const TicketBookingModal = ({
   quantity,
   onQuantityChange,
   onCheckout,
-  type
+  type,
+  event = null,
+  ticket = null
 }) => {
   console.log("Rendering TicketBookingModal with quantity:", quantity);
   const [activeButton, setActiveButton] = useState(null); // 'minus' or 'plus'
   const [timeLeft, setTimeLeft] = useState(600); // 10 minutes in seconds
+  const [showRegistrationForm, setShowRegistrationForm] = useState(false);
+
+  // Create default form fields if not provided
+  const defaultFormFields = [
+    {
+      _id: "name",
+      name: "name",
+      label: "Full Name",
+      type: "text",
+      required: true,
+      orderId: 1,
+      customClass: "full"
+    },
+    {
+      _id: "email",
+      name: "email",
+      label: "Email Address",
+      type: "email",
+      required: true,
+      orderId: 2,
+      customClass: "full"
+    },
+    {
+      _id: "authenticationId",
+      name: "authenticationId",
+      label: "Phone Number",
+      type: "mobilenumber",
+      required: true,
+      orderId: 3,
+      customClass: "full"
+    }
+  ];
+
+  // Create event and ticket objects if not provided
+  const eventData = event || {
+    ...createEventInterface(),
+    title: eventTitle || "Event",
+    description: "Event description",
+    banner: "/images/Events/event2.svg",
+    logo: "/images/Events/event2.svg",
+    startDate: new Date(),
+    authenticationType: "None"
+  };
+
+  const ticketData = ticket || {
+    ...createTicketInterface(),
+    title: "General Admission",
+    description: "General admission ticket",
+    enablePricing: true,
+    paymentAmount: ticketPrice || 0,
+    enableCoupenCode: false
+  };
+
+  // Build image URL via CDN or API base
+  const getImageUrl = (imagePath) => {
+    if (!imagePath) return "/images/Events/event2.svg";
+    if (typeof imagePath !== 'string') return "/images/Events/event2.svg";
+    // If it's a public asset path, return as-is
+    if (imagePath.startsWith('/')) return imagePath;
+    // If it's already a full URL, return as-is
+    if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) return imagePath;
+    const cdnUrl = process.env.NEXT_PUBLIC_CDN_URL || 'https://event-manager.syd1.cdn.digitaloceanspaces.com';
+    // Ensure single slash between base and path
+    return `${cdnUrl.replace(/\/$/, '')}/${imagePath.replace(/^\//, '')}`;
+  };
 
   useEffect(() => {
     console.log('Timer initialized with timeLeft:', timeLeft);
@@ -281,8 +350,8 @@ const TicketBookingModal = ({
                 <div className="rounded-lg flex flex-col items-center relative">
                   <div className="relative w-full flex justify-center">
                     <Image
-                      src="/images/Events/event2.svg"
-                      alt="Event"
+                      src={getImageUrl(eventData.banner || eventData.logo || "/images/Events/event2.svg")}
+                      alt={eventData.title || "Event"}
                       width={400}
                       height={100}
                       className="w-full max-w-[300px] rounded-[24px] md:rounded-[36px]"
@@ -344,16 +413,58 @@ const TicketBookingModal = ({
             {type === 'register' && (
             <div className={`flex   ${type === 'register' ? 'justify-center' : 'justify-center'}`}>
               <button 
-                onClick={onCheckout}
+                onClick={() => setShowRegistrationForm(true)}
                 className="bg-[#FF5F4A] text-[white] rounded-[12px] py-[10px] px-[36px] text-[16px] font-[500]"
               >
-                Checkout
+                Register Now
               </button>
             </div>
             )}
           </div>
         </div>
       </div>
+
+      {/* Registration Form Modal */}
+      {showRegistrationForm && (
+        <div 
+          className="fixed inset-0 bg-black/50 z-60 flex items-center justify-center p-4"
+          onClick={(e) => {
+            // Only close if clicking the backdrop, not the content
+            if (e.target === e.currentTarget) {
+              setShowRegistrationForm(false);
+            }
+          }}
+        >
+          <div 
+            className="bg-white rounded-lg shadow-2xl w-full max-w-6xl max-h-[90vh] overflow-y-auto"
+            onClick={(e) => {
+              // Prevent clicks inside the modal from closing it
+              e.stopPropagation();
+            }}
+          >
+            <div className="p-6">
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-2xl font-bold text-gray-900">Registration Form</h2>
+                <button
+                  onClick={() => setShowRegistrationForm(false)}
+                  className="text-gray-500 hover:text-gray-700"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
+              
+              <RegistrationForm
+                event={eventData}
+                ticket={ticketData}
+                allFormFields={defaultFormFields}
+                currencySymbol="₹"
+                defaultPaymentMethod="EventHex Payment"
+                isEmbeddedView={true}
+              />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

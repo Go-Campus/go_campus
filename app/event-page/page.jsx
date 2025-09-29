@@ -566,13 +566,15 @@ setRegisterModal(true)
       <TicketBookingModal
         isOpen={registerModal}
         onClose={closeModal}
-        eventTitle="Best Comedy Lineup ft. Famous Star Comedians"
-        eventDateTime="Sat 24 August 2024 · 10:00 AM - 14:00PM IST"
+        eventTitle={event?.title || "Best Comedy Lineup ft. Famous Star Comedians"}
+        eventDateTime={formattedDateRange || "Sat 24 August 2024 · 10:00 AM - 14:00PM IST"}
         ticketPrice={ticketPrice}
         quantity={quantity}
         onQuantityChange={handleQuantityChange}
         onCheckout={handleCheckout}
         type={modalType}
+        event={event}
+        ticket={tickets[0] || null}
       />
 
       <Footer />
