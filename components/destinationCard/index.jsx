@@ -101,9 +101,9 @@ const Card = ({
         </div>
 
         {/* Price */}
-        <span className="text-sm sm:text-base font-semibold whitespace-nowrap">
+        {/* <span className="text-sm sm:text-base font-semibold whitespace-nowrap">
           {price === 'Free' ? 'Free' : `₹${price}`}
-        </span>
+        </span> */}
       </div>
     </div>
   );
