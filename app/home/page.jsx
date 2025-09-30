@@ -45,6 +45,9 @@ const HomePage = () => {
   const [categoriesLoading, setCategoriesLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [isSearching, setIsSearching] = useState(false);
+  const [banners, setBanners] = useState([]);
+  const [bannersLoading, setBannersLoading] = useState(true);
+  const [currentBannerIndex, setCurrentBannerIndex] = useState(0);
 
   useEffect(() => {
     // Function to check if width is less than or equal to 425px
@@ -62,6 +65,38 @@ const HomePage = () => {
     // Cleanup
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
+
+  // Fetch banners data
+  useEffect(() => {
+    const fetchBanners = async () => {
+      try {
+        setBannersLoading(true);
+        const response = await getData('/banner?limit=10');
+        if (response.success && response.response) {
+          setBanners(response.response);
+        }
+      } catch (error) {
+        console.error('Error fetching banners:', error);
+      } finally {
+        setBannersLoading(false);
+      }
+    };
+
+    fetchBanners();
+  }, []);
+
+  // Auto-slide banners
+  useEffect(() => {
+    if (banners.length <= 1) return;
+
+    const interval = setInterval(() => {
+      setCurrentBannerIndex((prevIndex) => 
+        prevIndex === banners.length - 1 ? 0 : prevIndex + 1
+      );
+    }, 4000);
+
+    return () => clearInterval(interval);
+  }, [banners.length]);
 
   // Fetch categories data
   useEffect(() => {
@@ -190,16 +225,19 @@ const HomePage = () => {
     });
   };
 
-  // banner datas
-  const heroBanners = [
-    {
-      image: PartyImage,
-      title: ["From Pop", "Ballads to Emo", "Encores"],
-      description:
-        "Experience the magic as pop ballads transform into emo encores, showcasing.",
-      buttonText: "Get Into Music",
-    },
-  ];
+  // Get banner image URL with CDN
+  const getBannerImageUrl = (imagePath) => {
+    if (!imagePath) return PartyImage; // Fallback to default image
+    
+    // If it's already a full URL, return as is
+    if (imagePath.startsWith('http')) {
+      return imagePath;
+    }
+    
+    // Use CDN URL from environment
+    const cdnUrl = process.env.NEXT_PUBLIC_CDN_URL || 'https://event-manager.syd1.cdn.digitaloceanspaces.com';
+    return `${cdnUrl}/${imagePath}`;
+  };
   // Category selection handler
   const handleCategorySelect = (category) => {
     if (category.id === 'all') {
@@ -325,30 +363,54 @@ const HomePage = () => {
           className="w-full max-w-[var(--max-container-width)]"
           style={containerStyle}
         >
-          {heroBanners.map((banner, index) => (
-            <div key={index} className="w-full my-6 ">
+          {bannersLoading ? (
+            // Loading skeleton
+            <div className="w-full my-6">
+              <div className="hidden lg:flex relative">
+                <div className="relative flex-1 h-[400px] rounded-tr-[38px] rounded-br-[38px] overflow-hidden bg-gray-200 animate-pulse">
+                  <div className="absolute inset-0 z-20 flex items-center px-8 py-16">
+                    <div className="max-w-lg space-y-4">
+                      <div className="h-12 bg-gray-300 rounded w-3/4"></div>
+                      <div className="h-6 bg-gray-300 rounded w-1/2"></div>
+                      <div className="h-10 bg-gray-300 rounded w-32"></div>
+                    </div>
+                  </div>
+                </div>
+                <div className="relative w-[130px] h-[400px] bg-gray-200 rounded-tl-[36px] rounded-bl-[36px] animate-pulse"></div>
+              </div>
+              <div className="lg:hidden flex flex-col rounded-[36px] overflow-hidden">
+                <div className="relative h-[400px] bg-gray-200 animate-pulse"></div>
+                <div className="flex w-full justify-center items-center py-7 bg-gray-200 animate-pulse">
+                  <div className="w-56 h-16 bg-gray-300 rounded"></div>
+                </div>
+              </div>
+            </div>
+          ) : banners.length > 0 ? (
+            <div className="w-full my-6">
               {/* Desktop Layout */}
               <div className="hidden lg:flex relative">
                 {/* Left: Image + Content */}
                 <div className="relative flex-1 h-[400px] rounded-tr-[38px] rounded-br-[38px] overflow-hidden">
                   <div className="absolute inset-0 z-10 bg-gradient-to-r from-black/70 via-black/30 to-transparent" />
                   <Image
-                    src={banner.image}
+                    src={getBannerImageUrl(banners[currentBannerIndex]?.image)}
                     alt="Hero"
+                    width={800}
+                    height={400}
                     className="w-full h-full object-cover"
                   />
                   <div className="absolute inset-0 z-20 flex items-center px-8 py-16">
                     <div className="max-w-lg">
                       <h1 className="text-5xl font-bold text-white mb-4 leading-tight">
-                        {banner.title.map((line, i) => (
-                          <div key={i}>{line}</div>
-                        ))}
+                        <div>From Pop</div>
+                        <div>Ballads to Emo</div>
+                        <div>Encores</div>
                       </h1>
                       <p className="text-gray-300 text-lg mb-6">
-                        {banner.description}
+                        Experience the magic as pop ballads transform into emo encores, showcasing.
                       </p>
                       <button className="bg-white text-black px-6 py-3 rounded-full font-medium hover:bg-gray-100 transition-colors">
-                        {banner.buttonText}
+                        Get Into Music
                       </button>
                     </div>
                   </div>
@@ -380,24 +442,24 @@ const HomePage = () => {
               <div className=" gap-1 lg:hidden  flex flex-col  rounded-[36px] overflow-hidden ">
                 <div className="relative h-[400px]">
                   <Image
-                    width={50}
-                    height={200}
-                    src={banner.image}
+                    width={400}
+                    height={400}
+                    src={getBannerImageUrl(banners[currentBannerIndex]?.image)}
                     alt="Hero"
                     className="w-full h-full object-cover"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent z-10" />
                   <div className="absolute inset-0 flex flex-col justify-end px-5 pb-6 z-20">
                     <h1 className="text-3xl font-bold text-white leading-snug mb-2">
-                      {banner.title.map((line, i) => (
-                        <div key={i}>{line}</div>
-                      ))}
+                      <div>From Pop</div>
+                      <div>Ballads to Emo</div>
+                      <div>Encores</div>
                     </h1>
                     <p className="text-white text-sm mb-4">
-                      {banner.description}
+                      Experience the magic as pop ballads transform into emo encores, showcasing.
                     </p>
                     <button className="bg-white text-black text-sm font-semibold px-4 py-2 rounded-full w-fit">
-                      {banner.buttonText}
+                      Get Into Music
                     </button>
                   </div>
                 </div>
@@ -427,7 +489,96 @@ const HomePage = () => {
                 </div>
               </div>
             </div>
-          ))}
+          ) : (
+            // Fallback when no banners
+            <div className="w-full my-6">
+              <div className="hidden lg:flex relative">
+                <div className="relative flex-1 h-[400px] rounded-tr-[38px] rounded-br-[38px] overflow-hidden">
+                  <div className="absolute inset-0 z-10 bg-gradient-to-r from-black/70 via-black/30 to-transparent" />
+                  <Image
+                    src={PartyImage}
+                    alt="Hero"
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 z-20 flex items-center px-8 py-16">
+                    <div className="max-w-lg">
+                      <h1 className="text-5xl font-bold text-white mb-4 leading-tight">
+                        <div>From Pop</div>
+                        <div>Ballads to Emo</div>
+                        <div>Encores</div>
+                      </h1>
+                      <p className="text-gray-300 text-lg mb-6">
+                        Experience the magic as pop ballads transform into emo encores, showcasing.
+                      </p>
+                      <button className="bg-white text-black px-6 py-3 rounded-full font-medium hover:bg-gray-100 transition-colors">
+                        Get Into Music
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div className="relative w-[130px] h-[400px] bg-[#E9E6E6] rounded-tl-[36px] z-10  rounded-bl-[36px]">
+                  <div className="absolute top-0 left-[-6px] h-full flex flex-col justify-between py-3 z-20">
+                    {Array.from({ length: 28 }).map((_, i) => (
+                      <div
+                        key={i}
+                        className="w-2 h-2 bg-white rounded-full my-[2px]"
+                      />
+                    ))}
+                  </div>
+                  <div className="absolute inset-0 flex justify-center items-center z-30">
+                    <Image
+                      width={50}
+                      height={200}
+                      src="/images/barcode.svg"
+                      alt="Barcode"
+                      className="w-[50px] h-[200px] object-contain"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className=" gap-1 lg:hidden  flex flex-col  rounded-[36px] overflow-hidden ">
+                <div className="relative h-[400px]">
+                  <Image
+                    width={50}
+                    height={200}
+                    src={PartyImage}
+                    alt="Hero"
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent z-10" />
+                  <div className="absolute inset-0 flex flex-col justify-end px-5 pb-6 z-20">
+                    <h1 className="text-3xl font-bold text-white leading-snug mb-2">
+                      <div>From Pop</div>
+                      <div>Ballads to Emo</div>
+                      <div>Encores</div>
+                    </h1>
+                    <p className="text-white text-sm mb-4">
+                      Experience the magic as pop ballads transform into emo encores, showcasing.
+                    </p>
+                    <button className="bg-white text-black text-sm font-semibold px-4 py-2 rounded-full w-fit">
+                      Get Into Music
+                    </button>
+                  </div>
+                </div>
+                <div
+                style={{
+                  backgroundImage: `url(${TicketFooterMobile.src})`,
+                  backgroundSize: isMobile ? "contain" : "cover",
+                  backgroundPosition: "center",
+                  backgroundRepeat: "no-repeat",
+                }}
+                className="flex w-full xs:object-contain sm:object-contain md:object-cover justify-center items-center py-7 lg:hidden">
+                  <Image
+                    width={140}
+                    height={60}
+                    src={BarcodeImagemoblie}
+                    alt="Barcodfgde"
+                    className="w-56 object-contain"
+                  />
+                </div>
+              </div>
+            </div>
+          )}
         </section>
 
         {/* CATEGORY SECTION */}
