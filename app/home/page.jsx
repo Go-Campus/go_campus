@@ -202,7 +202,11 @@ const HomePage = () => {
   ];
   // Category selection handler
   const handleCategorySelect = (category) => {
-    setSelectedCategory(category);
+    if (category.id === 'all') {
+      setSelectedCategory(null);
+    } else {
+      setSelectedCategory(category);
+    }
   };
 
   // Search handler
@@ -272,17 +276,11 @@ const HomePage = () => {
     },
   ];
 
-  const filterLabels = [
-    "All",
-    "For You",
-    "Online",
-    "Today",
-    "This Week",
-    "Academic",
-    "Free",
-    "Food & Drink",
-    "Charity",
-  ];
+  // Create filter labels with "All" option plus categories
+  const getFilterLabels = () => {
+    const allOption = { id: 'all', value: 'All', isSpecial: true };
+    return [allOption, ...categories];
+  };
 
   const popularCities = [
     "Things to do in Abilene",
@@ -504,16 +502,18 @@ const HomePage = () => {
                     style={containerStyle}
                   >
                     <div className="flex gap-3  overflow-x-auto scrollbar-hide mb-6 sm:flex-wrap ">
-                      {filterLabels.map((label, i) => (
+                      {getFilterLabels().map((filter, i) => (
                         <button
-                          key={i}
-                          className={`flex-shrink-0 px-[13px] py-[3px] text-[14px] rounded-[6px] border ${
-                            i === 0
-                              ? "bg-[#CDD0D5] text-black  border-none"
+                          key={filter.id || i}
+                          onClick={() => handleCategorySelect(filter)}
+                          className={`flex-shrink-0 px-[13px] py-[3px] text-[14px] rounded-[6px] border transition ${
+                            (filter.id === 'all' && !selectedCategory) || 
+                            (selectedCategory && selectedCategory.id === filter.id)
+                              ? "bg-[#CDD0D5] text-black border-none"
                               : "text-[#868C98] hover:bg-gray-100 border-gray-300"
-                          } transition`}
+                          }`}
                         >
-                          {label}
+                          {filter.value}
                         </button>
                       ))}
                     </div>
