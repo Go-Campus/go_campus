@@ -197,6 +197,39 @@ const HomePage = () => {
     const cdnUrl = process.env.NEXT_PUBLIC_CDN_URL ;
     return `${cdnUrl}/${imagePath}`;
   };
+
+  // Get event pricing display
+  const getEventPricing = (event) => {
+    if (!event) return 'Contact for price';
+    
+    // If it's a free event
+    // if (event.ticketType === 'free') {
+    //   return 'Free';
+    // }
+    
+    // If multiple ticket pricing is enabled
+    if (event.isMultiTicketPrizing) {
+      if (event.ticketStartingPrice && event.ticketEndingPrice) {
+        return `₹${event.ticketStartingPrice} - ₹${event.ticketEndingPrice}`;
+      } else if (event.ticketStartingPrice) {
+        return `₹${event.ticketStartingPrice}+`;
+      } else if (event.ticketEndingPrice) {
+        return `₹${event.ticketEndingPrice}`;
+      }
+    }
+    
+    // Single ticket pricing
+    if (event.ticketPrizing && event.ticketPrizing > 0) {
+      return `₹${event.ticketPrizing}`;
+    }
+    
+    // Fallback to event.price if available
+    if (event.price) {
+      return `₹${event.price}`;
+    }
+    
+    return 'Free';
+  };
   // State for carousel scroll position
 
   // widthsetup
@@ -726,7 +759,7 @@ const HomePage = () => {
                             date={formatEventDate(event.startDate, event.endDate)}
                             title={event.title}
                             venue={event.venue}
-                            price={event.ticketType === 'free' ? 'Free' : (event.price || 'Contact for price')}
+                            price={getEventPricing(event)}
                             badge={i === 0 ? "Save up to 39%" : ""}
                             variant="latest"
                           />
@@ -795,7 +828,7 @@ const HomePage = () => {
                           date={formatEventDate(event.startDate, event.endDate)}
                           title={event.title}
                           venue={event.venue}
-                          price={event.ticketType === 'free' ? 'Free' : (event.price || 'Contact for price')}
+                          price={getEventPricing(event)}
                           badge={i === 0 ? "Save up to 39%" : ""}
                           variant="featured"
                         />
