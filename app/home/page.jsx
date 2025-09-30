@@ -48,6 +48,8 @@ const HomePage = () => {
   const [banners, setBanners] = useState([]);
   const [bannersLoading, setBannersLoading] = useState(true);
   const [currentBannerIndex, setCurrentBannerIndex] = useState(0);
+  const [featuredEvents, setFeaturedEvents] = useState([]);
+  const [featuredLoading, setFeaturedLoading] = useState(true);
 
   useEffect(() => {
     // Function to check if width is less than or equal to 425px
@@ -158,6 +160,25 @@ const HomePage = () => {
 
     fetchEvents();
   }, [selectedCategory, searchQuery]); // Re-fetch when category or search changes
+
+  // Fetch featured events data
+  useEffect(() => {
+    const fetchFeaturedEvents = async () => {
+      try {
+        setFeaturedLoading(true);
+        const response = await getData('/event?skip=0&limit=8&isFeatured=true');
+        if (response.success && response.response) {
+          setFeaturedEvents(response.response);
+        }
+      } catch (error) {
+        console.error('Error fetching featured events:', error);
+      } finally {
+        setFeaturedLoading(false);
+      }
+    };
+
+    fetchFeaturedEvents();
+  }, []); // Fetch once on component mount
 
   // Format date function
   const formatEventDate = (startDate, endDate) => {
@@ -807,7 +828,7 @@ const HomePage = () => {
                   </Link>
                 </div>
                 <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 w-full h-full">
-                  {loading ? (
+                  {featuredLoading ? (
                     // Loading skeleton
                     Array.from({ length: 8 }).map((_, i) => (
                       <div key={i} className="rounded-2xl overflow-hidden shadow-sm bg-gray-100 animate-pulse">
@@ -820,8 +841,8 @@ const HomePage = () => {
                         </div>
                       </div>
                     ))
-                  ) : (
-                    events.map((event, i) => (
+                  ) : featuredEvents.length > 0 ? (
+                    featuredEvents.map((event, i) => (
                       <Link key={event._id} href={`/event-page?slug=${event.slug}`}>
                         <Card
                           image={getImageUrl(event.banner)}
@@ -834,6 +855,12 @@ const HomePage = () => {
                         />
                       </Link>
                     ))
+                  ) : (
+                    <div className="col-span-full text-center py-12">
+                      <div className="text-gray-500 text-lg mb-2">
+                        No featured events found
+                      </div>
+                    </div>
                   )}
                 </div>
               </div>
@@ -917,7 +944,7 @@ const HomePage = () => {
           </section>
 
           {/* POPULAR CITIES SECTION */}
-          <div className="w-full  gap-[50px] flex flex-col items-center justify-center">
+          {/* <div className="w-full  gap-[50px] flex flex-col items-center justify-center">
             <section
               className="w-full justify-center items-center max-w-[var(--max-container-width)]"
               style={containerStyle}
@@ -961,7 +988,7 @@ const HomePage = () => {
                 </div>
               </div>
             </section>
-          </div>
+          </div> */}
         </div>
       </div>
    
