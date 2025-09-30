@@ -402,15 +402,28 @@ const HomePage = () => {
                   <div className="absolute inset-0 z-20 flex items-center px-8 py-16">
                     <div className="max-w-lg">
                       <h1 className="text-5xl font-bold text-white mb-4 leading-tight">
-                        <div>From Pop</div>
-                        <div>Ballads to Emo</div>
-                        <div>Encores</div>
+                        {banners[currentBannerIndex]?.title ? (
+                          <div>{banners[currentBannerIndex].title}</div>
+                        ) : (
+                          <>
+                            <div>From Pop</div>
+                            <div>Ballads to Emo</div>
+                            <div>Encores</div>
+                          </>
+                        )}
                       </h1>
                       <p className="text-gray-300 text-lg mb-6">
-                        Experience the magic as pop ballads transform into emo encores, showcasing.
+                        {banners[currentBannerIndex]?.description || "Experience the magic as pop ballads transform into emo encores, showcasing."}
                       </p>
-                      <button className="bg-white text-black px-6 py-3 rounded-full font-medium hover:bg-gray-100 transition-colors">
-                        Get Into Music
+                      <button 
+                        className="bg-white text-black px-6 py-3 rounded-full font-medium hover:bg-gray-100 transition-colors"
+                        onClick={() => {
+                          if (banners[currentBannerIndex]?.buttonLink) {
+                            window.open(banners[currentBannerIndex].buttonLink, '_blank');
+                          }
+                        }}
+                      >
+                        {banners[currentBannerIndex]?.buttonText || "Get Into Music"}
                       </button>
                     </div>
                   </div>
@@ -451,15 +464,28 @@ const HomePage = () => {
                   <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent z-10" />
                   <div className="absolute inset-0 flex flex-col justify-end px-5 pb-6 z-20">
                     <h1 className="text-3xl font-bold text-white leading-snug mb-2">
-                      <div>From Pop</div>
-                      <div>Ballads to Emo</div>
-                      <div>Encores</div>
+                      {banners[currentBannerIndex]?.title ? (
+                        <div>{banners[currentBannerIndex].title}</div>
+                      ) : (
+                        <>
+                          <div>From Pop</div>
+                          <div>Ballads to Emo</div>
+                          <div>Encores</div>
+                        </>
+                      )}
                     </h1>
                     <p className="text-white text-sm mb-4">
-                      Experience the magic as pop ballads transform into emo encores, showcasing.
+                      {banners[currentBannerIndex]?.description || "Experience the magic as pop ballads transform into emo encores, showcasing."}
                     </p>
-                    <button className="bg-white text-black text-sm font-semibold px-4 py-2 rounded-full w-fit">
-                      Get Into Music
+                    <button 
+                      className="bg-white text-black text-sm font-semibold px-4 py-2 rounded-full w-fit"
+                      onClick={() => {
+                        if (banners[currentBannerIndex]?.buttonLink) {
+                          window.open(banners[currentBannerIndex].buttonLink, '_blank');
+                        }
+                      }}
+                    >
+                      {banners[currentBannerIndex]?.buttonText || "Get Into Music"}
                     </button>
                   </div>
                 </div>
