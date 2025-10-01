@@ -50,6 +50,9 @@ const HomePage = () => {
   const [currentBannerIndex, setCurrentBannerIndex] = useState(0);
   const [featuredEvents, setFeaturedEvents] = useState([]);
   const [featuredLoading, setFeaturedLoading] = useState(true);
+  const [destinations, setDestinations] = useState([]);
+  const [destinationsLoading, setDestinationsLoading] = useState(true);
+  const [selectedLocation, setSelectedLocation] = useState(null);
 
   useEffect(() => {
     // Function to check if width is less than or equal to 425px
@@ -147,6 +150,9 @@ const HomePage = () => {
         if (searchQuery.trim()) {
           url += `&searchkey=${encodeURIComponent(searchQuery.trim())}`;
         }
+        if (selectedLocation) {
+          url += `&nearbyCity=${selectedLocation._id}`;
+        }
         const response = await getData(url);
         if (response.success && response.response) {
           setEvents(response.response);
@@ -159,7 +165,7 @@ const HomePage = () => {
     };
 
     fetchEvents();
-  }, [selectedCategory, searchQuery]); // Re-fetch when category or search changes
+  }, [selectedCategory, searchQuery, selectedLocation]); // Re-fetch when category, search, or location changes
 
   // Fetch featured events data
   useEffect(() => {
@@ -178,6 +184,25 @@ const HomePage = () => {
     };
 
     fetchFeaturedEvents();
+  }, []); // Fetch once on component mount
+
+  // Fetch destinations data
+  useEffect(() => {
+    const fetchDestinations = async () => {
+      try {
+        setDestinationsLoading(true);
+        const response = await getData('/destination/top');
+        if (response && Array.isArray(response)) {
+          setDestinations(response);
+        }
+      } catch (error) {
+        console.error('Error fetching destinations:', error);
+      } finally {
+        setDestinationsLoading(false);
+      }
+    };
+
+    fetchDestinations();
   }, []); // Fetch once on component mount
 
   // Format date function
@@ -314,6 +339,16 @@ const HomePage = () => {
     setIsSearching(false);
   };
 
+  // Location selection handler
+  const handleLocationSelect = (location) => {
+    setSelectedLocation(location);
+  };
+
+  // Clear location filter
+  const clearLocation = () => {
+    setSelectedLocation(null);
+  };
+
   const featuredTitles = [
     "Clay Sculpting",
     "The Universe in a Pot",
@@ -374,27 +409,20 @@ const HomePage = () => {
     return [allOption, ...categories];
   };
 
-  const popularCities = [
-    "Things to do in Abilene",
-    "Things to do in Kochi",
-    "Things to do in Kannur",
-    "Things to do in Coimbatore",
-    "Things to do in Calicut",
-    "Things to do in Indianapolis",
-    "Things to do in Antarctica",
-  ];
+  // Get destination image URL with CDN
+  const getDestinationImageUrl = (imagePath) => {
+    if (!imagePath) return CardImage; // Fallback to default image
+    
+    // If it's already a full URL, return as is
+    if (imagePath.startsWith('http')) {
+      return imagePath;
+    }
+    
+    // Use CDN URL from environment
+    const cdnUrl = process.env.NEXT_PUBLIC_CDN_URL || 'https://event-manager.syd1.cdn.digitaloceanspaces.com';
+    return `${cdnUrl}/${imagePath}`;
+  };
 
-  const topDestinations = [
-    { id: 'mumbai-1', img: CardImage, name: "Mumbai" },
-    { id: 'london-1', img: DubaiImage, name: "London" },
-    { id: 'dubai-1', img: DubaiImage, name: "Dubai" },
-    { id: 'mumbai-2', img: CardImage, name: "Mumbai" },
-    { id: 'london-2', img: DubaiImage, name: "London" },
-    { id: 'dubai-2', img: DubaiImage, name: "Dubai" },
-    { id: 'mumbai-3', img: CardImage, name: "Mumbai" },
-    { id: 'london-3', img: DubaiImage, name: "London" },
-    { id: 'dubai-3', img: DubaiImage, name: "Dubai" },
-  ];
 
   return (
     <div className=" bg-white w-full flex flex-col gap-[98px] items-center justify-center">
@@ -721,35 +749,36 @@ const HomePage = () => {
                   <h2 className="text-xl    py-[28px] sm:text-2xl font-semibold text-gray-800 ">
                     {searchQuery ? `Search Results for "${searchQuery}"` : 
                      selectedCategory ? `${selectedCategory.value} Events` : 
+                     selectedLocation ? `Events in ${selectedLocation.title}` :
                      'Latest Events in Lucknow'}
                   </h2>
                 </div>
               </div>
               {/* Filter buttons with horizontal scroll on mobile */}
               {!searchQuery && (
-                <div className=" w-full py-[36px]  flex justify-center items-center border-gray-200">
-                  <div
-                    className="w-full justify-center items-center max-w-[var(--max-container-width)]"
-                    style={containerStyle}
-                  >
-                    <div className="flex gap-3  overflow-x-auto scrollbar-hide mb-6 sm:flex-wrap ">
+              <div className=" w-full py-[36px]  flex justify-center items-center border-gray-200">
+                <div
+                  className="w-full justify-center items-center max-w-[var(--max-container-width)]"
+                  style={containerStyle}
+                >
+                  <div className="flex gap-3  overflow-x-auto scrollbar-hide mb-6 sm:flex-wrap ">
                       {getFilterLabels().map((filter, i) => (
-                        <button
+                      <button
                           key={filter.id || i}
                           onClick={() => handleCategorySelect(filter)}
                           className={`flex-shrink-0 px-[13px] py-[3px] text-[14px] rounded-[6px] border transition ${
                             (filter.id === 'all' && !selectedCategory) || 
                             (selectedCategory && selectedCategory.id === filter.id)
                               ? "bg-[#CDD0D5] text-black border-none"
-                              : "text-[#868C98] hover:bg-gray-100 border-gray-300"
+                            : "text-[#868C98] hover:bg-gray-100 border-gray-300"
                           }`}
-                        >
+                      >
                           {filter.value}
-                        </button>
-                      ))}
-                    </div>
+                      </button>
+                    ))}
                   </div>
                 </div>
+              </div>
               )}
 
               {/* Event cards */}
@@ -791,15 +820,28 @@ const HomePage = () => {
                         <div className="text-gray-500 text-lg mb-2">
                           {searchQuery ? `No events found for "${searchQuery}"` : 
                            selectedCategory ? `No ${selectedCategory.value} events found` : 
+                           selectedLocation ? `No events found in ${selectedLocation.title}` :
                            'No events found'}
                         </div>
-                        {searchQuery && (
-                          <button
-                            onClick={clearSearch}
-                            className="text-[#FF553F] hover:text-[#FF553F]/80 transition-colors"
-                          >
-                            Clear search
-                          </button>
+                        {(searchQuery || selectedLocation) && (
+                          <div className="flex gap-2">
+                            {searchQuery && (
+                              <button
+                                onClick={clearSearch}
+                                className="text-[#FF553F] hover:text-[#FF553F]/80 transition-colors"
+                              >
+                                Clear search
+                              </button>
+                            )}
+                            {selectedLocation && (
+                              <button
+                                onClick={clearLocation}
+                                className="text-[#FF553F] hover:text-[#FF553F]/80 transition-colors"
+                              >
+                                Clear location
+                              </button>
+                    )}
+                  </div>
                         )}
                       </div>
                     )}
@@ -811,60 +853,60 @@ const HomePage = () => {
 
           {/* FEATURED EVENTS SECTION */}
           {!searchQuery && (
-            <section className="flex flex-col items-center   w-full ">
-              <div
-                className="w-full justify-center items-center max-w-[var(--max-container-width)]"
-                style={containerStyle}
-              >
-                <div className="flex w-full py-[36px] justify-between">
-                  <h2 className="text-xl sm:text-2xl font-semibold text-gray-800 ">
-                    Featured Events
-                  </h2>
-                  <Link href="/events" className="flex gap-2 items-center text-[#FF553F] hover:text-[#FF553F]/80 transition-colors">
-                    See All
-                    <span>
-                      <ArrowRight className="w-4 h-4 " />
-                    </span>
-                  </Link>
-                </div>
-                <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 w-full h-full">
+          <section className="flex flex-col items-center   w-full ">
+            <div
+              className="w-full justify-center items-center max-w-[var(--max-container-width)]"
+              style={containerStyle}
+            >
+              <div className="flex w-full py-[36px] justify-between">
+                <h2 className="text-xl sm:text-2xl font-semibold text-gray-800 ">
+                  Featured Events
+                </h2>
+                <Link href="/events" className="flex gap-2 items-center text-[#FF553F] hover:text-[#FF553F]/80 transition-colors">
+                  See All
+                  <span>
+                    <ArrowRight className="w-4 h-4 " />
+                  </span>
+                </Link>
+              </div>
+              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 w-full h-full">
                   {featuredLoading ? (
-                    // Loading skeleton
-                    Array.from({ length: 8 }).map((_, i) => (
-                      <div key={i} className="rounded-2xl overflow-hidden shadow-sm bg-gray-100 animate-pulse">
-                        <div className="w-full h-48 bg-gray-200"></div>
-                        <div className="p-4 space-y-2">
-                          <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-                          <div className="h-3 bg-gray-200 rounded w-1/2"></div>
-                          <div className="h-3 bg-gray-200 rounded w-2/3"></div>
-                          <div className="h-4 bg-gray-200 rounded w-1/3"></div>
-                        </div>
+                  // Loading skeleton
+                  Array.from({ length: 8 }).map((_, i) => (
+                    <div key={i} className="rounded-2xl overflow-hidden shadow-sm bg-gray-100 animate-pulse">
+                      <div className="w-full h-48 bg-gray-200"></div>
+                      <div className="p-4 space-y-2">
+                        <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+                        <div className="h-3 bg-gray-200 rounded w-1/2"></div>
+                        <div className="h-3 bg-gray-200 rounded w-2/3"></div>
+                        <div className="h-4 bg-gray-200 rounded w-1/3"></div>
                       </div>
-                    ))
+                    </div>
+                  ))
                   ) : featuredEvents.length > 0 ? (
                     featuredEvents.map((event, i) => (
-                      <Link key={event._id} href={`/event-page?slug=${event.slug}`}>
-                        <Card
-                          image={getImageUrl(event.banner)}
-                          date={formatEventDate(event.startDate, event.endDate)}
-                          title={event.title}
-                          venue={event.venue}
+                    <Link key={event._id} href={`/event-page?slug=${event.slug}`}>
+                      <Card
+                        image={getImageUrl(event.banner)}
+                        date={formatEventDate(event.startDate, event.endDate)}
+                        title={event.title}
+                        venue={event.venue}
                           price={getEventPricing(event)}
-                          badge={i === 0 ? "Save up to 39%" : ""}
-                          variant="featured"
-                        />
-                      </Link>
-                    ))
+                        badge={i === 0 ? "Save up to 39%" : ""}
+                        variant="featured"
+                      />
+                    </Link>
+                  ))
                   ) : (
                     <div className="col-span-full text-center py-12">
                       <div className="text-gray-500 text-lg mb-2">
                         No featured events found
                       </div>
                     </div>
-                  )}
-                </div>
+                )}
               </div>
-            </section>
+            </div>
+          </section>
           )}
 
           {/* TOP DESTINATIONS SECTION */}
@@ -902,41 +944,49 @@ const HomePage = () => {
                   ref={carouselRef}
                   className="flex gap-4 overflow-x-auto no-scrollbar"
                 >
-                  {topDestinations.map((destination, i) => (
-                    <div
-                      key={i}
-                      className="group relative min-w-[274px] h-[390px] rounded-[30%]  cursor-pointer transition-transform duration-300 hover:translate-x-2 flex-shrink-0"
-                    >
-                      <Link 
-                        href={`/destination/${destination.id}?name=${encodeURIComponent(destination.name)}&image=${encodeURIComponent(destination.img.src)}`}
-                        className="block absolute inset-0"
-                        onClick={() => {
-                          console.log('Navigating to destination:', {
-                            id: destination.id,
-                            name: destination.name,
-                            image: destination.img.src
-                          });
-                        }}
+                  {destinationsLoading ? (
+                    // Loading skeleton
+                    Array.from({ length: 6 }).map((_, i) => (
+                      <div
+                        key={i}
+                        className="group relative min-w-[274px] h-[390px] rounded-[30%] bg-gray-200 animate-pulse flex-shrink-0"
+                      >
+                        <div className="absolute bottom-16 left-0 right-0 text-center">
+                          <div className="h-6 bg-gray-300 rounded w-24 mx-auto"></div>
+                        </div>
+                      </div>
+                    ))
+                  ) : destinations.length > 0 ? (
+                    destinations.map((destination, i) => (
+                      <div
+                        key={destination._id || i}
+                        className="group relative min-w-[274px] h-[390px] rounded-[30%] cursor-pointer transition-transform duration-300 hover:translate-x-2 flex-shrink-0"
+                        onClick={() => handleLocationSelect(destination)}
                       >
                         <div
                           style={{
                             borderRadius: "35%",
-                            backgroundImage: `url(${destination.img.src})`,
+                            backgroundImage: `url(${getDestinationImageUrl(destination.image)})`,
                             backgroundSize: "cover",
                             backgroundPosition: "center",
                             backgroundRepeat: "no-repeat",
                           }}
                           className="absolute inset-0 transition-transform duration-300"
                         />
-                      </Link>
-                      {/* <div className="absolute inset-0  rounded-[40%] bg-gradient-to-b from-transparent to-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300" /> */}
-                      <div className="absolute bottom-16 left-0 right-0 text-center text-white transform translate-y-full  transition-transform duration-300">
-                        <h3 className="text-xl font-semibold">
-                          {destination.name}
-                        </h3>
+                        <div className="absolute bottom-16 left-0 right-0 text-center text-white transform translate-y-full transition-transform duration-300">
+                          <h3 className="text-xl font-semibold">
+                            {destination.title}
+                          </h3>
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="col-span-full text-center py-12">
+                      <div className="text-gray-500 text-lg mb-2">
+                        No destinations found
                       </div>
                     </div>
-                  ))}
+                  )}
                 </div>
                 <div className="absolute left-0 right-0 bottom-0 h-1 bg-gradient-to-r from-transparent via-gray-200 to-transparent opacity-50" />
               </div>
