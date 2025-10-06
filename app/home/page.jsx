@@ -803,7 +803,7 @@ const HomePage = () => {
                       ))
                     ) : events.length > 0 ? (
                       events.map((event, i) => (
-                        <Link key={event._id} href={`/event-page?slug=${event.slug}`}>
+                        <Link key={event._id} href={`/event-details?slug=${event.slug}`}>
                           <Card
                             image={getImageUrl(event.banner)}
                             date={formatEventDate(event.startDate, event.endDate)}
@@ -885,7 +885,7 @@ const HomePage = () => {
                   ))
                   ) : featuredEvents.length > 0 ? (
                     featuredEvents.map((event, i) => (
-                    <Link key={event._id} href={`/event-page?slug=${event.slug}`}>
+                    <Link key={event._id} href={`/event-details?slug=${event.slug}`}>
                       <Card
                         image={getImageUrl(event.banner)}
                         date={formatEventDate(event.startDate, event.endDate)}
