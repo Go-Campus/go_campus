@@ -227,7 +227,7 @@ const EventsPage = () => {
               ) : events.length > 0 ? (
                 <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 w-full h-full">
                   {events.map((event, i) => (
-                    <Link key={event._id} href={`/event-page?slug=${event.slug}`}>
+                    <Link key={event._id} href={`/event-details?slug=${event.slug}`}>
                       <Card
                         image={getImageUrl(event.banner)}
                         date={formatEventDate(event.startDate, event.endDate)}

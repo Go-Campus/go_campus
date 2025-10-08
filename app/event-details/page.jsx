@@ -14,6 +14,13 @@ export default function EventPageNew() {
   const [loading, setLoading] = useState(true);
   const [moreEvents, setMoreEvents] = useState([]);
   const [selectedDate, setSelectedDate] = useState(null);
+  const [speakers, setSpeakers] = useState([]);
+  const [statistics, setStatistics] = useState({
+    sessions: 0,
+    speakers: 0,
+    delegates: 0,
+    stages: 0
+  });
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
     hours: 0,
@@ -90,8 +97,21 @@ export default function EventPageNew() {
         setEvent(ev);
         
         if (ev?._id) {
-          const tkRes = await getData(`/ticket?event=${encodeURIComponent(ev._id)}`);
+          // Fetch all data in parallel
+          const [tkRes, speakersRes, statisticsRes] = await Promise.all([
+            getData(`/ticket?event=${encodeURIComponent(ev._id)}`),
+            getData(`/speakers?event=${encodeURIComponent(ev._id)}`),
+            getData(`/dashboard?event=${encodeURIComponent(ev._id)}`)
+          ]);
+          
           setTickets(tkRes?.response || []);
+          setSpeakers(speakersRes?.response || []);
+          setStatistics(statisticsRes?.response || {
+            sessions: 0,
+            speakers: 0,
+            delegates: 0,
+            stages: 0
+          });
 
           // Fetch more events from the same franchise (organizer)
           const franchise = tkRes?.response?.[0]?.event?.franchise || tkRes?.response?.[0]?.event?.franchise?._id || null;
@@ -105,6 +125,13 @@ export default function EventPageNew() {
         } else {
           setTickets([]);
           setMoreEvents([]);
+          setSpeakers([]);
+          setStatistics({
+            sessions: 0,
+            speakers: 0,
+            delegates: 0,
+            stages: 0
+          });
         }
       } catch (e) {
         console.error('Failed to load event details', e);
@@ -224,19 +251,19 @@ export default function EventPageNew() {
           {/* Statistics */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mt-16">
             <div className="text-center">
-              <div className="text-4xl font-bold text-black mb-2">20+</div>
+              <div className="text-4xl font-bold text-black mb-2">{statistics.sessions}+</div>
               <div className="text-gray-600">Sessions</div>
             </div>
             <div className="text-center">
-              <div className="text-4xl font-bold text-black mb-2">50+</div>
+              <div className="text-4xl font-bold text-black mb-2">{statistics.speakers}+</div>
               <div className="text-gray-600">Guests</div>
             </div>
             <div className="text-center">
-              <div className="text-4xl font-bold text-black mb-2">300+</div>
+              <div className="text-4xl font-bold text-black mb-2">{statistics.delegates}+</div>
               <div className="text-gray-600">Delegates</div>
             </div>
             <div className="text-center">
-              <div className="text-4xl font-bold text-black mb-2">03+</div>
+              <div className="text-4xl font-bold text-black mb-2">{statistics.stages}+</div>
               <div className="text-gray-600">Stages</div>
             </div>
           </div>
@@ -321,29 +348,42 @@ export default function EventPageNew() {
         <div className="max-w-6xl mx-auto">
           <h2 className="text-5xl font-bold mb-12">Guests</h2>
           
-          <div className="flex space-x-6 overflow-x-auto pb-4 no-scrollbar">
-            {[
-              { name: "Antony Josse", role: "DJ Artist", image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" },
-              { name: "Micayel Ali", role: "Pop Singer", image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" },
-              { name: "Beelie Arena", role: "Pop Singer", image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" },
-              { name: "Arena Jelli", role: "Pop Singer", image: "https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" }
-            ].map((guest, index) => (
-              <div key={index} className="flex-shrink-0 w-80 bg-white rounded-t-2xl overflow-hidden">
-                <div className="h-64 relative">
-                  <Image
-                    src={guest.image}
-                    alt={guest.name}
-                    fill
-                    className="object-cover"
-                  />
+          {loading ? (
+            <div className="flex space-x-6 overflow-x-auto pb-4 no-scrollbar">
+              {[1, 2, 3, 4].map((item) => (
+                <div key={item} className="flex-shrink-0 w-80 bg-white rounded-t-2xl overflow-hidden animate-pulse">
+                  <div className="h-64 bg-gray-300"></div>
+                  <div className="p-6 bg-white">
+                    <div className="h-6 bg-gray-300 rounded mb-2"></div>
+                    <div className="h-4 bg-gray-300 rounded w-2/3"></div>
+                  </div>
                 </div>
-                <div className="p-6 bg-white text-black">
-                  <h3 className="text-xl font-bold mb-1">{guest.name}</h3>
-                  <p className="text-gray-500 text-sm">{guest.role}</p>
+              ))}
+            </div>
+          ) : speakers.length > 0 ? (
+            <div className="flex space-x-6 overflow-x-auto pb-4 no-scrollbar">
+              {speakers.map((speaker, index) => (
+                <div key={speaker._id} className="flex-shrink-0 w-80 bg-white rounded-t-2xl overflow-hidden">
+                  <div className="h-64 relative">
+                    <Image
+                      src={getImageUrl(speaker.photo)}
+                      alt={speaker.name}
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                  <div className="p-6 bg-white text-black">
+                    <h3 className="text-xl font-bold mb-1">{speaker.name}</h3>
+                    <p className="text-gray-500 text-sm">{speaker.designation || speaker.company || 'Speaker'}</p>
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center text-gray-400">
+              <p>No guests available at the moment.</p>
+            </div>
+          )}
           
           <div className="flex justify-center space-x-2 mt-8">
             <div className="w-3 h-3 bg-orange-500 rounded-full"></div>
