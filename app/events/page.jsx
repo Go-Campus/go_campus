@@ -1,7 +1,16 @@
 "use client";
 import Card from "../../components/destinationCard/index";
 import React from "react";
-import { CardImage } from "@/public";
+import {
+  CardImage,
+  TechnologyIcon,
+  CareerIcon,
+  entertaimentIcon,
+  SportIcon,
+  CultureIcon,
+  WorkshopesIcon,
+  AcadamicIcon,
+} from "@/public";
 import Image from "next/image";
 import {
   ChevronLeft,
@@ -20,24 +29,18 @@ const EventsPage = () => {
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(0);
   const [totalCount, setTotalCount] = useState(0);
-  const [selectedCategory, setSelectedCategory] = useState("All");
-  const [searchQuery, setSearchQuery] = useState("");
+  const [categories, setCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [categoriesLoading, setCategoriesLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [isSearching, setIsSearching] = useState(false);
+  const [destinations, setDestinations] = useState([]);
+  const [destinationsLoading, setDestinationsLoading] = useState(true);
+  const [selectedLocation, setSelectedLocation] = useState(null);
 
   const containerStyle = {
     "--max-container-width": "1400px",
   };
-
-  const filterLabels = [
-    "All",
-    "For You",
-    "Online",
-    "Today",
-    "This Week",
-    "Academic",
-    "Free",
-    "Food & Drink",
-    "Charity",
-  ];
 
   // Format date function
   const formatEventDate = (startDate, endDate) => {
@@ -78,36 +81,153 @@ const EventsPage = () => {
     return `${cdnUrl}/${imagePath}`;
   };
 
-  // Fetch events data
-  const fetchEvents = async (skip = 0, category = "All") => {
-    try {
-      setLoading(true);
-      let url = `/event?skip=${skip}&limit=50`;
-      
-      // Add category filter if not "All"
-      if (category !== "All") {
-        url += `&category=${encodeURIComponent(category)}`;
+  // Get event pricing display
+  const getEventPricing = (event) => {
+    if (!event) return 'Contact for price';
+    
+    // If multiple ticket pricing is enabled
+    if (event.isMultiTicketPrizing) {
+      if (event.ticketStartingPrice && event.ticketEndingPrice) {
+        return `₹${event.ticketStartingPrice} - ₹${event.ticketEndingPrice}`;
+      } else if (event.ticketStartingPrice) {
+        return `₹${event.ticketStartingPrice}+`;
+      } else if (event.ticketEndingPrice) {
+        return `₹${event.ticketEndingPrice}`;
       }
-
-      const response = await getData(url);
-      if (response.success && response.response) {
-        setEvents(response.response);
-        setTotalCount(response.totalCount || response.count || 0);
-      }
-    } catch (error) {
-      console.error('Error fetching events:', error);
-    } finally {
-      setLoading(false);
     }
+    
+    // Single ticket pricing
+    if (event.ticketPrizing && event.ticketPrizing > 0) {
+      return `₹${event.ticketPrizing}`;
+    }
+    
+    // Fallback to event.price if available
+    if (event.price) {
+      return `₹${event.price}`;
+    }
+    
+    return 'Free';
   };
 
+  // Fetch categories data
   useEffect(() => {
-    fetchEvents(currentPage * 50, selectedCategory);
-  }, [currentPage, selectedCategory]);
+    const fetchCategories = async () => {
+      try {
+        setCategoriesLoading(true);
+        const response = await getData('/event-category/select');
+        if (response && Array.isArray(response)) {
+          // Map categories with icons
+          const categoryIconMap = {
+            'Academic': AcadamicIcon,
+            'Technology': TechnologyIcon,
+            'Entertainment': entertaimentIcon,
+            'Career': CareerIcon,
+            'Sports': SportIcon,
+            'Culture': CultureIcon,
+            'Workshops': WorkshopesIcon,
+          };
+          
+          const mappedCategories = response.map(category => ({
+            ...category,
+            icon: categoryIconMap[category.value] || TechnologyIcon // Default icon
+          }));
+          
+          setCategories(mappedCategories);
+        }
+      } catch (error) {
+        console.error('Error fetching categories:', error);
+      } finally {
+        setCategoriesLoading(false);
+      }
+    };
 
-  const handleCategoryChange = (category) => {
-    setSelectedCategory(category);
+    fetchCategories();
+  }, []);
+
+  // Fetch destinations data
+  useEffect(() => {
+    const fetchDestinations = async () => {
+      try {
+        setDestinationsLoading(true);
+        const response = await getData('/destination/top');
+        if (response && Array.isArray(response)) {
+          setDestinations(response);
+        }
+      } catch (error) {
+        console.error('Error fetching destinations:', error);
+      } finally {
+        setDestinationsLoading(false);
+      }
+    };
+
+    fetchDestinations();
+  }, []);
+
+  // Fetch events data
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        setLoading(true);
+        let url = `/event?skip=${currentPage * 50}&limit=50`;
+        if (selectedCategory) {
+          url += `&eventCategory=${selectedCategory.id}`;
+        }
+        if (searchQuery.trim()) {
+          url += `&searchkey=${encodeURIComponent(searchQuery.trim())}`;
+        }
+        if (selectedLocation) {
+          url += `&nearbyCity=${selectedLocation._id}`;
+        }
+        const response = await getData(url);
+        if (response.success && response.response) {
+          setEvents(response.response);
+          setTotalCount(response.totalCount || response.count || 0);
+        }
+      } catch (error) {
+        console.error('Error fetching events:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchEvents();
+  }, [currentPage, selectedCategory, searchQuery, selectedLocation]);
+
+  // Category selection handler
+  const handleCategorySelect = (category) => {
+    if (category.id === 'all') {
+      setSelectedCategory(null);
+    } else {
+      setSelectedCategory(category);
+    }
     setCurrentPage(0); // Reset to first page when changing category
+  };
+
+  // Search handler
+  const handleSearch = (e) => {
+    e.preventDefault();
+    setIsSearching(true);
+    setCurrentPage(0); // Reset to first page when searching
+    // The useEffect will handle the actual search
+  };
+
+  // Clear search
+  const clearSearch = () => {
+    setSearchQuery('');
+    setIsSearching(false);
+    setCurrentPage(0);
+  };
+
+  // Location selection handler
+  const handleLocationSelect = (location) => {
+    setSelectedLocation(location);
+    setCurrentPage(0);
+  };
+
+  // Clear location filter
+  const clearLocation = () => {
+    setSelectedLocation(null);
+    setCurrentPage(0);
   };
 
   const handleNextPage = () => {
@@ -122,10 +242,10 @@ const EventsPage = () => {
     }
   };
 
-  const handleSearch = (e) => {
-    e.preventDefault();
-    // Implement search functionality
-    console.log('Search query:', searchQuery);
+  // Create filter labels with "All" option plus categories
+  const getFilterLabels = () => {
+    const allOption = { id: 'all', value: 'All', isSpecial: true };
+    return [allOption, ...categories];
   };
 
   return (
@@ -136,7 +256,11 @@ const EventsPage = () => {
             className="w-full max-w-[var(--max-container-width)]"
             style={containerStyle}
           >
-            <Navbar />
+            <Navbar 
+              searchQuery={searchQuery}
+              setSearchQuery={setSearchQuery}
+              onSearch={handleSearch}
+            />
           </div>
         </div>
 
@@ -148,31 +272,11 @@ const EventsPage = () => {
           <div className="w-full border-b border-t flex justify-center items-center border-gray-200">
             <div className="w-full justify-center items-center max-w-[var(--max-container-width)]">
               <h1 className="text-2xl sm:text-3xl font-semibold text-gray-800 py-[28px] text-center">
-                All Events
+                {searchQuery ? `Search Results for "${searchQuery}"` : 
+                 selectedCategory ? `${selectedCategory.value} Events` : 
+                 selectedLocation ? `Events in ${selectedLocation.title}` :
+                 'All Events'}
               </h1>
-            </div>
-          </div>
-        </section>
-
-        {/* SEARCH SECTION */}
-        <section
-          className="w-full max-w-[var(--max-container-width)]"
-          style={containerStyle}
-        >
-          <div className="w-full py-[36px] flex justify-center items-center">
-            <div className="w-full justify-center items-center max-w-[var(--max-container-width)]">
-              <form onSubmit={handleSearch} className="relative max-w-md mx-auto">
-                <div className="relative">
-                  <input
-                    type="text"
-                    placeholder="Search events..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full px-4 py-3 pl-12 pr-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FF553F] focus:border-transparent"
-                  />
-                  <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                </div>
-              </form>
             </div>
           </div>
         </section>
@@ -184,21 +288,34 @@ const EventsPage = () => {
         >
           <div className="w-full py-[36px] flex justify-center items-center border-gray-200">
             <div className="w-full justify-center items-center max-w-[var(--max-container-width)]">
-              <div className="flex gap-3 overflow-x-auto scrollbar-hide mb-6 sm:flex-wrap justify-center">
-                {filterLabels.map((label, i) => (
-                  <button
-                    key={i}
-                    onClick={() => handleCategoryChange(label)}
-                    className={`flex-shrink-0 px-[13px] py-[3px] text-[14px] rounded-[6px] border transition ${
-                      selectedCategory === label
-                        ? "bg-[#CDD0D5] text-black border-none"
-                        : "text-[#868C98] hover:bg-gray-100 border-gray-300"
-                    }`}
-                  >
-                    {label}
-                  </button>
-                ))}
-              </div>
+              {!searchQuery && (
+                <div className="flex gap-3 overflow-x-auto scrollbar-hide mb-6 sm:flex-wrap justify-center">
+                  {categoriesLoading ? (
+                    // Loading skeleton for categories
+                    Array.from({ length: 7 }).map((_, i) => (
+                      <div
+                        key={i}
+                        className="flex-shrink-0 px-[13px] py-[3px] text-[14px] rounded-[6px] border border-gray-300 bg-gray-200 animate-pulse h-8 w-20"
+                      />
+                    ))
+                  ) : (
+                    getFilterLabels().map((filter, i) => (
+                      <button
+                        key={filter.id || i}
+                        onClick={() => handleCategorySelect(filter)}
+                        className={`flex-shrink-0 px-[13px] py-[3px] text-[14px] rounded-[6px] border transition ${
+                          (filter.id === 'all' && !selectedCategory) || 
+                          (selectedCategory && selectedCategory.id === filter.id)
+                            ? "bg-[#CDD0D5] text-black border-none"
+                            : "text-[#868C98] hover:bg-gray-100 border-gray-300"
+                        }`}
+                      >
+                        {filter.value}
+                      </button>
+                    ))
+                  )}
+                </div>
+              )}
             </div>
           </div>
         </section>
@@ -233,7 +350,7 @@ const EventsPage = () => {
                         date={formatEventDate(event.startDate, event.endDate)}
                         title={event.title}
                         venue={event.venue}
-                        price={event.ticketType === 'free' ? 'Free' : '499'}
+                        price={getEventPricing(event)}
                         badge={i === 0 ? "Save up to 39%" : ""}
                         variant="latest"
                       />
@@ -241,8 +358,33 @@ const EventsPage = () => {
                   ))}
                 </div>
               ) : (
-                <div className="text-center py-12">
-                  <p className="text-gray-500 text-lg">No events found for the selected category.</p>
+                <div className="col-span-full text-center py-12">
+                  <div className="text-gray-500 text-lg mb-2">
+                    {searchQuery ? `No events found for "${searchQuery}"` : 
+                     selectedCategory ? `No ${selectedCategory.value} events found` : 
+                     selectedLocation ? `No events found in ${selectedLocation.title}` :
+                     'No events found'}
+                  </div>
+                  {(searchQuery || selectedLocation) && (
+                    <div className="flex gap-2 justify-center">
+                      {searchQuery && (
+                        <button
+                          onClick={clearSearch}
+                          className="text-[#FF553F] hover:text-[#FF553F]/80 transition-colors"
+                        >
+                          Clear search
+                        </button>
+                      )}
+                      {selectedLocation && (
+                        <button
+                          onClick={clearLocation}
+                          className="text-[#FF553F] hover:text-[#FF553F]/80 transition-colors"
+                        >
+                          Clear location
+                        </button>
+                      )}
+                    </div>
+                  )}
                 </div>
               )}
             </div>
