@@ -1,0 +1,1089 @@
+"use client";
+import Card from "../../components/destinationCard/index";
+import React from "react";
+import {
+  CardImage,
+  PartyImage,
+  TechnologyIcon,
+  CareerIcon,
+  entertaimentIcon,
+  SportIcon,
+  CultureIcon,
+  WorkshopesIcon,
+  AcadamicIcon,
+  PlaceImage,
+  UkImage,
+  DubaiImage,
+  ProfleColorIcon,
+  LockColorIcon,
+  SearchColorIcon,
+  TicketFooter,
+  TicketFooterMobile,
+  BarcodeImagemoblie,
+} from "@/public";
+import Image from "next/image";
+import {
+  ChevronLeft,
+  ChevronRight,
+  Search,
+  MoveUpRight,
+  ArrowUpRight,
+  ArrowRight,
+} from "lucide-react";
+import Navbar from "@/components/navbar";
+import Footer from "@/components/footer";
+import Link from "next/link";
+import { useState, useEffect } from "react";
+import { getData } from "@/utils/api";
+
+const HomePageClient = () => {
+  const [isMobile, setIsMobile] = useState(false);
+  const [events, setEvents] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [categories, setCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [categoriesLoading, setCategoriesLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [isSearching, setIsSearching] = useState(false);
+  const [banners, setBanners] = useState([]);
+  const [bannersLoading, setBannersLoading] = useState(true);
+  const [currentBannerIndex, setCurrentBannerIndex] = useState(0);
+  const [featuredEvents, setFeaturedEvents] = useState([]);
+  const [featuredLoading, setFeaturedLoading] = useState(true);
+  const [destinations, setDestinations] = useState([]);
+  const [destinationsLoading, setDestinationsLoading] = useState(true);
+  const [selectedLocation, setSelectedLocation] = useState(null);
+
+  useEffect(() => {
+    // Function to check if width is less than or equal to 425px
+    const checkMobile = () => {
+      console.log("Checking mobile width");
+      setIsMobile(window.innerWidth <= 425);
+    };
+
+    // Check on initial load
+    checkMobile();
+
+    // Add event listener for window resize
+    window.addEventListener('resize', checkMobile);
+
+    // Cleanup
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // Fetch banners data
+  useEffect(() => {
+    const fetchBanners = async () => {
+      try {
+        setBannersLoading(true);
+        const response = await getData('/banner?limit=10');
+        if (response.success && response.response) {
+          setBanners(response.response);
+        }
+      } catch (error) {
+        console.error('Error fetching banners:', error);
+      } finally {
+        setBannersLoading(false);
+      }
+    };
+
+    fetchBanners();
+  }, []);
+
+  // Auto-slide banners
+  useEffect(() => {
+    if (banners.length <= 1) return;
+
+    const interval = setInterval(() => {
+      setCurrentBannerIndex((prevIndex) => 
+        prevIndex === banners.length - 1 ? 0 : prevIndex + 1
+      );
+    }, 4000);
+
+    return () => clearInterval(interval);
+  }, [banners.length]);
+
+  // Fetch categories data
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        setCategoriesLoading(true);
+        const response = await getData('/event-category/select');
+        if (response && Array.isArray(response)) {
+          // Map categories with icons
+          const categoryIconMap = {
+            'Academic': AcadamicIcon,
+            'Technology': TechnologyIcon,
+            'Entertainment': entertaimentIcon,
+            'Career': CareerIcon,
+            'Sports': SportIcon,
+            'Culture': CultureIcon,
+            'Workshops': WorkshopesIcon,
+          };
+          
+          const mappedCategories = response.map(category => ({
+            ...category,
+            icon: categoryIconMap[category.value] || TechnologyIcon // Default icon
+          }));
+          
+          setCategories(mappedCategories);
+        }
+      } catch (error) {
+        console.error('Error fetching categories:', error);
+      } finally {
+        setCategoriesLoading(false);
+      }
+    };
+
+    fetchCategories();
+  }, []);
+
+  // Fetch events data
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        setLoading(true);
+        let url = '/event?skip=0&limit=8';
+        if (selectedCategory) {
+          url += `&eventCategory=${selectedCategory.id}`;
+        }
+        if (searchQuery.trim()) {
+          url += `&searchkey=${encodeURIComponent(searchQuery.trim())}`;
+        }
+        if (selectedLocation) {
+          url += `&nearbyCity=${selectedLocation._id}`;
+        }
+        const response = await getData(url);
+        if (response.success && response.response) {
+          setEvents(response.response);
+        }
+      } catch (error) {
+        console.error('Error fetching events:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchEvents();
+  }, [selectedCategory, searchQuery, selectedLocation]); // Re-fetch when category, search, or location changes
+
+  // Fetch featured events data
+  useEffect(() => {
+    const fetchFeaturedEvents = async () => {
+      try {
+        setFeaturedLoading(true);
+        const response = await getData('/event?skip=0&limit=8&isFeatured=true');
+        if (response.success && response.response) {
+          setFeaturedEvents(response.response);
+        }
+      } catch (error) {
+        console.error('Error fetching featured events:', error);
+      } finally {
+        setFeaturedLoading(false);
+      }
+    };
+
+    fetchFeaturedEvents();
+  }, []); // Fetch once on component mount
+
+  // Fetch destinations data
+  useEffect(() => {
+    const fetchDestinations = async () => {
+      try {
+        setDestinationsLoading(true);
+        const response = await getData('/destination/top');
+        if (response && Array.isArray(response)) {
+          setDestinations(response);
+        }
+      } catch (error) {
+        console.error('Error fetching destinations:', error);
+      } finally {
+        setDestinationsLoading(false);
+      }
+    };
+
+    fetchDestinations();
+  }, []); // Fetch once on component mount
+
+  // Format date function
+  const formatEventDate = (startDate, endDate) => {
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    
+    const startDay = start.getDate();
+    const startMonth = start.toLocaleDateString('en-US', { month: 'short' });
+    const startYear = start.getFullYear();
+    const startTime = start.toLocaleTimeString('en-US', { 
+      hour: '2-digit', 
+      minute: '2-digit',
+      hour12: true 
+    });
+    
+    const endDay = end.getDate();
+    const endMonth = end.toLocaleDateString('en-US', { month: 'short' });
+    const endYear = end.getFullYear();
+    
+    if (startYear === endYear && startMonth === endMonth && startDay === endDay) {
+      return `${startDay} ${startMonth} ${startYear} | ${startTime}`;
+    } else {
+      return `${startDay} ${startMonth} – ${endDay} ${endMonth} | ${startTime}`;
+    }
+  };
+
+  // Get image URL with CDN
+  const getImageUrl = (imagePath) => {
+    if (!imagePath) return CardImage;
+    
+    // If it's already a full URL, return as is
+    if (imagePath.startsWith('http')) {
+      return imagePath;
+    }
+    
+    // Use CDN URL from environment or fallback to API URL
+    const cdnUrl = process.env.NEXT_PUBLIC_CDN_URL ;
+    return `${cdnUrl}/${imagePath}`;
+  };
+
+  // Get event pricing display
+  const getEventPricing = (event) => {
+    if (!event) return 'Contact for price';
+    
+    // If it's a free event
+    // if (event.ticketType === 'free') {
+    //   return 'Free';
+    // }
+    
+    // If multiple ticket pricing is enabled
+    if (event.isMultiTicketPrizing) {
+      if (event.ticketStartingPrice && event.ticketEndingPrice) {
+        return `₹${event.ticketStartingPrice} - ₹${event.ticketEndingPrice}`;
+      } else if (event.ticketStartingPrice) {
+        return `₹${event.ticketStartingPrice}+`;
+      } else if (event.ticketEndingPrice) {
+        return `₹${event.ticketEndingPrice}`;
+      }
+    }
+    
+    // Single ticket pricing
+    if (event.ticketPrizing && event.ticketPrizing > 0) {
+      return `₹${event.ticketPrizing}`;
+    }
+    
+    // Fallback to event.price if available
+    if (event.price) {
+      return `₹${event.price}`;
+    }
+    
+    return 'Free';
+  };
+  // State for carousel scroll position
+
+  // widthsetup
+  // Define a CSS variable for max-width that can be used throughout the component
+  const containerStyle = {
+    "--max-container-width": "1400px", // Change this value to update all container widths
+  };
+
+  const carouselRef = React.useRef(null);
+
+  // Function to handle carousel navigation
+  const handleCarouselScroll = (direction) => {
+    console.log(`Scrolling carousel ${direction}`);
+
+    if (!carouselRef.current) return;
+
+    const scrollAmount = 300; // Adjust this value based on your needs
+    const currentScroll = carouselRef.current.scrollLeft;
+
+    carouselRef.current.scrollTo({
+      left:
+        direction === "left"
+          ? currentScroll - scrollAmount
+          : currentScroll + scrollAmount,
+      behavior: "smooth",
+    });
+  };
+
+  // Get banner image URL with CDN
+  const getBannerImageUrl = (imagePath) => {
+    if (!imagePath) return PartyImage; // Fallback to default image
+    
+    // If it's already a full URL, return as is
+    if (imagePath.startsWith('http')) {
+      return imagePath;
+    }
+    
+    // Use CDN URL from environment
+    const cdnUrl = process.env.NEXT_PUBLIC_CDN_URL || 'https://event-manager.syd1.cdn.digitaloceanspaces.com';
+    return `${cdnUrl}/${imagePath}`;
+  };
+  // Category selection handler
+  const handleCategorySelect = (category) => {
+    if (category.id === 'all') {
+      setSelectedCategory(null);
+    } else {
+      setSelectedCategory(category);
+    }
+  };
+
+  // Search handler
+  const handleSearch = (e) => {
+    e.preventDefault();
+    setIsSearching(true);
+    // The useEffect will handle the actual search
+  };
+
+  // Clear search
+  const clearSearch = () => {
+    setSearchQuery('');
+    setIsSearching(false);
+  };
+
+  // Location selection handler
+  const handleLocationSelect = (location) => {
+    setSelectedLocation(location);
+  };
+
+  // Clear location filter
+  const clearLocation = () => {
+    setSelectedLocation(null);
+  };
+
+  const featuredTitles = [
+    "Clay Sculpting",
+    "The Universe in a Pot",
+    "Zoreko",
+    "Music Quiz",
+    "Radhika Das India Tour 2025 | Delhi",
+    "Delhi Beatbox Championship",
+    "Weekend Comedy Night",
+    "Worlds of Wonder (WOW) – Water Park",
+  ];
+
+  const featuredVenues = [
+    "Venue to be announced, Delhi",
+    "Nojoto Creator Hub, Delhi",
+    "Venue to be announced, Delhi",
+    "Venue to be announced, Delhi",
+    "Venue to be announced, Delhi",
+    "IndiOwl – Platform 13, Delhi",
+    "Nojoto Creator Hub, Delhi",
+    "Worlds of Wonder, Noida",
+  ];
+
+  const featuredPrices = [
+    "2499",
+    "499",
+    "2499",
+    "2499",
+    "2499",
+    "5699",
+    "499",
+    "5317",
+  ];
+
+  const howItWorksItems = [
+    {
+      icon: SearchColorIcon,
+      heading: "Discover Events",
+      text: "Browse through hundreds of campus events or search for specific interests",
+      bgColor: "bg-green-50",
+    },
+    {
+      icon: LockColorIcon,
+      heading: "Register & Save",
+      text: "Sign up for events with just a click and save them to your personal calendar",
+      bgColor: "bg-red-50",
+    },
+    {
+      icon: ProfleColorIcon,
+      heading: "Attend & Connect",
+      text: "Join the events, meet new people, and make the most of your campus experiences",
+      bgColor: "bg-purple-50",
+    },
+  ];
+
+  // Create filter labels with "All" option plus categories
+  const getFilterLabels = () => {
+    const allOption = { id: 'all', value: 'All', isSpecial: true };
+    return [allOption, ...categories];
+  };
+
+  // Get destination image URL with CDN
+  const getDestinationImageUrl = (imagePath) => {
+    if (!imagePath) return CardImage; // Fallback to default image
+    
+    // If it's already a full URL, return as is
+    if (imagePath.startsWith('http')) {
+      return imagePath;
+    }
+    
+    // Use CDN URL from environment
+    const cdnUrl = process.env.NEXT_PUBLIC_CDN_URL || 'https://event-manager.syd1.cdn.digitaloceanspaces.com';
+    return `${cdnUrl}/${imagePath}`;
+  };
+
+
+  return (
+    <div className=" bg-white w-full flex flex-col gap-[98px] items-center justify-center">
+      <div className="w-full  px-5 flex gap-5 flex-col items-center justify-center">
+        <div className="w-full flex justify-center items-center">
+          <div
+            className="w-full max-w-[var(--max-container-width)]"
+            style={containerStyle}
+          >
+            <Navbar 
+              searchQuery={searchQuery}
+              setSearchQuery={setSearchQuery}
+              onSearch={handleSearch}
+            />
+          </div>
+        </div>
+
+        {/* HERO SECTION */}
+        <section
+          className="w-full max-w-[var(--max-container-width)]"
+          style={containerStyle}
+        >
+          {bannersLoading ? (
+            // Loading skeleton
+            <div className="w-full my-6">
+              <div className="hidden lg:flex relative">
+                <div className="relative flex-1 h-[400px] rounded-tr-[38px] rounded-br-[38px] overflow-hidden bg-gray-200 animate-pulse">
+                  <div className="absolute inset-0 z-20 flex items-center px-8 py-16">
+                    <div className="max-w-lg space-y-4">
+                      <div className="h-12 bg-gray-300 rounded w-3/4"></div>
+                      <div className="h-6 bg-gray-300 rounded w-1/2"></div>
+                      <div className="h-10 bg-gray-300 rounded w-32"></div>
+                    </div>
+                  </div>
+                </div>
+                <div className="relative w-[130px] h-[400px] bg-gray-200 rounded-tl-[36px] rounded-bl-[36px] animate-pulse"></div>
+              </div>
+              <div className="lg:hidden flex flex-col rounded-[36px] overflow-hidden">
+                <div className="relative h-[400px] bg-gray-200 animate-pulse"></div>
+                <div className="flex w-full justify-center items-center py-7 bg-gray-200 animate-pulse">
+                  <div className="w-56 h-16 bg-gray-300 rounded"></div>
+                </div>
+              </div>
+            </div>
+          ) : banners.length > 0 ? (
+            <div className="w-full my-6">
+              {/* Desktop Layout */}
+              <div className="hidden lg:flex relative">
+                {/* Left: Image + Content */}
+                <div className="relative flex-1 h-[400px] rounded-tr-[38px] rounded-br-[38px] overflow-hidden">
+                  <div className="absolute inset-0 z-10 bg-gradient-to-r from-black/70 via-black/30 to-transparent" />
+                  <Image
+                    src={getBannerImageUrl(banners[currentBannerIndex]?.image)}
+                    alt="Hero"
+                    width={800}
+                    height={400}
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 z-20 flex items-center px-8 py-16">
+                    <div className="max-w-lg">
+                      <h1 className="text-5xl font-bold text-white mb-4 leading-tight">
+                        {banners[currentBannerIndex]?.title ? (
+                          <div>{banners[currentBannerIndex].title}</div>
+                        ) : (
+                          <>
+                            <div>From Pop</div>
+                            <div>Ballads to Emo</div>
+                            <div>Encores</div>
+                          </>
+                        )}
+                      </h1>
+                      <p className="text-gray-300 text-lg mb-6">
+                        {banners[currentBannerIndex]?.description || "Experience the magic as pop ballads transform into emo encores, showcasing."}
+                      </p>
+                      <button 
+                        className="bg-white text-black px-6 py-3 rounded-full font-medium hover:bg-gray-100 transition-colors"
+                        onClick={() => {
+                          if (banners[currentBannerIndex]?.buttonLink) {
+                            window.open(banners[currentBannerIndex].buttonLink, '_blank');
+                          }
+                        }}
+                      >
+                        {banners[currentBannerIndex]?.buttonText || "Get Into Music"}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Right: Barcode */}
+                <div className="relative w-[130px] h-[400px] bg-[#E9E6E6] rounded-tl-[36px] z-10  rounded-bl-[36px]">
+                  <div className="absolute top-0 left-[-6px] h-full flex flex-col justify-between py-3 z-20">
+                    {Array.from({ length: 28 }).map((_, i) => (
+                      <div
+                        key={i}
+                        className="w-2 h-2 bg-white rounded-full my-[2px]"
+                      />
+                    ))}
+                  </div>
+                  <div className="absolute inset-0 flex justify-center items-center z-30">
+                    <Image
+                      width={50}
+                      height={200}
+                      src="/images/barcode.svg"
+                      alt="Barcode"
+                      className="w-[50px] h-[200px] object-contain"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Mobile Layout */}
+              <div className=" gap-1 lg:hidden  flex flex-col  rounded-[36px] overflow-hidden ">
+                <div className="relative h-[400px]">
+                  <Image
+                    width={400}
+                    height={400}
+                    src={getBannerImageUrl(banners[currentBannerIndex]?.image)}
+                    alt="Hero"
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent z-10" />
+                  <div className="absolute inset-0 flex flex-col justify-end px-5 pb-6 z-20">
+                    <h1 className="text-3xl font-bold text-white leading-snug mb-2">
+                      {banners[currentBannerIndex]?.title ? (
+                        <div>{banners[currentBannerIndex].title}</div>
+                      ) : (
+                        <>
+                          <div>From Pop</div>
+                          <div>Ballads to Emo</div>
+                          <div>Encores</div>
+                        </>
+                      )}
+                    </h1>
+                    <p className="text-white text-sm mb-4">
+                      {banners[currentBannerIndex]?.description || "Experience the magic as pop ballads transform into emo encores, showcasing."}
+                    </p>
+                    <button 
+                      className="bg-white text-black text-sm font-semibold px-4 py-2 rounded-full w-fit"
+                      onClick={() => {
+                        if (banners[currentBannerIndex]?.buttonLink) {
+                          window.open(banners[currentBannerIndex].buttonLink, '_blank');
+                        }
+                      }}
+                    >
+                      {banners[currentBannerIndex]?.buttonText || "Get Into Music"}
+                    </button>
+                  </div>
+                </div>
+
+                <div className="  lg:block hidden  relative h-[20px] bg-white">
+                  <div className="absolute  lg:block hidden inset-0 border-t border-dotted border-gray-300" />
+                  <div className="absolute -left-4 top-1/2 lg:block hidden -translate-y-1/2 w-8 h-8 bg-white rounded-full border border-gray-200" />
+                  <div className="absolute -right-4 top-1/2 -translate-y-1/2  lg:block hidden w-8 h-8 bg-white rounded-full border border-gray-200" />
+                </div>
+
+                {/* Mobile Barcode */}
+                <div
+                style={{
+                  backgroundImage: `url(${TicketFooterMobile.src})`,
+                  backgroundSize: isMobile ? "contain" : "cover",
+                  backgroundPosition: "center",
+                  backgroundRepeat: "no-repeat",
+                }}
+                className="flex w-full xs:object-contain sm:object-contain md:object-cover justify-center items-center py-7 lg:hidden">
+                  <Image
+                    width={140}
+                    height={60}
+                    src={BarcodeImagemoblie}
+                    alt="Barcodfgde"
+                    className="w-56 object-contain"
+                  />
+                </div>
+              </div>
+            </div>
+          ) : (
+            // Fallback when no banners
+            <div className="w-full my-6">
+              <div className="hidden lg:flex relative">
+                <div className="relative flex-1 h-[400px] rounded-tr-[38px] rounded-br-[38px] overflow-hidden">
+                  <div className="absolute inset-0 z-10 bg-gradient-to-r from-black/70 via-black/30 to-transparent" />
+                  <Image
+                    src={PartyImage}
+                    alt="Hero"
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 z-20 flex items-center px-8 py-16">
+                    <div className="max-w-lg">
+                      <h1 className="text-5xl font-bold text-white mb-4 leading-tight">
+                        <div>From Pop</div>
+                        <div>Ballads to Emo</div>
+                        <div>Encores</div>
+                      </h1>
+                      <p className="text-gray-300 text-lg mb-6">
+                        Experience the magic as pop ballads transform into emo encores, showcasing.
+                      </p>
+                      <button className="bg-white text-black px-6 py-3 rounded-full font-medium hover:bg-gray-100 transition-colors">
+                        Get Into Music
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div className="relative w-[130px] h-[400px] bg-[#E9E6E6] rounded-tl-[36px] z-10  rounded-bl-[36px]">
+                  <div className="absolute top-0 left-[-6px] h-full flex flex-col justify-between py-3 z-20">
+                    {Array.from({ length: 28 }).map((_, i) => (
+                      <div
+                        key={i}
+                        className="w-2 h-2 bg-white rounded-full my-[2px]"
+                      />
+                    ))}
+                  </div>
+                  <div className="absolute inset-0 flex justify-center items-center z-30">
+                    <Image
+                      width={50}
+                      height={200}
+                      src="/images/barcode.svg"
+                      alt="Barcode"
+                      className="w-[50px] h-[200px] object-contain"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className=" gap-1 lg:hidden  flex flex-col  rounded-[36px] overflow-hidden ">
+                <div className="relative h-[400px]">
+                  <Image
+                    width={50}
+                    height={200}
+                    src={PartyImage}
+                    alt="Hero"
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent z-10" />
+                  <div className="absolute inset-0 flex flex-col justify-end px-5 pb-6 z-20">
+                    <h1 className="text-3xl font-bold text-white leading-snug mb-2">
+                      <div>From Pop</div>
+                      <div>Ballads to Emo</div>
+                      <div>Encores</div>
+                    </h1>
+                    <p className="text-white text-sm mb-4">
+                      Experience the magic as pop ballads transform into emo encores, showcasing.
+                    </p>
+                    <button className="bg-white text-black text-sm font-semibold px-4 py-2 rounded-full w-fit">
+                      Get Into Music
+                    </button>
+                  </div>
+                </div>
+                <div
+                style={{
+                  backgroundImage: `url(${TicketFooterMobile.src})`,
+                  backgroundSize: isMobile ? "contain" : "cover",
+                  backgroundPosition: "center",
+                  backgroundRepeat: "no-repeat",
+                }}
+                className="flex w-full xs:object-contain sm:object-contain md:object-cover justify-center items-center py-7 lg:hidden">
+                  <Image
+                    width={140}
+                    height={60}
+                    src={BarcodeImagemoblie}
+                    alt="Barcodfgde"
+                    className="w-56 object-contain"
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+        </section>
+
+        {/* CATEGORY SECTION */}
+        <section
+          className="w-full max-w-[var(--max-container-width)]"
+          style={containerStyle}
+        >
+          <div className="w-full   flex ">
+            <div className="flex flex-wrap w-full   gap-4 items-center justify-between">
+              {categoriesLoading ? (
+                // Loading skeleton for categories
+                Array.from({ length: 7 }).map((_, i) => (
+                  <div
+                    key={i}
+                    className="flex flex-col items-center w-[146px] h-[146px] justify-center border border-[#ADADAD40] rounded-[26px] text-center animate-pulse"
+                  >
+                    <div className="w-10 h-10 bg-gray-200 rounded"></div>
+                    <div className="h-4 bg-gray-200 rounded w-16 mt-2"></div>
+                  </div>
+                ))
+              ) : (
+                categories.map((category, index) => (
+                  <div
+                    key={category.id || index}
+                    className={`flex flex-col items-center w-[146px] h-[146px] justify-center border rounded-[26px] text-center cursor-pointer transition-colors ${
+                      selectedCategory?.id === category.id 
+                        ? 'border-[#FF553F] bg-[#FF553F]/10' 
+                        : 'border-[#ADADAD40] hover:border-[#FF553F]/50'
+                    }`}
+                    onClick={() => handleCategorySelect(category)}
+                  >
+                    <div className="w-10 h-10">
+                    <Image
+                      width={28}
+                      height={28}
+                      src={category.icon}
+                        alt={category.value}
+                      className="w-full h-full object-contain"
+                    />
+                  </div>
+                  <span className="text-gray-800 text-sm font-medium">
+                      {category.value}
+                  </span>
+                </div>
+                ))
+              )}
+            </div>
+          </div>
+        </section>
+
+        {/* LATEST EVENTS SECTION */}
+        <div className="w-full flex  flex-col  gap-[50px]">
+          <section className=" w-full">
+            <div className=" w-full ">
+              <div className=" w-full border-b border-t  flex justify-center items-center border-gray-200">
+                <div
+                  className="w-full justify-center items-center max-w-[var(--max-container-width)]"
+                  style={containerStyle}
+                >
+                  <h2 className="text-xl    py-[28px] sm:text-2xl font-semibold text-gray-800 ">
+                    {searchQuery ? `Search Results for "${searchQuery}"` : 
+                     selectedCategory ? `${selectedCategory.value} Events` : 
+                     selectedLocation ? `Events in ${selectedLocation.title}` :
+                     'Latest Events in Lucknow'}
+                  </h2>
+                </div>
+              </div>
+              {/* Filter buttons with horizontal scroll on mobile */}
+              {!searchQuery && (
+              <div className=" w-full py-[36px]  flex justify-center items-center border-gray-200">
+                <div
+                  className="w-full justify-center items-center max-w-[var(--max-container-width)]"
+                  style={containerStyle}
+                >
+                  <div className="flex gap-3  overflow-x-auto scrollbar-hide mb-6 sm:flex-wrap ">
+                      {getFilterLabels().map((filter, i) => (
+                      <button
+                          key={filter.id || i}
+                          onClick={() => handleCategorySelect(filter)}
+                          className={`flex-shrink-0 px-[13px] py-[3px] text-[14px] rounded-[6px] border transition ${
+                            (filter.id === 'all' && !selectedCategory) || 
+                            (selectedCategory && selectedCategory.id === filter.id)
+                              ? "bg-[#CDD0D5] text-black border-none"
+                            : "text-[#868C98] hover:bg-gray-100 border-gray-300"
+                          }`}
+                      >
+                          {filter.value}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+              )}
+
+              {/* Event cards */}
+              <div className="w-full items-center flex justify-center">
+                <div
+                  className="w-full justify-center items-center max-w-[var(--max-container-width)]"
+                  style={containerStyle}
+                >
+                  <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 w-full h-full">
+                    {loading ? (
+                      // Loading skeleton
+                      Array.from({ length: 8 }).map((_, i) => (
+                        <div key={i} className="rounded-2xl overflow-hidden shadow-sm bg-gray-100 animate-pulse">
+                          <div className="w-full h-48 bg-gray-200"></div>
+                          <div className="p-4 space-y-2">
+                            <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+                            <div className="h-3 bg-gray-200 rounded w-1/2"></div>
+                            <div className="h-3 bg-gray-200 rounded w-2/3"></div>
+                            <div className="h-4 bg-gray-200 rounded w-1/3"></div>
+                          </div>
+                        </div>
+                      ))
+                    ) : events.length > 0 ? (
+                      events.map((event, i) => (
+                        <Link key={event._id} href={`/event-details?slug=${event.slug}`}>
+                          <Card
+                            image={getImageUrl(event.banner)}
+                            date={formatEventDate(event.startDate, event.endDate)}
+                            title={event.title}
+                            venue={event.venue}
+                            price={getEventPricing(event)}
+                            badge={i === 0 ? "Save up to 39%" : ""}
+                            variant="latest"
+                          />
+                        </Link>
+                      ))
+                    ) : (
+                      <div className="col-span-full text-center py-12">
+                        <div className="text-gray-500 text-lg mb-2">
+                          {searchQuery ? `No events found for "${searchQuery}"` : 
+                           selectedCategory ? `No ${selectedCategory.value} events found` : 
+                           selectedLocation ? `No events found in ${selectedLocation.title}` :
+                           'No events found'}
+                        </div>
+                        {(searchQuery || selectedLocation) && (
+                          <div className="flex gap-2">
+                            {searchQuery && (
+                              <button
+                                onClick={clearSearch}
+                                className="text-[#FF553F] hover:text-[#FF553F]/80 transition-colors"
+                              >
+                                Clear search
+                              </button>
+                            )}
+                            {selectedLocation && (
+                              <button
+                                onClick={clearLocation}
+                                className="text-[#FF553F] hover:text-[#FF553F]/80 transition-colors"
+                              >
+                                Clear location
+                              </button>
+                    )}
+                  </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* FEATURED EVENTS SECTION */}
+          {!searchQuery && (
+          <section className="flex flex-col items-center   w-full ">
+            <div
+              className="w-full justify-center items-center max-w-[var(--max-container-width)]"
+              style={containerStyle}
+            >
+              <div className="flex w-full py-[36px] justify-between">
+                <h2 className="text-xl sm:text-2xl font-semibold text-gray-800 ">
+                  Featured Events
+                </h2>
+                <Link href="/events" className="flex gap-2 items-center text-[#FF553F] hover:text-[#FF553F]/80 transition-colors">
+                  See All
+                  <span>
+                    <ArrowRight className="w-4 h-4 " />
+                  </span>
+                </Link>
+              </div>
+              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 w-full h-full">
+                  {featuredLoading ? (
+                  // Loading skeleton
+                  Array.from({ length: 8 }).map((_, i) => (
+                    <div key={i} className="rounded-2xl overflow-hidden shadow-sm bg-gray-100 animate-pulse">
+                      <div className="w-full h-48 bg-gray-200"></div>
+                      <div className="p-4 space-y-2">
+                        <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+                        <div className="h-3 bg-gray-200 rounded w-1/2"></div>
+                        <div className="h-3 bg-gray-200 rounded w-2/3"></div>
+                        <div className="h-4 bg-gray-200 rounded w-1/3"></div>
+                      </div>
+                    </div>
+                  ))
+                  ) : featuredEvents.length > 0 ? (
+                    featuredEvents.map((event, i) => (
+                    <Link key={event._id} href={`/event-details?slug=${event.slug}`}>
+                      <Card
+                        image={getImageUrl(event.banner)}
+                        date={formatEventDate(event.startDate, event.endDate)}
+                        title={event.title}
+                        venue={event.venue}
+                          price={getEventPricing(event)}
+                        badge={i === 0 ? "Save up to 39%" : ""}
+                        variant="featured"
+                      />
+                    </Link>
+                  ))
+                  ) : (
+                    <div className="col-span-full text-center py-12">
+                      <div className="text-gray-500 text-lg mb-2">
+                        No featured events found
+                      </div>
+                    </div>
+                )}
+              </div>
+            </div>
+          </section>
+          )}
+
+          {/* TOP DESTINATIONS SECTION */}
+          <section className="w-full  items-center flex justify-center">
+            <div
+              className="w-full justify-center items-center max-w-[var(--max-container-width)]"
+              style={containerStyle}
+            >
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-xl sm:text-2xl font-semibold text-gray-800">
+                  Top destinations
+                </h2>
+                <div className="hidden sm:flex gap-3">
+                  <button
+                    onClick={() => handleCarouselScroll("left")}
+                    className="w-10 h-10 rounded-full bg-gray-100 flex justify-center items-center hover:bg-gray-200 transition"
+                  >
+                    <span className="text-xl font-bold">
+                      <ChevronLeft className="text-gray-500" />
+                    </span>
+                  </button>
+                  <button
+                    onClick={() => handleCarouselScroll("right")}
+                    className="w-10 h-10 rounded-full bg-gray-100 flex justify-center items-center hover:bg-gray-200 transition"
+                  >
+                    <span className="text-xl font-bold">
+                      <ChevronRight className="text-gray-500" />
+                    </span>
+                  </button>
+                </div>
+              </div>
+
+              <div className="relative">
+                <div
+                  ref={carouselRef}
+                  className="flex gap-4 overflow-x-auto no-scrollbar"
+                >
+                  {destinationsLoading ? (
+                    // Loading skeleton
+                    Array.from({ length: 6 }).map((_, i) => (
+                      <div
+                        key={i}
+                        className="group relative min-w-[274px] h-[390px] rounded-[30%] bg-gray-200 animate-pulse flex-shrink-0"
+                      >
+                        <div className="absolute bottom-16 left-0 right-0 text-center">
+                          <div className="h-6 bg-gray-300 rounded w-24 mx-auto"></div>
+                        </div>
+                      </div>
+                    ))
+                  ) : destinations.length > 0 ? (
+                    destinations.map((destination, i) => (
+                      <div
+                        key={destination._id || i}
+                        className="group relative min-w-[274px] h-[390px] rounded-[30%] cursor-pointer transition-transform duration-300 hover:translate-x-2 flex-shrink-0"
+                        onClick={() => handleLocationSelect(destination)}
+                      >
+                        <div
+                          style={{
+                            borderRadius: "35%",
+                            backgroundImage: `url(${getDestinationImageUrl(destination.image)})`,
+                            backgroundSize: "cover",
+                            backgroundPosition: "center",
+                            backgroundRepeat: "no-repeat",
+                          }}
+                          className="absolute inset-0 transition-transform duration-300"
+                        />
+                        <div className="absolute bottom-16 left-0 right-0 text-center text-white transform translate-y-full transition-transform duration-300">
+                          <h3 className="text-xl font-semibold">
+                            {destination.title}
+                          </h3>
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="col-span-full text-center py-12">
+                      <div className="text-gray-500 text-lg mb-2">
+                        No destinations found
+                      </div>
+                    </div>
+                  )}
+                </div>
+                <div className="absolute left-0 right-0 bottom-0 h-1 bg-gradient-to-r from-transparent via-gray-200 to-transparent opacity-50" />
+              </div>
+            </div>
+          </section>
+
+          {/* POPULAR CITIES SECTION */}
+          {/* <div className="w-full  gap-[50px] flex flex-col items-center justify-center">
+            <section
+              className="w-full justify-center items-center max-w-[var(--max-container-width)]"
+              style={containerStyle}
+            >
+              <div className="w-full  flex gap-[24px] flex-col">
+                <h2 className="text-[28px] font-[500] text-gray-800 ">
+                  Popular Cities
+                </h2>
+                <div className="grid grid-cols-2 md:flex md:flex-wrap gap-[16px]">
+                  {popularCities.map((city, i) => (
+                    <button
+                      key={i}
+                      className="flex items-center gap-[10px] py-[6px] px-[14px] text-[14px] font-medium bg-[#F6F8FA] text-[#31353F] hover:bg-gray-100 transition rounded-lg border border-gray-200"
+                    >
+                      <span className="truncate">{city}</span>
+                      <ArrowUpRight className="w-4 h-4 " />
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </section>
+
+            <section className=" w-full  items-center flex justify-center">
+              <div
+                className="w-full flex justify-center items-center max-w-[var(--max-container-width)] gap-[24px] flex-col"
+                style={containerStyle}
+              >
+                <h2 className="text-[28px] text-start w-full font-[500]  text-gray-800 ">
+                  Things to do Around Calicut
+                </h2>
+                <div className="grid grid-cols-2 md:flex md:flex-wrap gap-[16px]">
+                  {popularCities.map((city, i) => (
+                    <button
+                      key={i}
+                      className="flex items-center gap-[10px] py-[6px] px-[14px] text-[14px] font-medium bg-[#F6F8FA] text-[#31353F] hover:bg-gray-100 transition rounded-lg border border-gray-200"
+                    >
+                      <span className="truncate">{city}</span>
+                      <ArrowUpRight className="w-4 h-4 " />
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </section>
+          </div> */}
+        </div>
+      </div>
+   
+      {/* FOOTER SECTION */}
+      <div className=" w-full">
+        <section className=" w-full px-0 md:px-[98px]   pt-[35px] pb-[98px] bg-[#F6F8FA]  ">
+          <div className="  ">
+            {/* Title */}
+            <h2 className="text-lg sm:text-xl md:text-2xl font-medium text-center text-black mb-12">
+              How GoCampus Works
+            </h2>
+
+            {/* Items row */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-10">
+              {howItWorksItems.map((item, idx) => (
+                <div key={idx} className="flex gap-4">
+                  {/* Icon */}
+                  <div className="min-w-[88px] w-[88px] h-[88px] justify-center items-center flex rounded-full">
+                    <Image
+                      width={20}
+                      height={20}
+                      src={item.icon}
+                      alt={item.heading}
+                      className="   w-[50px] md:w-[86px] object-contain"
+                    />
+                  </div>
+                  {/* Text */}
+                  <div>
+                    <h3 className="text-base font-semibold text-gray-900 mb-1">
+                      {item.heading}
+                    </h3>
+                    <p className="text-sm text-gray-500 leading-relaxed">
+                      {item.text}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+        <Footer />
+      </div>
+    </div>
+  );
+};
+
+export default HomePageClient;
+
